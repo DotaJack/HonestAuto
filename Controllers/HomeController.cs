@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace HonestAuto.Controllers
+namespace HonestAutoDBTest.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,0 +1,48 @@
+﻿@model IEnumerable<HonestAuto.Models.Buyer>
+@{
+    ViewData["Title"] = "Home Page";
+}
+<h2>Buyers</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Buyer</a>
+</p>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var buyer in Model)
+            {
+                <tr>
+                    <td>@buyer.BuyerID</td>
+                    <td>@buyer.FirstName</td>
+                    <td>@buyer.LastName</td>
+                    <td>@buyer.Email</td>
+                    <td>@buyer.PhoneNumber</td>
+                    <td>@buyer.Address</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@buyer.BuyerID" class="btn btn-warning">Edit</a>
+                     
+                        <a asp-action="Delete" asp-route-id="@buyer.BuyerID" class="btn btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No buyers available.</p>
+}
