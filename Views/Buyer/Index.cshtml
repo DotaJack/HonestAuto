@@ -1,4 +1,4 @@
-﻿@model IEnumerable<HonestAuto.Models.Buyer>
+﻿@model IEnumerable<HonestAuto.Models.User>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -26,16 +26,16 @@
             @foreach (var buyer in Model)
             {
                 <tr>
-                    <td>@buyer.BuyerID</td>
+                    <td>@buyer.UserID</td>
                     <td>@buyer.FirstName</td>
                     <td>@buyer.LastName</td>
                     <td>@buyer.Email</td>
                     <td>@buyer.PhoneNumber</td>
                     <td>@buyer.Address</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@buyer.BuyerID" class="btn btn-warning">Edit</a>
-                     
-                        <a asp-action="Delete" asp-route-id="@buyer.BuyerID" class="btn btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@buyer.UserID" class="btn btn-warning">Edit</a>
+
+                        <a asp-action="Delete" asp-route-id="@buyer.UserID" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }

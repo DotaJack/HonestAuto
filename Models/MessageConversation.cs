@@ -5,7 +5,7 @@
         public int ConversationID { get; set; }
         public string Content { get; set; }
         public DateTime TimeStamp { get; set; }
-        public int SellerID { get; set; }
-        public int BuyerID { get; set; }
+        public int UserID1 { get; set; }
+        public int UserID2 { get; set; }
     }
 }

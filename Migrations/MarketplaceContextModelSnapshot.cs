@@ -21,42 +21,6 @@ namespace HonestAuto.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("HonestAuto.Models.Buyer", b =>
-                {
-                    b.Property<int>("BuyerID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BuyerID"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("PhoneNumber")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("BuyerID");
-
-                    b.ToTable("Buyers");
-                });
-
             modelBuilder.Entity("HonestAuto.Models.Car", b =>
                 {
                     b.Property<int>("CarID")
@@ -157,13 +121,13 @@ namespace HonestAuto.Migrations
                     b.ToTable("Mechanics");
                 });
 
-            modelBuilder.Entity("HonestAuto.Models.Seller", b =>
+            modelBuilder.Entity("HonestAuto.Models.User", b =>
                 {
-                    b.Property<int>("SellerID")
+                    b.Property<int>("UserID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SellerID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
 
                     b.Property<string>("Address")
                         .IsRequired()
@@ -188,9 +152,9 @@ namespace HonestAuto.Migrations
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
 
-                    b.HasKey("SellerID");
+                    b.HasKey("UserID");
 
-                    b.ToTable("Sellers");
+                    b.ToTable("Users");
                 });
 #pragma warning restore 612, 618
         }

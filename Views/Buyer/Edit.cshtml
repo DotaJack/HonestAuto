@@ -1,9 +1,9 @@
-﻿@model HonestAuto.Models.Buyer
+﻿@model HonestAuto.Models.User
 <body>
 <h2>Edit Buyer</h2>
 
 <form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="BuyerID" />
+        <input type="hidden" asp-for="UserID" />
 
     <div class="form-group">
         <label asp-for="FirstName">First Name</label>
