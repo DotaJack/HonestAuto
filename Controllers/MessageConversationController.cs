@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HonestAuto.Controllers
 {
-    public class BuyerController : Controller
+    public class MessageConversationController : Controller
     {
-        public readonly MarketplaceContext _context;
+        private readonly MarketplaceContext _context;
 
-        public BuyerController(MarketplaceContext context)
+        public MessageConversationController(MarketplaceContext context)
         {
             _context = context;
         }
@@ -17,8 +17,8 @@ namespace HonestAuto.Controllers
         // INDEX (Read/List all)
         public IActionResult Index()
         {
-            var buyers = _context.Buyers.ToList();
-            return View(buyers);
+            var conversations = _context.MessageConversations.ToList();
+            return View(conversations);
         }
 
         // CREATE (GET)
@@ -30,15 +30,15 @@ namespace HonestAuto.Controllers
         // CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Buyer buyer)
+        public async Task<IActionResult> Create(MessageConversation conversation)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(buyer);
+                _context.Add(conversation);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(buyer);
+            return View(conversation);
         }
 
         // EDIT (GET)
@@ -49,20 +49,20 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
-            var buyer = await _context.Buyers.FindAsync(id);
-            if (buyer == null)
+            var conversation = await _context.MessageConversations.FindAsync(id);
+            if (conversation == null)
             {
                 return NotFound();
             }
-            return View(buyer);
+            return View(conversation);
         }
 
         // EDIT (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BuyerID,FirstName,LastName,Email,PhoneNumber,Password,Address")] Buyer buyer)
+        public async Task<IActionResult> Edit(int id, [Bind("MessageConversationID,Content,TimeStamp,UserID1,UserID2")] MessageConversation conversation)
         {
-            if (id != buyer.BuyerID)
+            if (id != conversation.MessageConversationID)
             {
                 return NotFound();
             }
@@ -71,12 +71,12 @@ namespace HonestAuto.Controllers
             {
                 try
                 {
-                    _context.Update(buyer);
+                    _context.Update(conversation);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!_context.Buyers.Any(b => b.BuyerID == buyer.BuyerID))
+                    if (!_context.MessageConversations.Any(c => c.MessageConversationID == conversation.MessageConversationID))
                     {
                         return NotFound();
                     }
@@ -87,7 +87,7 @@ namespace HonestAuto.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(buyer);
+            return View(conversation);
         }
 
         // DELETE (GET)
@@ -98,12 +98,12 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
-            var buyer = await _context.Buyers.FindAsync(id);
-            if (buyer == null)
+            var conversation = await _context.MessageConversations.FindAsync(id);
+            if (conversation == null)
             {
                 return NotFound();
             }
-            return View(buyer);
+            return View(conversation);
         }
 
         // DELETE (POST/Confirmed)
@@ -111,13 +111,12 @@ namespace HonestAuto.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var buyer = await _context.Buyers.FindAsync(id);
-            if (buyer == null)
+            var conversation = await _context.MessageConversations.FindAsync(id);
+            if (conversation == null)
             {
-                return NotFound(); // or handle as appropriate (e.g., return an error view)
+                return NotFound();
             }
-            _context.Buyers.Remove(buyer);
-            _context.Buyers.Remove(buyer);
+            _context.MessageConversations.Remove(conversation);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

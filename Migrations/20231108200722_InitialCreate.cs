@@ -5,29 +5,11 @@
 namespace HonestAuto.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Buyers",
-                columns: table => new
-                {
-                    BuyerID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PhoneNumber = table.Column<long>(type: "bigint", nullable: false),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Buyers", x => x.BuyerID);
-                });
-
             migrationBuilder.CreateTable(
                 name: "CarEvaluations",
                 columns: table => new
@@ -72,7 +54,6 @@ namespace HonestAuto.Migrations
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AttributeName = table.Column<int>(type: "int", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -82,10 +63,26 @@ namespace HonestAuto.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Sellers",
+                name: "MessageConversations",
                 columns: table => new
                 {
-                    SellerID = table.Column<int>(type: "int", nullable: false)
+                    MessageConversationID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    TimeStamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UserID1 = table.Column<int>(type: "int", nullable: false),
+                    UserID2 = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MessageConversations", x => x.MessageConversationID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Users",
+                columns: table => new
+                {
+                    UserID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -96,16 +93,13 @@ namespace HonestAuto.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Sellers", x => x.SellerID);
+                    table.PrimaryKey("PK_Users", x => x.UserID);
                 });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Buyers");
-
             migrationBuilder.DropTable(
                 name: "CarEvaluations");
 
@@ -116,7 +110,10 @@ namespace HonestAuto.Migrations
                 name: "Mechanics");
 
             migrationBuilder.DropTable(
-                name: "Sellers");
+                name: "MessageConversations");
+
+            migrationBuilder.DropTable(
+                name: "Users");
         }
     }
 }
