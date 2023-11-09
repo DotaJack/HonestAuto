@@ -2,7 +2,9 @@
 {
     public class MessageConversation
     {
-        public int ConversationID { get; set; }
+
+        
+        public int MessageConversationID { get; set; }
         public string Content { get; set; }
         public DateTime TimeStamp { get; set; }
         public int UserID1 { get; set; }

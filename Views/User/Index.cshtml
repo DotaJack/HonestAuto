@@ -23,19 +23,19 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var buyer in Model)
+            @foreach (var User in Model)
             {
                 <tr>
-                    <td>@buyer.UserID</td>
-                    <td>@buyer.FirstName</td>
-                    <td>@buyer.LastName</td>
-                    <td>@buyer.Email</td>
-                    <td>@buyer.PhoneNumber</td>
-                    <td>@buyer.Address</td>
+                    <td>@User.UserID</td>
+                    <td>@User.FirstName</td>
+                    <td>@User.LastName</td>
+                    <td>@User.Email</td>
+                    <td>@User.PhoneNumber</td>
+                    <td>@User.Address</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@buyer.UserID" class="btn btn-warning">Edit</a>
+                        <a asp-action="Edit" asp-route-id="@User.UserID" class="btn btn-warning">Edit</a>
 
-                        <a asp-action="Delete" asp-route-id="@buyer.UserID" class="btn btn-danger">Delete</a>
+                        <a asp-action="Delete" asp-route-id="@User.UserID" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }
