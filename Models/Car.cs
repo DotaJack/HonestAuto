@@ -9,5 +9,6 @@
         public int Mileage { get; set; }
         public string History { get; set; }
         public int UserID { get; set; }
+        public byte[] CarImage { get; set; }
     }
 }

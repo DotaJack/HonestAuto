@@ -9,6 +9,7 @@ namespace HonestAuto.Data
         public MarketplaceContext(DbContextOptions<MarketplaceContext> options) : base(options)
         {
         }
+
         public DbSet<MessageConversation> MessageConversations { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Mechanic> Mechanics { get; set; }
