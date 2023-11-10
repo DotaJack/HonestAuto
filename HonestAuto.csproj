@@ -8,6 +8,13 @@
 
   <ItemGroup>
     <Folder Include="Migrations\" />
+    <Folder Include="Views\User - Copy\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Shared\Error.cshtml" />
+    <None Include="Views\Shared\_Layout.cshtml" />
+    <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

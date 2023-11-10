@@ -1,6 +1,6 @@
 ﻿@model HonestAuto.Models.User
 <body>
-<h2>Edit Buyer</h2>
+    <h2>Edit User</h2>
 
 <form asp-action="Edit" method="post">
         <input type="hidden" asp-for="UserID" />
@@ -29,7 +29,7 @@
         <span asp-validation-for="PhoneNumber" class="text-danger"></span>
     </div>
 
-    <!-- Note: Typically, you wouldn't edit a password in this way. You'd have a separate process for updating passwords. But, for the sake of completion, I'm adding it here. -->
+    <!-- Note: Typically, you wouldn't edit a password in this way. Eventually PasswordHashing will be implemented. -->
     <div class="form-group">
         <label asp-for="Password">Password</label>
         <input asp-for="Password" type="password" class="form-control" />

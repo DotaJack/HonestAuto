@@ -1,7 +1,9 @@
 ﻿@model IEnumerable<HonestAuto.Models.User>
+
 @{
     ViewData["Title"] = "Home Page";
 }
+
 <h2>Buyers</h2>
 
 <p>
@@ -19,23 +21,26 @@
                 <th>Email</th>
                 <th>Phone Number</th>
                 <th>Address</th>
+                <th>Role</th> <!-- Added Role -->
+                <th>Profile Image</th> <!-- Added Profile Image -->
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var User in Model)
+            @foreach (var user in Model)
             {
                 <tr>
-                    <td>@User.UserID</td>
-                    <td>@User.FirstName</td>
-                    <td>@User.LastName</td>
-                    <td>@User.Email</td>
-                    <td>@User.PhoneNumber</td>
-                    <td>@User.Address</td>
+                    <td>@user.UserID</td>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.Email</td>
+                    <td>@user.PhoneNumber</td>
+                    <td>@user.Address</td>
+                    <td>@user.Role</td> <!-- Display Role -->
+       
                     <td>
-                        <a asp-action="Edit" asp-route-id="@User.UserID" class="btn btn-warning">Edit</a>
-
-                        <a asp-action="Delete" asp-route-id="@User.UserID" class="btn btn-danger">Delete</a>
+                        <a asp-action="Edit" asp-route-id="@user.UserID" class="btn btn-warning">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@user.UserID" class="btn btn-danger">Delete</a>
                     </td>
                 </tr>
             }

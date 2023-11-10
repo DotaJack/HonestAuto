@@ -10,7 +10,5 @@
         public string Password { get; set; }
         public string Address { get; set; }
         public string Role { get; set; }
-
-        public byte[] ProfileImage { get; set; }
     }
 }

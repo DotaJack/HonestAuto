@@ -1,0 +1,57 @@
+﻿@model IEnumerable<HonestAuto.Models.ViewModels.CarAndEvaluationViewModel>
+
+@{
+    ViewData["Title"] = "Car List";
+}
+
+<h2>Car List</h2>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Car</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Car.Brand)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Car.Model)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().Car.Year)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().CarEvaluation.MechanicID)
+            </th>
+            <!-- Add other car properties you want to display -->
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var viewModel in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => viewModel.Car.Brand)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => viewModel.Car.Model)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => viewModel.Car.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => viewModel.CarEvaluation.MechanicID)
+                </td>
+                <!-- Display other car properties here -->
+                <td>
+                    <a asp-action="Edit" asp-route-id="@viewModel.Car.CarID" class="btn btn-default">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@viewModel.Car.CarID" class="btn btn-default">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@viewModel.Car.CarID" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
