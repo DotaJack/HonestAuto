@@ -28,7 +28,5 @@ namespace HonestAuto.Models
         public string History { get; set; }
 
         public int UserID { get; set; }
-
-        public virtual List<CarEvaluation> CarEvaluations { get; set; }
     }
 }

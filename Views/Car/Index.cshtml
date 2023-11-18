@@ -1,57 +1,43 @@
-﻿@model IEnumerable<HonestAuto.Models.ViewModels.CarAndEvaluationViewModel>
+﻿@model IEnumerable<HonestAuto.Models.Car>
 
 @{
-    ViewData["Title"] = "Car List";
+    ViewData["Title"] = "Cars List";
 }
 
-<h2>Car List</h2>
-
-<p>
-    <a asp-action="Create" class="btn btn-primary">Create New Car</a>
-</p>
+<h1>Cars</h1>
 
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Car.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Car.Model)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().Car.Year)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.FirstOrDefault().CarEvaluation.MechanicID)
-            </th>
-            <!-- Add other car properties you want to display -->
+            <th>Car ID</th>
+            <th>Brand</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Mileage</th>
+            <th>History</th>
+            <th>User ID</th>
             <th>Actions</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var viewModel in Model)
+        @foreach (var car in Model)
         {
             <tr>
+                <td>@car.CarID</td>
+                <td>@car.Brand</td>
+                <td>@car.Model</td>
+                <td>@car.Year</td>
+                <td>@car.Mileage</td>
+                <td>@car.History</td>
+                <td>@car.UserID</td>
                 <td>
-                    @Html.DisplayFor(modelItem => viewModel.Car.Brand)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => viewModel.Car.Model)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => viewModel.Car.Year)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => viewModel.CarEvaluation.MechanicID)
-                </td>
-                <!-- Display other car properties here -->
-                <td>
-                    <a asp-action="Edit" asp-route-id="@viewModel.Car.CarID" class="btn btn-default">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@viewModel.Car.CarID" class="btn btn-default">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@viewModel.Car.CarID" class="btn btn-danger">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@car.CarID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@car.CarID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@car.CarID">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<a asp-action="Create">Create New Car</a>

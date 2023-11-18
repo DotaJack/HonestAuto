@@ -1,4 +1,4 @@
-﻿@model HonestAuto.Models.ViewModels.CarAndEvaluationViewModel
+﻿@model HonestAuto.Models.Car
 
 @{
     ViewData["Title"] = "Create New Car";
@@ -7,42 +7,44 @@
 <h2>@ViewData["Title"]</h2>
 
 <form asp-action="Create" method="post">
-    @Html.AntiForgeryToken()
 
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
 
     <div class="form-group">
-        <label asp-for="Car.Brand">Brand</label>
-        <input asp-for="Car.Brand" class="form-control" />
-        <span asp-validation-for="Car.Brand" class="text-danger"></span>
+        <label asp-for="Brand">Brand</label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Car.Model">Model</label>
-        <input asp-for="Car.Model" class="form-control" />
-        <span asp-validation-for="Car.Model" class="text-danger"></span>
+        <label asp-for="Model">Model</label>
+        <input asp-for="Model" class="form-control" />
+        <span asp-validation-for="Model" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Car.Mileage">Mileage</label>
-        <input asp-for="Car.Mileage" class="form-control" />
-        <span asp-validation-for="Car.Mileage" class="text-danger"></span>
+        <label asp-for="Mileage">Mileage</label>
+        <input asp-for="Mileage" class="form-control" />
+        <span asp-validation-for="Mileage" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Car.Year">Year</label>
-        <input asp-for="Car.Year" class="form-control" />
-        <span asp-validation-for="Car.Year" class="text-danger"></span>
+        <label asp-for="Year">Year</label>
+        <input asp-for="Year" class="form-control" />
+        <span asp-validation-for="Year" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Car.History">History</label>
-        <input asp-for="Car.History" class="form-control" />
-        <span asp-validation-for="Car.History" class="text-danger"></span>
+        <label asp-for="History">History</label>
+        <input asp-for="History" class="form-control" />
+        <span asp-validation-for="History" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label asp-for="Car.UserID">UserID</label>
-        <input asp-for="Car.UserID" class="form-control" />
-        <span asp-validation-for="Car.UserID" class="text-danger"></span>
+        <label asp-for="UserID">UserID</label>
+        <input asp-for="UserID" class="form-control" />
+        <span asp-validation-for="UserID" class="text-danger"></span>
     </div>
-    <input type="hidden" asp-for="CarEvaluation.CarID" value="@Model.Car.CarID" />
 
     <button type="submit" class="btn btn-primary">Create</button>
 </form>

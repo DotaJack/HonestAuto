@@ -24,27 +24,5 @@ namespace HonestAuto.Data
 
         public DbSet<CarEvaluation> CarEvaluations { get; set; }
         // DbSet for the CarEvaluation model. Allows interaction with the CarEvaluations table.
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // Override the OnModelCreating method to configure entity relationships and constraints.
-
-            modelBuilder.Entity<Car>()
-                .HasMany(c => c.CarEvaluations)
-                .WithOne(e => e.Car)
-                .HasForeignKey(e => e.CarID);
-            // Configure a one-to-many relationship between Car and CarEvaluations,
-            // specifying that each Car can have multiple CarEvaluations.
-
-            modelBuilder.Entity<CarEvaluation>()
-                .HasOne(ce => ce.Mechanic)
-                .WithMany(m => m.CarEvaluations)
-                .HasForeignKey(ce => ce.MechanicID);
-            // Configure a one-to-many relationship between CarEvaluation and Mechanic,
-            // specifying that each Mechanic can have multiple CarEvaluations.
-            // Also, define the foreign key relationship using MechanicID.
-
-            // Ensure that this is the correct foreign key name when defining the relationship.
-        }
     }
 }
