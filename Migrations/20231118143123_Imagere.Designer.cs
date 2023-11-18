@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231117211636_test3323")]
-    partial class test3323
+    [Migration("20231118143123_Imagere")]
+    partial class Imagere
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,8 +51,6 @@ namespace HonestAuto.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CarEvaluationID");
-
-                    b.HasIndex("CarID");
 
                     b.HasIndex("MechanicID");
 
@@ -196,22 +194,11 @@ namespace HonestAuto.Migrations
 
             modelBuilder.Entity("CarEvaluation", b =>
                 {
-                    b.HasOne("HonestAuto.Models.Car", null)
-                        .WithMany("CarEvaluations")
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("HonestAuto.Models.Mechanic", null)
                         .WithMany("CarEvaluations")
                         .HasForeignKey("MechanicID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("HonestAuto.Models.Car", b =>
-                {
-                    b.Navigation("CarEvaluations");
                 });
 
             modelBuilder.Entity("HonestAuto.Models.Mechanic", b =>

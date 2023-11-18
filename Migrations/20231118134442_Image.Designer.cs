@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231117213020_test1")]
-    partial class test1
+    [Migration("20231118134442_Image")]
+    partial class Image
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -182,6 +182,10 @@ namespace HonestAuto.Migrations
 
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()

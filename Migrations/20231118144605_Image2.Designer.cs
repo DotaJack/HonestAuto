@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231110021413_Update392")]
-    partial class Update392
+    [Migration("20231118144605_Image2")]
+    partial class Image2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,8 +51,6 @@ namespace HonestAuto.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("CarEvaluationID");
-
-                    b.HasIndex("CarID");
 
                     b.HasIndex("MechanicID");
 
@@ -146,9 +144,6 @@ namespace HonestAuto.Migrations
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserID1")
-                        .HasColumnType("int");
-
                     b.Property<int>("UserID2")
                         .HasColumnType("int");
 
@@ -188,6 +183,10 @@ namespace HonestAuto.Migrations
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
 
+                    b.Property<byte[]>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -199,26 +198,11 @@ namespace HonestAuto.Migrations
 
             modelBuilder.Entity("CarEvaluation", b =>
                 {
-                    b.HasOne("HonestAuto.Models.Car", "Car")
-                        .WithMany("CarEvaluations")
-                        .HasForeignKey("CarID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HonestAuto.Models.Mechanic", "Mechanic")
+                    b.HasOne("HonestAuto.Models.Mechanic", null)
                         .WithMany("CarEvaluations")
                         .HasForeignKey("MechanicID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Car");
-
-                    b.Navigation("Mechanic");
-                });
-
-            modelBuilder.Entity("HonestAuto.Models.Car", b =>
-                {
-                    b.Navigation("CarEvaluations");
                 });
 
             modelBuilder.Entity("HonestAuto.Models.Mechanic", b =>

@@ -11,7 +11,6 @@
         public string Address { get; set; }
         public long PhoneNumber { get; set; }
 
-        // public byte[] ProfileImage { get; set; }
         public List<CarEvaluation> CarEvaluations { get; set; }
     }
 }

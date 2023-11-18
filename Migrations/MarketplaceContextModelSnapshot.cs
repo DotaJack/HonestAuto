@@ -180,6 +180,10 @@ namespace HonestAuto.Migrations
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
 
+                    b.Property<byte[]>("ProfileImage")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
