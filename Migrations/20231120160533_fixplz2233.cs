@@ -5,25 +5,24 @@
 namespace HonestAuto.Migrations
 {
     /// <inheritdoc />
-    public partial class Image : Migration
+    public partial class fixplz2233 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<byte[]>(
-                name: "ProfileImage",
-                table: "Users",
+                name: "CarImage",
+                table: "Cars",
                 type: "varbinary(max)",
-                nullable: false,
-                defaultValue: new byte[0]);
+                nullable: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropColumn(
-                name: "ProfileImage",
-                table: "Users");
+                name: "CarImage",
+                table: "Cars");
         }
     }
 }

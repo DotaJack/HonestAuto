@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231118143123_Imagere")]
-    partial class Imagere
+    [Migration("20231120155825_fixplz223")]
+    partial class fixplz223
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -129,29 +129,6 @@ namespace HonestAuto.Migrations
                     b.ToTable("Mechanics");
                 });
 
-            modelBuilder.Entity("HonestAuto.Models.MessageConversation", b =>
-                {
-                    b.Property<int>("MessageConversationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageConversationID"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID2")
-                        .HasColumnType("int");
-
-                    b.HasKey("MessageConversationID");
-
-                    b.ToTable("MessageConversations");
-                });
-
             modelBuilder.Entity("HonestAuto.Models.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -182,6 +159,9 @@ namespace HonestAuto.Migrations
 
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
+
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Role")
                         .IsRequired()

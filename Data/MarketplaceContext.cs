@@ -10,7 +10,7 @@ namespace HonestAuto.Data
             // Constructor for the MarketplaceContext class, which accepts DbContextOptions.
         }
 
-        public DbSet<MessageConversation> MessageConversations { get; set; }
+        //  public DbSet<MessageConversation> MessageConversations { get; set; }
         // DbSet for the MessageConversation model. Allows interaction with the MessageConversations table.
 
         public DbSet<User> Users { get; set; }

@@ -28,5 +28,6 @@ namespace HonestAuto.Models
         public string History { get; set; }
 
         public int UserID { get; set; }
+        public byte[]? CarImage { get; set; } // Correct: Byte array to store the image
     }
 }

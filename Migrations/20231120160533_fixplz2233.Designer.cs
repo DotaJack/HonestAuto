@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231118134442_Image")]
-    partial class Image
+    [Migration("20231120160533_fixplz2233")]
+    partial class fixplz2233
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -69,6 +69,9 @@ namespace HonestAuto.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("CarImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("History")
                         .IsRequired()
@@ -129,29 +132,6 @@ namespace HonestAuto.Migrations
                     b.ToTable("Mechanics");
                 });
 
-            modelBuilder.Entity("HonestAuto.Models.MessageConversation", b =>
-                {
-                    b.Property<int>("MessageConversationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageConversationID"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID2")
-                        .HasColumnType("int");
-
-                    b.HasKey("MessageConversationID");
-
-                    b.ToTable("MessageConversations");
-                });
-
             modelBuilder.Entity("HonestAuto.Models.User", b =>
                 {
                     b.Property<int>("UserID")
@@ -184,7 +164,6 @@ namespace HonestAuto.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<byte[]>("ProfileImage")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("Role")

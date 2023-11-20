@@ -16,6 +16,7 @@
             <th>Mileage</th>
             <th>History</th>
             <th>User ID</th>
+            <th>User ID</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -30,6 +31,16 @@
                 <td>@car.Mileage</td>
                 <td>@car.History</td>
                 <td>@car.UserID</td>
+                <td>
+                    @if (car.CarImage != null && car.CarImage.Length > 0)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" style="width:100px; height:auto;" />
+                    }
+                    else
+                    {
+                        <text>No Image</text>
+                    }
+                </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@car.CarID">Edit</a> |
                     <a asp-action="Details" asp-route-id="@car.CarID">Details</a> |
