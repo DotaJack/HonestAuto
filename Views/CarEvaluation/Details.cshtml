@@ -1,0 +1,81 @@
+﻿@model HonestAuto.Models.CarEvaluation
+@{
+    ViewData["Title"] = "Car Details";
+    string statusBarClass = "status-bar ";
+
+    switch (Model.EvaluationStatus)
+    {
+        case "Submitted":
+            statusBarClass += "status-submitted";
+            break;
+        case "In Progress":
+            statusBarClass += "status-in-progress";
+            break;
+        case "Completed":
+            statusBarClass += "status-completed";
+            break;
+        default:
+            statusBarClass += "status-bar"; // Default class if no status
+            break;
+    }
+}
+<h2>Details</h2>
+
+<div>
+    <h4>Car Evaluation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CarID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CarID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MechanicID)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MechanicID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvaluationStatus)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EvaluationStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvaluationSummary)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EvaluationSummary)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EvaluationDate)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EvaluationDate)
+        </dd>
+
+      
+     
+    </dl>
+</div>
+
+    </dl>
+    <!-- Status Bar -->
+    <div class="@statusBarClass">
+        @Model.EvaluationStatus
+    </div>
+</div>
+
+<div>
+    <p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.CarEvaluationID }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>
+</div>
+}

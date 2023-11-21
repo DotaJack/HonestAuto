@@ -20,3 +20,21 @@ html {
 body {
     margin-bottom: 60px;
 }
+
+.status-bar {
+    height: 20px;
+    width: 100%;
+    border: 1px solid #ddd;
+}
+
+.status-submitted {
+    background-color: yellow;
+}
+
+.status-in-progress {
+    background-color: orange;
+}
+
+.status-completed {
+    background-color: green;
+}

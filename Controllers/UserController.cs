@@ -97,30 +97,21 @@ namespace HonestAuto.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,FirstName,LastName,Email,PhoneNumber,Password,Address,Role")] User user, IFormFile profileImageFile)
+        public async Task<IActionResult> Edit(int id, [Bind("UserID,FirstName,LastName,Email,PhoneNumber,Password,Address,Role")] User user)
         {
-            try
+            if (id != user.UserID)
             {
-                if (id != user.UserID)
-                {
-                    return NotFound();
-                }
+                return NotFound();
+            }
 
-                if (ModelState.IsValid)
+            if (ModelState.IsValid)
+            {
+                try
                 {
                     var userToUpdate = await _context.Users.FindAsync(id);
                     if (userToUpdate == null)
                     {
                         return NotFound();
-                    }
-
-                    if (profileImageFile != null && profileImageFile.Length > 0)
-                    {
-                        using (var memoryStream = new MemoryStream())
-                        {
-                            await profileImageFile.CopyToAsync(memoryStream);
-                            userToUpdate.ProfileImage = memoryStream.ToArray();
-                        }
                     }
 
                     // Update properties
@@ -136,13 +127,13 @@ namespace HonestAuto.Controllers
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
-                return View(user);
+                catch (DbUpdateException ex)
+                {
+                    _logger.LogError(ex, $"Error occurred while updating user with ID {id}");
+                    // Handle specific database update errors
+                }
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, $"Error occurred while updating user with ID {id}");
-                return View("Error");
-            }
+            return View(user);
         }
 
         // DELETE (GET)

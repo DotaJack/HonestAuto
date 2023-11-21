@@ -1,0 +1,57 @@
+﻿@model HonestAuto.Models.CarEvaluation
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>CarEvaluation</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post" asp-action="Edit">
+            @Html.AntiForgeryToken()
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CarEvaluationID" />
+            <div class="form-group">
+                <label asp-for="CarID" class="control-label"></label>
+                <select asp-for="CarID" class="form-control" asp-items="ViewBag.CarID"></select>
+                <span asp-validation-for="CarID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MechanicID" class="control-label"></label>
+                <input asp-for="MechanicID" class="form-control" />
+                <span asp-validation-for="MechanicID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EvaluationStatus" class="control-label"></label>
+                <input asp-for="EvaluationStatus" class="form-control" />
+                <span asp-validation-for="EvaluationStatus" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EvaluationSummary" class="control-label"></label>
+                <input asp-for="EvaluationSummary" class="form-control" />
+                <span asp-validation-for="EvaluationSummary" class="text-danger"></span>
+            </div>
+     
+            <div class="form-group">
+                <label asp-for="CarValue" class="control-label"></label>
+                <input asp-for="CarValue" class="form-control" />
+                <span asp-validation-for="CarValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
