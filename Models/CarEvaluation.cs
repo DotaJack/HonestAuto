@@ -19,5 +19,7 @@ namespace HonestAuto.Models
 
         public DateTime EvaluationDate { get; set; } = DateTime.UtcNow;
         public double? CarValue { get; set; }
+
+        public Car Car { get; set; }
     }
 }

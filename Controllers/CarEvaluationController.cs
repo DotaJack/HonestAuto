@@ -36,14 +36,16 @@ namespace HonestAuto.Controllers
             }
 
             // Retrieve a car evaluation by ID from the database asynchronously
-            var carEvaluation = await _context.CarEvaluations.FirstOrDefaultAsync(ce => ce.CarEvaluationID == id);
+            var carEvaluation = await _context.CarEvaluations
+                .Include(ce => ce.Car) // Include the associated Car
+                .FirstOrDefaultAsync(ce => ce.CarEvaluationID == id);
 
             if (carEvaluation == null)
             {
                 return NotFound();
             }
 
-            // Return the car evaluation details to a view
+            // Return the car evaluation details along with the associated car to a view
             return View(carEvaluation);
         }
 

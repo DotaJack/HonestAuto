@@ -43,16 +43,6 @@
     </div>
 
     <div class="form-group">
-        <label asp-for="CarImage" class="control-label"></label>
-        <input type="file" asp-for="CarImage" class="form-control-file" />
-        <span asp-validation-for="CarImage" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <img src="data:image;base64,@Convert.ToBase64String(Model.CarImage)" alt="Car Image" class="img-thumbnail" />
-    </div>
-
-    <div class="form-group">
         <input type="submit" value="Save" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>

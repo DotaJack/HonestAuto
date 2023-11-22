@@ -64,7 +64,11 @@ namespace HonestAuto.Controllers
                 {
                     CarID = car.CarID, // The CarID from the newly created Car
                     EvaluationStatus = "Submitted", // Set the EvaluationStatus as "Submitted"
-                    EvaluationDate = DateTime.UtcNow // Set the current UTC date and time
+                    EvaluationDate = DateTime.UtcNow, // Set the current UTC date and time
+                    MechanicID = 1, // Set the MechanicID to 1 for now
+                    CarValue = 20000, // Set the CarValue to 20000 for now
+                    EvaluationSummary = "This is a summary of the car evaluation."
+
                     // Other properties can be initialized here if needed
                 };
 
