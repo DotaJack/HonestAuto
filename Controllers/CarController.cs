@@ -170,6 +170,76 @@ namespace HonestAuto.Controllers
             return View(car);
         }
 
+        // GET: Car/EditImage/5
+        public async Task<IActionResult> EditImage(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound(); // If no ID is provided, return a 404 Not Found result.
+            }
+
+            var car = await _context.Cars.FindAsync(id);
+
+            if (car == null)
+            {
+                return NotFound(); // If no car with the provided ID is found, return a 404 Not Found result.
+            }
+
+            return View(car); // Display the view for updating the image.
+        }
+
+        // POST: Car/EditImage/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditImage(int id, IFormFile imageFile)
+        {
+            if (id == null)
+            {
+                return NotFound(); // If no ID is provided, return a 404 Not Found result.
+            }
+
+            var car = await _context.Cars.FindAsync(id);
+
+            if (car == null)
+            {
+                return NotFound(); // If no car with the provided ID is found, return a 404 Not Found result.
+            }
+
+            if (imageFile != null)
+            {
+                // If a new image file is provided, read it into a memory stream and assign it to the CarImage property.
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(memoryStream);
+                    car.CarImage = memoryStream.ToArray();
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _context.Update(car); // Update the Car entity in the database context.
+                    await _context.SaveChangesAsync(); // Save changes to the database.
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!CarExists(car.CarID))
+                    {
+                        return NotFound(); // If the car no longer exists, return a 404 Not Found result.
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+
+                return RedirectToAction(nameof(Index)); // Redirect to the Index action after a successful update.
+            }
+
+            return View(car); // If the model state is not valid, return the view with the car data to display validation errors.
+        }
+
         // DELETE (GET)
         [HttpGet]
         public async Task<IActionResult> Delete(int? id)

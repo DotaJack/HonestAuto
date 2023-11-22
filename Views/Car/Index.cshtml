@@ -42,13 +42,14 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@car.CarID">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@car.CarID">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@car.CarID">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-primary">Details</a>
+                    <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-danger">Delete</a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
 
-<a asp-action="Create">Create New Car</a>
+<a asp-action="Create" class="btn btn-success">Create New Car</a>
+
