@@ -7,14 +7,14 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging; // Add this for logging
+using Microsoft.Extensions.Logging; // Import the logger namespace
 
 namespace HonestAuto.Controllers
 {
     public class UserController : Controller
     {
         private readonly MarketplaceContext _context;
-        private readonly ILogger<UserController> _logger; // Add a logger
+        private readonly ILogger<UserController> _logger; // Create a logger instance
 
         public UserController(MarketplaceContext context, ILogger<UserController> logger)
         {
@@ -22,18 +22,22 @@ namespace HonestAuto.Controllers
             _logger = logger; // Initialize the logger
         }
 
-        // INDEX (Read/List all)
+        // INDEX (Read/List all users)
         public async Task<IActionResult> Index()
         {
             try
             {
+                // Retrieve a list of all users from the database asynchronously
                 var users = await _context.Users.ToListAsync();
-                return View(users);
+                return View(users); // Display the list of users
             }
             catch (Exception ex)
             {
+                // Log the error
                 _logger.LogError(ex, "Error occurred while getting users");
-                return View("Error"); // Consider a dedicated error view
+
+                // Display an error view or handle the error gracefully
+                return View("Error");
             }
         }
 
@@ -41,7 +45,7 @@ namespace HonestAuto.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View();
+            return View(); // Display the user creation form
         }
 
         // POST: User/Create
@@ -56,18 +60,15 @@ namespace HonestAuto.Controllers
                     using (var memoryStream = new MemoryStream())
                     {
                         await profileImageFile.CopyToAsync(memoryStream);
-                        user.ProfileImage = memoryStream.ToArray();
+                        user.ProfileImage = memoryStream.ToArray(); // Upload and store the profile image
                     }
                 }
 
-                // TODO: Add password hashing here if necessary
-                // user.Password = HashPassword(user.Password);
-
-                _context.Add(user);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                _context.Add(user); // Add the user to the database
+                await _context.SaveChangesAsync(); // Save changes to the database
+                return RedirectToAction(nameof(Index)); // Redirect to the user list after creation
             }
-            return View(user);
+            return View(user); // Return to the create user form with validation errors if any
         }
 
         // EDIT (GET)
@@ -78,19 +79,22 @@ namespace HonestAuto.Controllers
             {
                 if (id == null)
                 {
-                    return NotFound();
+                    return NotFound(); // Return a not found view if no user ID is provided
                 }
 
                 var user = await _context.Users.FindAsync(id);
                 if (user == null)
                 {
-                    return NotFound();
+                    return NotFound(); // Return a not found view if the user doesn't exist
                 }
-                return View(user);
+                return View(user); // Display the user edit form
             }
             catch (Exception ex)
             {
+                // Log the error
                 _logger.LogError(ex, $"Error occurred while editing user with ID {id}");
+
+                // Consider a dedicated error view or error handling logic
                 return View("Error");
             }
         }
@@ -101,7 +105,7 @@ namespace HonestAuto.Controllers
         {
             if (id != user.UserID)
             {
-                return NotFound();
+                return NotFound(); // Return not found if the user ID doesn't match
             }
 
             if (ModelState.IsValid)
@@ -111,29 +115,31 @@ namespace HonestAuto.Controllers
                     var userToUpdate = await _context.Users.FindAsync(id);
                     if (userToUpdate == null)
                     {
-                        return NotFound();
+                        return NotFound(); // Return not found if the user doesn't exist
                     }
 
-                    // Update properties
+                    // Update user properties
                     userToUpdate.FirstName = user.FirstName;
                     userToUpdate.LastName = user.LastName;
                     userToUpdate.Email = user.Email;
                     userToUpdate.PhoneNumber = user.PhoneNumber;
-                    userToUpdate.Password = HashPassword(user.Password); // Hash password
+                    userToUpdate.Password = user.Password;
                     userToUpdate.Address = user.Address;
                     userToUpdate.Role = user.Role;
 
-                    _context.Update(userToUpdate);
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    _context.Update(userToUpdate); // Update the user in the database
+                    await _context.SaveChangesAsync(); // Save changes to the database
+                    return RedirectToAction(nameof(Index)); // Redirect to the user list after editing
                 }
                 catch (DbUpdateException ex)
                 {
+                    // Log the error
                     _logger.LogError(ex, $"Error occurred while updating user with ID {id}");
+
                     // Handle specific database update errors
                 }
             }
-            return View(user);
+            return View(user); // Return to the edit user form with validation errors if any
         }
 
         // DELETE (GET)
@@ -144,19 +150,22 @@ namespace HonestAuto.Controllers
             {
                 if (id == null)
                 {
-                    return NotFound();
+                    return NotFound(); // Return not found if no user ID is provided
                 }
 
                 var user = await _context.Users.FirstOrDefaultAsync(m => m.UserID == id);
                 if (user == null)
                 {
-                    return NotFound();
+                    return NotFound(); // Return not found if the user doesn't exist
                 }
-                return View(user);
+                return View(user); // Display the user delete confirmation page
             }
             catch (Exception ex)
             {
+                // Log the error
                 _logger.LogError(ex, $"Error occurred while deleting user with ID {id}");
+
+                // Consider a dedicated error view or error handling logic
                 return View("Error");
             }
         }
@@ -171,14 +180,17 @@ namespace HonestAuto.Controllers
                 var user = await _context.Users.FindAsync(id);
                 if (user != null)
                 {
-                    _context.Users.Remove(user);
-                    await _context.SaveChangesAsync();
+                    _context.Users.Remove(user); // Remove the user from the database
+                    await _context.SaveChangesAsync(); // Save changes to the database
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index)); // Redirect to the user list after deletion
             }
             catch (Exception ex)
             {
+                // Log the error
                 _logger.LogError(ex, $"Error occurred while confirming deletion of user with ID {id}");
+
+                // Display an error view or handle the error gracefully
                 return View("Error");
             }
         }
@@ -186,13 +198,6 @@ namespace HonestAuto.Controllers
         private bool UserExists(int id)
         {
             return _context.Users.Any(e => e.UserID == id);
-        }
-
-        // TODO: Implement a method for password hashing
-        private string HashPassword(string password)
-        {
-            // Implement password hashing logic here
-            return password; // Placeholder, replace with actual hashed password
         }
     }
 }

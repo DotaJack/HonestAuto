@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HonestAuto.Models; // Make sure to include the correct namespace for your models
+using HonestAuto.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,10 +20,10 @@ namespace HonestAuto.Controllers
         // GET: CarEvaluation
         public async Task<IActionResult> Index()
         {
-            var carEvaluation = await _context.CarEvaluations
+            // Retrieve a list of all car evaluations from the database asynchronously
+            var carEvaluation = await _context.CarEvaluations.ToListAsync();
 
-                .ToListAsync();
-
+            // Return the list of car evaluations to a view
             return View(carEvaluation);
         }
 
@@ -35,15 +35,15 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
-            var carEvaluation = await _context.CarEvaluations
-
-                .FirstOrDefaultAsync(ce => ce.CarEvaluationID == id);
+            // Retrieve a car evaluation by ID from the database asynchronously
+            var carEvaluation = await _context.CarEvaluations.FirstOrDefaultAsync(ce => ce.CarEvaluationID == id);
 
             if (carEvaluation == null)
             {
                 return NotFound();
             }
 
+            // Return the car evaluation details to a view
             return View(carEvaluation);
         }
 
@@ -60,11 +60,20 @@ namespace HonestAuto.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Set the evaluation date to the current UTC date and time
                 carEvaluation.EvaluationDate = DateTime.UtcNow;
+
+                // Add the car evaluation to the database context
                 _context.Add(carEvaluation);
+
+                // Save changes to the database
                 await _context.SaveChangesAsync();
+
+                // Redirect to the Index action after successful creation
                 return RedirectToAction(nameof(Index));
             }
+
+            // If the model state is not valid, return the view with the car evaluation data to display validation errors
             return View(carEvaluation);
         }
 
@@ -76,11 +85,15 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
+            // Retrieve a car evaluation by ID from the database asynchronously
             var carEvaluation = await _context.CarEvaluations.FindAsync(id);
+
             if (carEvaluation == null)
             {
                 return NotFound();
             }
+
+            // Display a form for editing the car evaluation
             return View(carEvaluation);
         }
 
@@ -98,6 +111,7 @@ namespace HonestAuto.Controllers
             {
                 try
                 {
+                    // Find the existing car evaluation by ID
                     var existingCarEvaluation = await _context.CarEvaluations.FindAsync(id);
 
                     if (existingCarEvaluation == null)
@@ -105,13 +119,10 @@ namespace HonestAuto.Controllers
                         return NotFound();
                     }
 
-                    // Update the properties of the existingCarEvaluation with the values from carEvaluation
+                    // Update the properties of the existing car evaluation with the values from carEvaluation
                     existingCarEvaluation.EvaluationStatus = carEvaluation.EvaluationStatus;
                     existingCarEvaluation.EvaluationSummary = carEvaluation.EvaluationSummary;
                     existingCarEvaluation.CarValue = carEvaluation.CarValue;
-
-                    // You may also need to attach the related Car entity to the context if it's being modified.
-                    // Example: _context.Attach(existingCarEvaluation.Car);
 
                     // Save changes to the database
                     await _context.SaveChangesAsync();
@@ -127,8 +138,12 @@ namespace HonestAuto.Controllers
                         throw;
                     }
                 }
+
+                // Redirect to the Index action after successful editing
                 return RedirectToAction(nameof(Index));
             }
+
+            // If the model state is not valid, return the view with the car evaluation data to display validation errors
             return View(carEvaluation);
         }
 
@@ -137,14 +152,18 @@ namespace HonestAuto.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            // Find the car evaluation by ID and remove it from the database
             var carEvaluation = await _context.CarEvaluations.FindAsync(id);
             _context.CarEvaluations.Remove(carEvaluation);
             await _context.SaveChangesAsync();
+
+            // Redirect to the Index action after successful deletion
             return RedirectToAction(nameof(Index));
         }
 
         private bool CarEvaluationExists(int id)
         {
+            // Check if a car evaluation with the provided ID exists in the database
             return _context.CarEvaluations.Any(ce => ce.CarEvaluationID == id);
         }
     }

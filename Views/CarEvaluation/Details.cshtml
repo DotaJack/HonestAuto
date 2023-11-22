@@ -6,18 +6,20 @@
     switch (Model.EvaluationStatus)
     {
         case "Submitted":
-            statusBarClass += "status-submitted";
+            statusBarClass += "status-submitted"; // Set status class for Submitted
             break;
         case "In Progress":
-            statusBarClass += "status-in-progress";
+            statusBarClass += "status-in-progress"; // Set status class for In Progress
             break;
         case "Completed":
-            statusBarClass += "status-completed";
+            statusBarClass += "status-completed"; // Set status class for Completed
             break;
         default:
             statusBarClass += "status-bar"; // Default class if no status
             break;
     }
+}
+  }
 }
 <h2>Details</h2>
 

@@ -41,5 +41,4 @@ E.G mine is {
   "AllowedHosts": "*"
 }
 User FYPADMIN is the user I created in SQL Server Management Studio, you can create your own user and password and use that instead.
-  Sources: https://stackoverflow.com/questions/22368726/how-to-combine-two-models-into-a-single-model-and-pass-it-to-view-using-asp-net
   https://stackoverflow.com/questions/50820275/how-to-use-idesigntimedbcontextfactory-implementation-in-asp-net-core-2-1

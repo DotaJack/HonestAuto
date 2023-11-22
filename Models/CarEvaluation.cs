@@ -17,7 +17,7 @@ namespace HonestAuto.Models
 
         public string? EvaluationSummary { get; set; } // Default is null
 
-        public DateTime EvaluationDate { get; set; } = DateTime.UtcNow; // Consider using UTC date
+        public DateTime EvaluationDate { get; set; } = DateTime.UtcNow;
         public double? CarValue { get; set; }
     }
 }
