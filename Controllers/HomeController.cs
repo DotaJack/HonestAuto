@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
 namespace HonestAutoDBTest.Controllers
-{
+{//Autogenrated when Created the project
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;

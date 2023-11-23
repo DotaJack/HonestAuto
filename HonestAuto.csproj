@@ -7,11 +7,30 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Migrations\" />
+    <Compile Remove="Controllers\MessageConversationController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="Views\CarEvaluation\Delete.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\CarEvaluation\Create.cshtml" />
+    <None Include="Views\CarEvaluation\Details.cshtml" />
+    <None Include="Views\CarEvaluation\Edit.cshtml" />
+    <None Include="Views\CarEvaluation\Index.cshtml" />
+    <None Include="Views\Car\Create.cshtml" />
+    <None Include="Views\Car\Edit.cshtml" />
+    <None Include="Views\Car\Index.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.12" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="7.0.12" />
@@ -26,6 +45,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.11" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 

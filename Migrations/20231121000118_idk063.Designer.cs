@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231108211725_UpdateCarEvulationMode3")]
-    partial class UpdateCarEvulationMode3
+    [Migration("20231121000118_idk063")]
+    partial class idk063
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,11 @@ namespace HonestAuto.Migrations
 
                     b.Property<string>("Brand")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<byte[]>("CarImage")
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<string>("History")
                         .IsRequired()
@@ -46,7 +50,8 @@ namespace HonestAuto.Migrations
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
@@ -70,9 +75,6 @@ namespace HonestAuto.Migrations
                     b.Property<int>("CarID")
                         .HasColumnType("int");
 
-                    b.Property<int>("CarValue")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("EvaluationDate")
                         .HasColumnType("datetime2");
 
@@ -84,18 +86,14 @@ namespace HonestAuto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EvaluationTime")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Image")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("MechanicID")
                         .HasColumnType("int");
 
                     b.HasKey("CarEvaluationID");
+
+                    b.HasIndex("CarID");
+
+                    b.HasIndex("MechanicID");
 
                     b.ToTable("CarEvaluations");
                 });
@@ -128,35 +126,12 @@ namespace HonestAuto.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<long>("PhoneNumber")
+                        .HasColumnType("bigint");
+
                     b.HasKey("MechanicID");
 
                     b.ToTable("Mechanics");
-                });
-
-            modelBuilder.Entity("HonestAuto.Models.MessageConversation", b =>
-                {
-                    b.Property<int>("MessageConversationID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MessageConversationID"));
-
-                    b.Property<string>("Content")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID1")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserID2")
-                        .HasColumnType("int");
-
-                    b.HasKey("MessageConversationID");
-
-                    b.ToTable("MessageConversations");
                 });
 
             modelBuilder.Entity("HonestAuto.Models.User", b =>
@@ -190,6 +165,9 @@ namespace HonestAuto.Migrations
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
 
+                    b.Property<byte[]>("ProfileImage")
+                        .HasColumnType("varbinary(max)");
+
                     b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -197,6 +175,28 @@ namespace HonestAuto.Migrations
                     b.HasKey("UserID");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("HonestAuto.Models.CarEvaluation", b =>
+                {
+                    b.HasOne("HonestAuto.Models.Car", "Car")
+                        .WithMany()
+                        .HasForeignKey("CarID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("HonestAuto.Models.Mechanic", null)
+                        .WithMany("CarEvaluations")
+                        .HasForeignKey("MechanicID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+                });
+
+            modelBuilder.Entity("HonestAuto.Models.Mechanic", b =>
+                {
+                    b.Navigation("CarEvaluations");
                 });
 #pragma warning restore 612, 618
         }

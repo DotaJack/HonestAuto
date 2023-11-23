@@ -1,146 +1,203 @@
 ﻿using HonestAuto.Data;
 using HonestAuto.Models;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging; // Import the logger namespace
 
-public class UserController : Controller
+namespace HonestAuto.Controllers
 {
-    private readonly UserManager<User> _userManager;
-    private readonly MarketplaceContext _context;
-
-    public UserController(UserManager<User> userManager, MarketplaceContext context)
+    public class UserController : Controller
     {
-        _userManager = userManager;
-        _context = context;
-    }
+        private readonly MarketplaceContext _context;
+        private readonly ILogger<UserController> _logger; // Create a logger instance
 
-    // INDEX (Read/List all)
-    public IActionResult Index()
-    {
-        var users = _context.Users.ToList();
-        return View(users);
-    }
-
-    // CREATE (GET)
-    public IActionResult Create()
-    {
-        return View();
-    }
-
-    // CREATE (POST)
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Create(User user)
-    {
-        if (ModelState.IsValid)
+        public UserController(MarketplaceContext context, ILogger<UserController> logger)
         {
-            _context.Add(user);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-        return View(user);
-    }
-
-    // EDIT (GET)
-    public async Task<IActionResult> Edit(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            _context = context;
+            _logger = logger; // Initialize the logger
         }
 
-        var user = await _context.Users.FindAsync(id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-        return View(user);
-    }
-
-    // EDIT (POST)
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("UserID,FirstName,LastName,Email,PhoneNumber,Password,Address")] User user)
-    {
-        if (id != user.UserID)
-        {
-            return NotFound();
-        }
-
-        if (ModelState.IsValid)
+        // INDEX (Read/List all users)
+        public async Task<IActionResult> Index()
         {
             try
             {
-                _context.Update(user);
-                await _context.SaveChangesAsync();
+                // Retrieve a list of all users from the database asynchronously
+                var users = await _context.Users.ToListAsync();
+                return View(users); // Display the list of users
             }
-            catch (DbUpdateConcurrencyException)
+            catch (Exception ex)
             {
-                if (!_context.Users.Any(u => u.UserID == user.UserID))
+                // Log the error
+                _logger.LogError(ex, "Error occurred while getting users");
+
+                // Display an error view or handle the error gracefully
+                return View("Error");
+            }
+        }
+
+        // CREATE (GET)
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(); // Display the user creation form
+        }
+
+        // POST: User/Create
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Email,PhoneNumber,Password,Address,Role")] User user, IFormFile profileImageFile)
+        {
+            if (ModelState.IsValid)
+            {
+                if (profileImageFile != null && profileImageFile.Length > 0)
                 {
-                    return NotFound();
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await profileImageFile.CopyToAsync(memoryStream);
+                        user.ProfileImage = memoryStream.ToArray(); // Upload and store the profile image
+                    }
                 }
-                else
+
+                _context.Add(user); // Add the user to the database
+                await _context.SaveChangesAsync(); // Save changes to the database
+                return RedirectToAction(nameof(Index)); // Redirect to the user list after creation
+            }
+            return View(user); // Return to the create user form with validation errors if any
+        }
+
+        // EDIT (GET)
+        [HttpGet]
+        public async Task<IActionResult> Edit(int? id)
+        {
+            try
+            {
+                if (id == null)
                 {
-                    throw;
+                    return NotFound(); // Return a not found view if no user ID is provided
+                }
+
+                var user = await _context.Users.FindAsync(id);
+                if (user == null)
+                {
+                    return NotFound(); // Return a not found view if the user doesn't exist
+                }
+                return View(user); // Display the user edit form
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                _logger.LogError(ex, $"Error occurred while editing user with ID {id}");
+
+                // Consider a dedicated error view or error handling logic
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, [Bind("UserID,FirstName,LastName,Email,PhoneNumber,Password,Address,Role")] User user)
+        {
+            if (id != user.UserID)
+            {
+                return NotFound(); // Return not found if the user ID doesn't match
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var userToUpdate = await _context.Users.FindAsync(id);
+                    if (userToUpdate == null)
+                    {
+                        return NotFound(); // Return not found if the user doesn't exist
+                    }
+
+                    // Update user properties
+                    userToUpdate.FirstName = user.FirstName;
+                    userToUpdate.LastName = user.LastName;
+                    userToUpdate.Email = user.Email;
+                    userToUpdate.PhoneNumber = user.PhoneNumber;
+                    userToUpdate.Password = user.Password;
+                    userToUpdate.Address = user.Address;
+                    userToUpdate.Role = user.Role;
+
+                    _context.Update(userToUpdate); // Update the user in the database
+                    await _context.SaveChangesAsync(); // Save changes to the database
+                    return RedirectToAction(nameof(Index)); // Redirect to the user list after editing
+                }
+                catch (DbUpdateException ex)
+                {
+                    // Log the error
+                    _logger.LogError(ex, $"Error occurred while updating user with ID {id}");
+
+                    // Handle specific database update errors
                 }
             }
-            return RedirectToAction(nameof(Index));
-        }
-        return View(user);
-    }
-
-    // DELETE (GET)
-    public async Task<IActionResult> Delete(int? id)
-    {
-        if (id == null)
-        {
-            return NotFound();
+            return View(user); // Return to the edit user form with validation errors if any
         }
 
-        var user = await _context.Users.FindAsync(id);
-        if (user == null)
+        // DELETE (GET)
+        [HttpGet]
+        public async Task<IActionResult> Delete(int? id)
         {
-            return NotFound();
-        }
-        return View(user);
-    }
+            try
+            {
+                if (id == null)
+                {
+                    return NotFound(); // Return not found if no user ID is provided
+                }
 
-    // DELETE (POST/Confirmed)
-    [HttpPost, ActionName("Delete")]
-    [ValidateAntiForgeryToken]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        var user = await _context.Users.FindAsync(id);
-        if (user == null)
-        {
-            return NotFound();
-        }
-        _context.Users.Remove(user);
-        await _context.SaveChangesAsync();
-        return RedirectToAction(nameof(Index));
-    }
+                var user = await _context.Users.FirstOrDefaultAsync(m => m.UserID == id);
+                if (user == null)
+                {
+                    return NotFound(); // Return not found if the user doesn't exist
+                }
+                return View(user); // Display the user delete confirmation page
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                _logger.LogError(ex, $"Error occurred while deleting user with ID {id}");
 
-    // CheckRoleAndRedirect function
-    public async Task<IActionResult> CheckRoleAndRedirect()
-    {
-        var user = await _userManager.GetUserAsync(User);
+                // Consider a dedicated error view or error handling logic
+                return View("Error");
+            }
+        }
 
-        if (await _userManager.IsInRoleAsync(user, "Buyer"))
+        // DELETE (POST/Confirmed)
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            // User is a buyer, redirect them to the buyer dashboard.
-            return RedirectToAction("BuyerDashboard", "Buyer");
+            try
+            {
+                var user = await _context.Users.FindAsync(id);
+                if (user != null)
+                {
+                    _context.Users.Remove(user); // Remove the user from the database
+                    await _context.SaveChangesAsync(); // Save changes to the database
+                }
+                return RedirectToAction(nameof(Index)); // Redirect to the user list after deletion
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+                _logger.LogError(ex, $"Error occurred while confirming deletion of user with ID {id}");
+
+                // Display an error view or handle the error gracefully
+                return View("Error");
+            }
         }
-        else if (await _userManager.IsInRoleAsync(user, "Seller"))
+
+        private bool UserExists(int id)
         {
-            // User is a seller, redirect them to the seller dashboard.
-            return RedirectToAction("SellerDashboard", "Seller");
-        }
-        else
-        {
-            // Handle other roles or unauthorized access as needed.
-            return RedirectToAction("AccessDenied", "Home");
+            return _context.Users.Any(e => e.UserID == id);
         }
     }
 }

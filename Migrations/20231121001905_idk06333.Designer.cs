@@ -4,6 +4,7 @@ using HonestAuto.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    partial class MarketplaceContextModelSnapshot : ModelSnapshot
+    [Migration("20231121001905_idk06333")]
+    partial class idk06333
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -72,19 +75,21 @@ namespace HonestAuto.Migrations
                     b.Property<int>("CarID")
                         .HasColumnType("int");
 
-                    b.Property<double?>("CarValue")
+                    b.Property<double>("CarValue")
                         .HasColumnType("float");
 
                     b.Property<DateTime>("EvaluationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EvaluationStatus")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EvaluationSummary")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MechanicID")
+                    b.Property<int>("MechanicID")
                         .HasColumnType("int");
 
                     b.HasKey("CarEvaluationID");

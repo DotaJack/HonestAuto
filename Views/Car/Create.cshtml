@@ -1,0 +1,53 @@
+﻿@model HonestAuto.Models.Car
+
+@{
+    ViewData["Title"] = "Create New Car";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        <label asp-for="Brand">Brand</label>
+        <input asp-for="Brand" class="form-control" />
+        <span asp-validation-for="Brand" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Model">Model</label>
+        <input asp-for="Model" class="form-control" />
+        <span asp-validation-for="Model" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Mileage">Mileage</label>
+        <input asp-for="Mileage" class="form-control" />
+        <span asp-validation-for="Mileage" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Year">Year</label>
+        <input asp-for="Year" class="form-control" />
+        <span asp-validation-for="Year" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="History">History</label>
+        <input asp-for="History" class="form-control" />
+        <span asp-validation-for="History" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="UserID">UserID</label>
+        <input asp-for="UserID" class="form-control" />
+        <span asp-validation-for="UserID" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="carImageFile">Car Image</label>
+        <input type="file" name="carImageFile" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
