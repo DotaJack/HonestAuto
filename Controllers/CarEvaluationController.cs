@@ -17,14 +17,18 @@ namespace HonestAuto.Controllers
             _context = context;
         }
 
-        // GET: CarEvaluation
+        // GET: CarEvaluation/Index
         public async Task<IActionResult> Index()
         {
-            // Retrieve a list of all car evaluations from the database asynchronously
-            var carEvaluation = await _context.CarEvaluations.ToListAsync();
+            // Retrieve a list of all car evaluations with a valid CarID from the database asynchronously
+            var carEvaluations = await _context.CarEvaluations
+                .Where(ce => _context.Cars.Any(c => c.CarID == ce.CarID))
+                .ToListAsync();
 
-            // Return the list of car evaluations to a view
-            return View(carEvaluation);
+            // Group car evaluations by their EvaluationStatus
+            var groupedCarEvaluations = carEvaluations.GroupBy(ce => ce.EvaluationStatus);
+
+            return View(groupedCarEvaluations);
         }
 
         // GET: CarEvaluation/Details/5

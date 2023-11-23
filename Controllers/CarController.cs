@@ -270,7 +270,7 @@ namespace HonestAuto.Controllers
         // DELETE (POST/Confirmed)
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
             // Retrieve a car by ID from the database
             var car = await _context.Cars.FindAsync(id);

@@ -49,7 +49,7 @@
             @Html.DisplayFor(model => model.UserID)
         </dd>
     </dl>
-    <form asp-action="DeleteConfirmed" method="post">
+    <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="CarID" />
         <input type="submit" value="Delete" class="btn btn-danger" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>

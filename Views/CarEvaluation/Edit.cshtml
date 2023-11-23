@@ -10,7 +10,11 @@
     <input type="hidden" asp-for="CarEvaluationID" />
     <div class="form-group">
         <label asp-for="EvaluationStatus"></label>
-        <input asp-for="EvaluationStatus" class="form-control" />
+        <select asp-for="EvaluationStatus" class="form-control">
+            <option value="Submitted">Submitted</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+        </select>
         <span asp-validation-for="EvaluationStatus" class="text-danger"></span>
     </div>
     <div class="form-group">
@@ -19,12 +23,11 @@
         <span asp-validation-for="EvaluationSummary" class="text-danger"></span>
     </div>
     <div class="form-group">
-    <div class="form-group">
         <label asp-for="CarValue"></label>
         <input asp-for="CarValue" class="form-control" />
         <span asp-validation-for="CarValue" class="text-danger"></span>
     </div>
- 
+
     <div class="form-group">
         <input type="submit" value="Save" class="btn btn-primary" />
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
