@@ -12,7 +12,7 @@ Getting Started
 
     bash
 
-git clone https://github.com/DotaJack/HonestAuto
+git clone [https://github.com/DotaJack/HonestAuto](https://github.com/DotaJack/HonestAuto.git)
 
 Open the Project: Launch Visual Studio 2022 and open the HonestAuto.sln solution file located in the root folder of the cloned repository.
 
