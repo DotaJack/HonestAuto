@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using HonestAuto.Data;
 using HonestAuto.Models;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
-using HonestAuto.Data;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace HonestAuto.Controllers
 {
@@ -160,8 +157,17 @@ namespace HonestAuto.Controllers
         {
             // Find the car evaluation by ID and remove it from the database
             var carEvaluation = await _context.CarEvaluations.FindAsync(id);
-            _context.CarEvaluations.Remove(carEvaluation);
-            await _context.SaveChangesAsync();
+
+            if (carEvaluation != null)
+            {
+                _context.CarEvaluations.Remove(carEvaluation);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                // Handle the case when carEvaluation is null if necessary
+                // This could be logging the error or returning a user-friendly message
+            }
 
             // Redirect to the Index action after successful deletion
             return RedirectToAction(nameof(Index));
