@@ -1,5 +1,7 @@
 using HonestAuto.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using HonestAuto.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,8 +9,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<MarketplaceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MarketplaceContext")));
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<MarketplaceContext>();
 
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -21,7 +25,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.MapRazorPages();
 app.UseRouting();
 
 app.MapControllerRoute(

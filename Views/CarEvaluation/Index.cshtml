@@ -9,56 +9,33 @@
 @foreach (var group in Model)
 {
     <h2>@group.Key</h2>
-
     <table class="table">
         <thead>
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().CarEvaluationID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().CarID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().MechanicID)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().EvaluationSummary)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().CarValue)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.First().EvaluationDate)
-                </th>
-                <th></th>
+                <th>Evaluation ID</th>
+                <th>Car ID</th>
+                <th>Mechanic ID</th>
+                <th>Evaluation Status</th>
+                <th>Evaluation Summary</th>
+                <th>Car Value</th>
+                <th>Evaluation Date</th>
+                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in group)
             {
                 <tr>
+                    <td>@item.CarEvaluationID</td>
+                    <td>@item.CarID</td>
+                    <td>@item.MechanicID</td>
+                    <td>@item.EvaluationStatus</td>
+                    <td>@item.EvaluationSummary</td>
+                    <td>@item.CarValue</td>
+                    <td>@item.EvaluationDate.ToString("d")</td>
                     <td>
-                        @Html.DisplayFor(modelItem => item.CarEvaluationID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CarID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MechanicID)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EvaluationSummary)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CarValue)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.EvaluationDate)
-                    </td>
-                    <td>
-                        <a asp-action="Details" asp-route-id="@item.CarEvaluationID" class="btn btn-primary">Details</a>
                         <a asp-action="Edit" asp-route-id="@item.CarEvaluationID" class="btn btn-warning">Edit</a>
+                        <a asp-action="Details" asp-route-id="@item.CarEvaluationID" class="btn btn-primary">Details</a>
                     </td>
                 </tr>
             }
