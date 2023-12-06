@@ -7,7 +7,7 @@
 <h1>Cars</h1>
 
 <table class="table">
-    <caption>New York City Marathon Results 2013</caption>
+    <caption>Car Inventory Table: Browse, Edit, and Delete Car Listings</caption>
     <thead>
         <tr>
             <th>Car ID</th>
@@ -35,7 +35,8 @@
                 <td>
                     @if (car.CarImage != null && car.CarImage.Length > 0)
                     {
-                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" style="width:100px; height:auto;" />
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" style="width:100px; height:auto;" alt="Car image" />
+
                     }
                     else
                     {

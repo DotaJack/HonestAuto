@@ -13,6 +13,7 @@
 @if (Model != null && Model.Any())
 {
     <table class="table">
+<caption>User Table: Browse, Edit, and Delete User Listings</caption>
         <thead>
             <tr>
                 <th>ID</th>
@@ -40,7 +41,7 @@
                     <td>
                         @if (user.ProfileImage != null && user.ProfileImage.Length > 0)
                         {
-                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.ProfileImage)" style="width:100px; height:auto;" />
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.ProfileImage)" style="width:100px; height:auto;" alt=" Profile Image" />
                         }
                         else
                         {

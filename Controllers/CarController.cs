@@ -140,14 +140,30 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
+            // Load the existing car entity from the database
+            var existingCar = await _context.Cars.FindAsync(id);
+
+            if (existingCar == null)
+            {
+                return NotFound();
+            }
+
+            // Retain the original CarImage by setting it to the existing value
+            car.CarImage = existingCar.CarImage;
+
+            // Update the properties of the existing car entity with the values from the submitted form
+            existingCar.Brand = car.Brand;
+            existingCar.Model = car.Model;
+            existingCar.Year = car.Year;
+            existingCar.Mileage = car.Mileage;
+            existingCar.History = car.History;
+            existingCar.UserID = car.UserID;
+
             // Check if the submitted form data is valid
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Update the car in the database context
-                    _context.Update(car);
-
                     // Save changes to the database
                     await _context.SaveChangesAsync();
                 }
@@ -169,8 +185,9 @@ namespace HonestAuto.Controllers
             }
 
             // If the model state is not valid, return the view with the car data to display validation errors
-            return View(car);
+            return View(existingCar);
         }
+
 
         // GET: Car/EditImage/5
         public async Task<IActionResult> EditImage(int? id)
@@ -195,9 +212,9 @@ namespace HonestAuto.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditImage(int id, IFormFile imageFile)
         {
-            if (id == null)
+            if (id <= 0)
             {
-                return NotFound(); // If no ID is provided, return a 404 Not Found result.
+                return NotFound(); // Replace this with a relevant error message if 0 can be a valid ID
             }
 
             var car = await _context.Cars.FindAsync(id);
@@ -207,7 +224,7 @@ namespace HonestAuto.Controllers
                 return NotFound(); // If no car with the provided ID is found, return a 404 Not Found result.
             }
 
-            if (imageFile != null)
+            if (imageFile != null && imageFile.Length > 0)
             {
                 // If a new image file is provided, read it into a memory stream and assign it to the CarImage property.
                 using (var memoryStream = new MemoryStream())
@@ -217,29 +234,26 @@ namespace HonestAuto.Controllers
                 }
             }
 
-            if (ModelState.IsValid)
+            // The ModelState.IsValid check is usually redundant for file upload scenarios
+            // unless you have other properties being validated
+            try
             {
-                try
+                _context.Update(car); // Update the Car entity in the database context.
+                await _context.SaveChangesAsync(); // Save changes to the database.
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CarExists(car.CarID))
                 {
-                    _context.Update(car); // Update the Car entity in the database context.
-                    await _context.SaveChangesAsync(); // Save changes to the database.
+                    return NotFound(); // If the car no longer exists, return a 404 Not Found result.
                 }
-                catch (DbUpdateConcurrencyException)
+                else
                 {
-                    if (!CarExists(car.CarID))
-                    {
-                        return NotFound(); // If the car no longer exists, return a 404 Not Found result.
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    throw;
                 }
-
-                return RedirectToAction(nameof(Index)); // Redirect to the Index action after a successful update.
             }
 
-            return View(car); // If the model state is not valid, return the view with the car data to display validation errors.
+            return RedirectToAction(nameof(Index)); // Redirect to the Index action after a successful update.
         }
 
         // DELETE (GET)
