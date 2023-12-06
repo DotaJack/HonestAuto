@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HonestAuto.Migrations
 {
     [DbContext(typeof(MarketplaceContext))]
-    [Migration("20231121000118_idk063")]
-    partial class idk063
+    [Migration("20231206183903_test")]
+    partial class test
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -75,25 +75,24 @@ namespace HonestAuto.Migrations
                     b.Property<int>("CarID")
                         .HasColumnType("int");
 
+                    b.Property<double?>("CarValue")
+                        .HasColumnType("float");
+
                     b.Property<DateTime>("EvaluationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EvaluationStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EvaluationSummary")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MechanicID")
+                    b.Property<int?>("MechanicID")
                         .HasColumnType("int");
 
                     b.HasKey("CarEvaluationID");
 
                     b.HasIndex("CarID");
-
-                    b.HasIndex("MechanicID");
 
                     b.ToTable("CarEvaluations");
                 });
@@ -185,18 +184,7 @@ namespace HonestAuto.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HonestAuto.Models.Mechanic", null)
-                        .WithMany("CarEvaluations")
-                        .HasForeignKey("MechanicID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Car");
-                });
-
-            modelBuilder.Entity("HonestAuto.Models.Mechanic", b =>
-                {
-                    b.Navigation("CarEvaluations");
                 });
 #pragma warning restore 612, 618
         }
