@@ -86,8 +86,7 @@ namespace HonestAuto.Controllers
             return View(car);
         }
 
-        // DETAILS (Read/View single item)
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int? id, int? referrerId = 0)
         {
             // Check if the provided ID is null
             if (id == null)
@@ -102,6 +101,12 @@ namespace HonestAuto.Controllers
             if (car == null)
             {
                 return NotFound();
+            }
+
+            // Check if referrerId has a valid value and pass it to the view
+            if (referrerId > 0)
+            {
+                ViewData["ReferrerId"] = referrerId;
             }
 
             // Return the car details to a view

@@ -1,6 +1,9 @@
 ﻿@model HonestAuto.Models.Car
-
+@{
+    var referrerId = ViewData["ReferrerId"] as int?;
+}
 <h2>Car Details</h2>
+
 <div>
     <h4>Car</h4>
     <hr />
@@ -49,6 +52,17 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
-    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+    @if (referrerId.HasValue)
+    {
+        <!-- Button to go back to the specific CarEvaluation -->
+        <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@referrerId.Value" class="btn btn-secondary">Back to Car Evaluation</a>
+    }
+    else
+    {
+    
+        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
+
+        <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
+    }
+
 </div>

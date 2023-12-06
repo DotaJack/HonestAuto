@@ -71,50 +71,12 @@
     </dl>
 </div>
 
-<div>
-    <h4>Car Information</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Car.Brand)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Car.Brand)
-        </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.Car.Model)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Car.Model)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Car.Year)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Car.Year)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Car.Mileage)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Car.Mileage)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Car.History)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Car.History)
-        </dd>
-    </dl>
-</div>
 
 <div class="mt-3">
     <!-- Style the "Edit" link as a button -->
     <a asp-action="Edit" asp-route-id="@Model.CarEvaluationID" class="btn btn-warning mr-2">Edit</a>
+    <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarID" asp-route-referrerId="@Model.CarEvaluationID" class="btn btn-info">View Car Details</a>
 
     <!-- Style the "Back to List" link as a button -->
     <a asp-action="Index" class="btn btn-secondary">Back to List</a>

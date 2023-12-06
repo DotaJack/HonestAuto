@@ -20,8 +20,7 @@ namespace HonestAuto.Controllers
         public async Task<IActionResult> Index()
         {
             var carEvaluations = await _context.CarEvaluations
-                .Include(ce => ce.Car)
-                .Where(ce => _context.Cars.Any(c => c.CarID == ce.CarID))
+                //  .Where(ce => _context.Cars.Any(c => c.CarID == ce.CarID))
                 .ToListAsync();
 
             var groupedCarEvaluations = carEvaluations.GroupBy(ce => ce.EvaluationStatus);
@@ -37,7 +36,7 @@ namespace HonestAuto.Controllers
             }
 
             var carEvaluation = await _context.CarEvaluations
-                .Include(ce => ce.Car)
+            //    .Include(ce => ce.Car)
                 .FirstOrDefaultAsync(m => m.CarEvaluationID == id);
 
             if (carEvaluation == null)
@@ -64,12 +63,10 @@ namespace HonestAuto.Controllers
             return View(carEvaluation);
         }
 
-        // POST: CarEvaluation/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CarEvaluationID,EvaluationStatus,EvaluationSummary,CarValue")] CarEvaluation carEvaluation)
         {
-            // Check if the provided ID matches the car evaluation's ID
             if (id != carEvaluation.CarEvaluationID)
             {
                 return NotFound();
@@ -77,18 +74,26 @@ namespace HonestAuto.Controllers
 
             if (ModelState.IsValid)
             {
+                // Fetch the existing car evaluation from the database
+                var existingEvaluation = await _context.CarEvaluations.FindAsync(id);
+                if (existingEvaluation == null)
+                {
+                    return NotFound();
+                }
+
+                // Update only the specific fields
+                existingEvaluation.EvaluationStatus = carEvaluation.EvaluationStatus;
+                existingEvaluation.EvaluationSummary = carEvaluation.EvaluationSummary;
+                existingEvaluation.CarValue = carEvaluation.CarValue;
+
                 try
                 {
-                    // Update the car in the database context
-                    _context.Update(carEvaluation);
-
-                    // Save changes to the database
+                    _context.Update(existingEvaluation);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    // Check if the car with the provided ID no longer exists
-                    if (!CarEvaluationExists(carEvaluation.CarEvaluationID))
+                    if (!CarEvaluationExists(id))
                     {
                         return NotFound();
                     }
@@ -98,11 +103,9 @@ namespace HonestAuto.Controllers
                     }
                 }
 
-                // Redirect to the Index action after successful editing
                 return RedirectToAction(nameof(Index));
             }
 
-            // If the model state is not valid, return the view with the car evaluation data to display validation errors
             return View(carEvaluation);
         }
 

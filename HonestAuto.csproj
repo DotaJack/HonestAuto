@@ -19,15 +19,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="Views\CarEvaluation\Delete.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Properties\launchSettings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Views\CarEvaluation\Create.cshtml" />
+    <None Include="Views\CarEvaluation\Delete.cshtml" />
     <None Include="Views\CarEvaluation\Details.cshtml" />
     <None Include="Views\CarEvaluation\Edit.cshtml" />
     <None Include="Views\CarEvaluation\Index.cshtml" />
