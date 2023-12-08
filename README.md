@@ -36,7 +36,7 @@ b. Inside the appsettings.json file, find the "ConnectionStrings" section and re
 json
 
 "ConnectionStrings": {
-    "MarketplaceContext": "Data Source=localhost\\MSSQLSERVER03;Initial Catalog=HONESTAUTODB;Integrated Security=True;Persist Security Info=True;User ID=FYPADMIN;Password=test;Trust Server Certificate=True"
+    "MarketplaceContext": "Data Source=localhost\\MSSQLSERVER03;Initial Catalog=WEBDEVCA2;Integrated Security=True;Persist Security Info=True;User ID=FYPADMIN;Password=test;Trust Server Certificate=True"
 }
 
 Make sure to replace the connection string value with your actual connection details if they differ.
