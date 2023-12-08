@@ -1,8 +1,11 @@
 ﻿using HonestAuto.Data;
 using HonestAuto.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HonestAuto.Controllers
@@ -11,19 +14,31 @@ namespace HonestAuto.Controllers
     {
         private readonly MarketplaceContext _context;
 
-        public CarController(MarketplaceContext context)
+        // Inject UserManager into your controller
+        private readonly UserManager<User> _userManager;
+
+        public CarController(MarketplaceContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // INDEX (Read/List all)
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? searchYear)
         {
             // Retrieve a list of all cars from the database asynchronously
-            var cars = await _context.Cars.ToListAsync();
+            var cars = _context.Cars.AsQueryable(); // Start with all cars
 
-            // Return the list of cars to a view
-            return View(cars);
+            if (searchYear.HasValue)
+            {
+                // If a search year is provided, filter cars by that year
+                cars = cars.Where(car => car.Year == searchYear.Value);
+            }
+
+            // Execute the query and retrieve the filtered cars
+            var filteredCars = await cars.ToListAsync();
+
+            // Return the list of filtered cars to a view
+            return View(filteredCars);
         }
 
         // CREATE (GET)
@@ -37,18 +52,18 @@ namespace HonestAuto.Controllers
         // CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Brand,Model,Year,Mileage,History,UserID")] Car car, IFormFile carImageFile)
+        public async Task<IActionResult> Create([Bind("Brand,Model,Year,Mileage,History")] Car car, IFormFile carImageFile)
         {
             // Check if the submitted form data is valid
             if (ModelState.IsValid)
             {
-                // Check if a car image file is uploaded
                 if (carImageFile != null && carImageFile.Length > 0)
                 {
                     // Copy the uploaded car image to a memory stream
                     using (var memoryStream = new MemoryStream())
                     {
                         await carImageFile.CopyToAsync(memoryStream);
+
                         car.CarImage = memoryStream.ToArray(); // Store the image data as a byte array in the Car object
                     }
                 }
@@ -115,6 +130,7 @@ namespace HonestAuto.Controllers
 
         // EDIT (GET)
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             // Check if the provided ID is null
@@ -138,8 +154,9 @@ namespace HonestAuto.Controllers
 
         // EDIT (POST)
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarID,Brand,Model,Year,Mileage,History,UserID")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("CarID,Brand,Model,Year,Mileage,History,UserID,CarImage")] Car car)
         {
             // Check if the provided ID matches the car's ID
             if (id != car.CarID)
@@ -147,13 +164,26 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
+            // Retrieve the existing car data from the database, including the current image
+            var existingCar = await _context.Cars.FindAsync(id);
+
             // Check if the submitted form data is valid
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Retain the existing image without updating it
+                    car.CarImage = existingCar.CarImage;
+
+                    // Update other car properties in the database context
+                    existingCar.Brand = car.Brand;
+                    existingCar.Model = car.Model;
+                    existingCar.Year = car.Year;
+                    existingCar.Mileage = car.Mileage;
+                    existingCar.History = car.History;
+
                     // Update the car in the database context
-                    _context.Update(car);
+                    _context.Update(existingCar);
 
                     // Save changes to the database
                     await _context.SaveChangesAsync();
@@ -176,10 +206,13 @@ namespace HonestAuto.Controllers
             }
 
             // If the model state is not valid, return the view with the car data to display validation errors
-            return View(car);
+            return View(existingCar);
         }
 
         // GET: Car/EditImage/5
+        // EDIT (GET)
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> EditImage(int? id)
         {
             if (id == null)
@@ -251,6 +284,7 @@ namespace HonestAuto.Controllers
 
         // DELETE (GET)
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             // Check if the provided ID is null
@@ -274,6 +308,7 @@ namespace HonestAuto.Controllers
 
         // DELETE (POST/Confirmed)
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {

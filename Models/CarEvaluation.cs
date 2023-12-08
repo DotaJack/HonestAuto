@@ -6,18 +6,21 @@ namespace HonestAuto.Models
     public class CarEvaluation
     {
         [Key]
-        public int CarEvaluationID { get; set; }
+        public int CarEvaluationID { get; set; } // Unique identifier for a car evaluation
 
         [ForeignKey("CarID")]
-        public int CarID { get; set; }
+        public int CarID { get; set; } // Foreign key linking to the associated Car entity
 
-        public int? MechanicID { get; set; }
+        public int? MechanicID { get; set; } // ID of the mechanic performing the evaluation (nullable)
 
-        public string? EvaluationStatus { get; set; } // Default is null, no need to set it explicitly
+        public string? EvaluationStatus { get; set; } // Status of the evaluation (nullable)
 
-        public string? EvaluationSummary { get; set; } // Default is null
+        public string? EvaluationSummary { get; set; } // Summary of the car evaluation (nullable)
 
-        public DateTime EvaluationDate { get; set; } = DateTime.UtcNow;
-        public double? CarValue { get; set; }
+        public DateTime EvaluationDate { get; set; } = DateTime.UtcNow; // Date and time of the evaluation, defaulting to current UTC time
+
+        public double? CarValue { get; set; } // Estimated value of the car (nullable)
+
+        // This class represents the CarEvaluation entity in the database and defines its properties and relationships.
     }
 }

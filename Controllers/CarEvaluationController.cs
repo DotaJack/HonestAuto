@@ -19,11 +19,13 @@ namespace HonestAuto.Controllers
         // GET: CarEvaluation
         public async Task<IActionResult> Index()
         {
-            var carEvaluations = await _context.CarEvaluations
-                //  .Where(ce => _context.Cars.Any(c => c.CarID == ce.CarID))
-                .ToListAsync();
+            // Retrieve all CarEvaluations from the database
+            var carEvaluations = await _context.CarEvaluations.ToListAsync();
 
+            // Group the CarEvaluations by EvaluationStatus
             var groupedCarEvaluations = carEvaluations.GroupBy(ce => ce.EvaluationStatus);
+
+            // Render the view with groupedCarEvaluations
             return View(groupedCarEvaluations);
         }
 
@@ -35,15 +37,15 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
-            var carEvaluation = await _context.CarEvaluations
-            //    .Include(ce => ce.Car)
-                .FirstOrDefaultAsync(m => m.CarEvaluationID == id);
+            // Retrieve a specific CarEvaluation by its ID from the database
+            var carEvaluation = await _context.CarEvaluations.FirstOrDefaultAsync(m => m.CarEvaluationID == id);
 
             if (carEvaluation == null)
             {
                 return NotFound();
             }
 
+            // Render the view with the carEvaluation
             return View(carEvaluation);
         }
 
@@ -55,11 +57,15 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
+            // Retrieve a specific CarEvaluation for editing by its ID from the database
             var carEvaluation = await _context.CarEvaluations.FindAsync(id);
+
             if (carEvaluation == null)
             {
                 return NotFound();
             }
+
+            // Render the view for editing with the carEvaluation
             return View(carEvaluation);
         }
 
@@ -76,18 +82,20 @@ namespace HonestAuto.Controllers
             {
                 // Fetch the existing car evaluation from the database
                 var existingEvaluation = await _context.CarEvaluations.FindAsync(id);
+
                 if (existingEvaluation == null)
                 {
                     return NotFound();
                 }
 
-                // Update only the specific fields
+                // Update specific fields of the existing car evaluation
                 existingEvaluation.EvaluationStatus = carEvaluation.EvaluationStatus;
                 existingEvaluation.EvaluationSummary = carEvaluation.EvaluationSummary;
                 existingEvaluation.CarValue = carEvaluation.CarValue;
 
                 try
                 {
+                    // Save the changes to the database
                     _context.Update(existingEvaluation);
                     await _context.SaveChangesAsync();
                 }
@@ -103,14 +111,17 @@ namespace HonestAuto.Controllers
                     }
                 }
 
+                // Redirect to the Index action after successful update
                 return RedirectToAction(nameof(Index));
             }
 
+            // If the ModelState is not valid, return to the edit view with the carEvaluation
             return View(carEvaluation);
         }
 
         private bool CarEvaluationExists(int id)
         {
+            // Check if a CarEvaluation with the given ID exists in the database
             return _context.CarEvaluations.Any(ce => ce.CarEvaluationID == id);
         }
 

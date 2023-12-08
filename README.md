@@ -8,13 +8,6 @@ Welcome to the Honest Auto ASP.NET MVC Web Application! This README file will gu
     Microsoft SQL Server 2022
     SQL Server Management Studio (SSMS) 19
 
-Getting Started
-
-    Clone the Repository: Start by cloning this repository to your local machine using Git:
-
-    bash
-
-git clone [https://github.com/DotaJack/HonestAuto](https://github.com/DotaJack/HonestAuto.git)
 
 Open the Project: Launch Visual Studio 2022 and open the HonestAuto.sln solution file located in the root folder of the cloned repository.
 

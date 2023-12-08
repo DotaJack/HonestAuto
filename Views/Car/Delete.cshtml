@@ -42,12 +42,7 @@
             @Html.DisplayFor(model => model.History)
         </dd>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.UserID)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.UserID)
-        </dd>
+       
     </dl>
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="CarID" />

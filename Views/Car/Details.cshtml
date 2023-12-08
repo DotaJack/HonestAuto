@@ -44,11 +44,19 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.UserID)
+            Car Image
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UserID)
+            @if (Model.CarImage != null && Model.CarImage.Length > 0)
+            {
+                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.CarImage)" style="width:400px; height:auto;" />
+            }
+            else
+            {
+                <text>No Image</text>
+            }
         </dd>
+       
     </dl>
 </div>
 <div>

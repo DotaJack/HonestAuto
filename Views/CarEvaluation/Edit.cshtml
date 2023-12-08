@@ -22,9 +22,14 @@
 
     <div class="form-group">
         <label asp-for="EvaluationStatus" class="control-label"></label>
-        <input asp-for="EvaluationStatus" class="form-control" />
+        <select asp-for="EvaluationStatus" class="form-control">
+            <option value="">Select Status</option>
+            <option value="Submitted">Submitted</option>
+            <option value="Completed">Completed</option>
+        </select>
         <span asp-validation-for="EvaluationStatus" class="text-danger"></span>
     </div>
+
 
     <div class="form-group">
         <label asp-for="EvaluationSummary" class="control-label"></label>
