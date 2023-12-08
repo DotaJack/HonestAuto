@@ -1,0 +1,29 @@
+﻿@model HonestAuto.Models.CarEvaluation
+
+<h2>Delete</h2>
+
+<form asp-action="Delete" asp-route-id="@Model.CarEvaluationID" method="post">
+    <div class="form-group">
+        <label asp-for="CarID" class="control-label"></label>
+        <input asp-for="CarID" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MechanicID" class="control-label"></label>
+        <input asp-for="MechanicID" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EvaluationStatus" class="control-label"></label>
+        <input asp-for="EvaluationStatus" class="form-control" disabled />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EvaluationSummary" class="control-label"></label>
+        <input asp-for="EvaluationSummary" class="form-control" disabled />
+    </div>
+
+
+
+    <input type="submit" value="Delete" class="btn btn-danger" />
+</form>

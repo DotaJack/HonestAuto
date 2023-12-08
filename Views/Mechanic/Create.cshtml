@@ -1,15 +1,18 @@
-﻿@model HonestAuto.Models.User
+﻿@model HonestAuto.Models.Mechanic
 
-<h2>Create New User</h2>
+<h2>Create New Mechanic</h2>
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    
-       @Html.AntiForgeryToken()
+<form asp-action="Create" method="post">
+    <!-- Define an HTML form that submits data to the "Create" action using POST which can be seen in MechanicController -->
 
     <div class="form-group">
         <label asp-for="FirstName">First Name</label>
+        <!-- Label for the "FirstName" property -->
         <input asp-for="FirstName" class="form-control" />
+        <!-- Input field bound to the "FirstName" property -->
         <span asp-validation-for="FirstName" class="text-danger"></span>
+        <!-- Display validation messages for the "FirstName" property -->
+        <!-- This is then repeated for all of them -->
     </div>
 
     <div class="form-group">
@@ -42,21 +45,8 @@
         <span asp-validation-for="Address" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <label asp-for="Role">Role</label>
-        <select asp-for="Role" class="form-control">
-            <option value="Buyer">Buyer</option>
-            <option value="Seller">Seller</option>
-         
-        </select>
-        <span asp-validation-for="Role" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <label for="profileImageFile">Profile Image</label>
-        <input type="file" name="profileImageFile" class="form-control" />
-    </div>
 
 
     <button type="submit" class="btn btn-primary">Create</button>
+    <!-- Submit button to trigger form submission -->
 </form>

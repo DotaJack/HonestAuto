@@ -1,19 +1,26 @@
 ﻿using HonestAuto.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace HonestAuto.Data
-
-{
-    public class MarketplaceContext : DbContext
+{// This is done so that the MarketplaceContext class can be used to interact with the database. This can then be paired with the Migrations which will allow the project to be used on other devices. Using Add-Migration DBcreation and then update-database
+    public class MarketplaceContext : IdentityDbContext<User>
     {
         public MarketplaceContext(DbContextOptions<MarketplaceContext> options) : base(options)
         {
+            // Constructor remains the same
         }
 
-        public DbSet<MessageConversation> MessageConversations { get; set; }
-        public DbSet<User> Users { get; set; }
+        //  public DbSet<MessageConversation> MessageConversations { get; set; }
+        // DbSet for the MessageConversation model. Allows interaction with the MessageConversations table.
+
         public DbSet<Mechanic> Mechanics { get; set; }
+        // DbSet for the Mechanic model. Allows interaction with the Mechanics table.
+
         public DbSet<Car> Cars { get; set; }
+        // DbSet for the Car model. Allows interaction with the Cars table.
+
         public DbSet<CarEvaluation> CarEvaluations { get; set; }
+        // DbSet for the CarEvaluation model. Allows interaction with the CarEvaluations table.
     }
 }
