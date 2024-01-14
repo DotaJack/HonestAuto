@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using HonestAuto.Models;
 using System;
 using System.Threading.Tasks;
+using HonestAuto.Hubs;
+using HonestAuto.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,11 +17,12 @@ builder.Services.AddDbContext<MarketplaceContext>(options =>
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() // Add roles to the identity configuration
     .AddEntityFrameworkStores<MarketplaceContext>();
-
+builder.Services.AddScoped<ChatMessageService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddRouting();
 builder.Services.AddMvc();
+builder.Services.AddSignalR();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -35,17 +38,14 @@ else
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.MapHub<ChatHub>("/chatHub");
 app.UseRouting();
-
 app.UseAuthentication(); // Enable authentication
 app.UseAuthorization(); // Enable authorization
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
-
 // Seed Roles and Users
 SeedRoles(app.Services).Wait(); // Seed roles
 SeedUsersAndRoles(app.Services).Wait(); // Seed users and assign roles

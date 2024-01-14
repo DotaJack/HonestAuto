@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Identity;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -28,6 +29,9 @@ namespace HonestAuto.Models
         public string History { get; set; } // Optional history or additional information about the car
 
         public byte[]? CarImage { get; set; } // Binary data representing an image of the car (nullable)
+
+        [Required]
+        public string UserID { get; set; } // Foreign key to the User table
 
         // This class represents the Car entity in the database and defines its properties and constraints.
     }

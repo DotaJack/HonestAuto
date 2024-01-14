@@ -45,6 +45,7 @@ namespace HonestAuto.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            ViewBag.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier); // Set the user ID
             // Display a form for creating a new car
             return View();
         }
@@ -52,7 +53,7 @@ namespace HonestAuto.Controllers
         // CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Brand,Model,Year,Mileage,History")] Car car, IFormFile carImageFile)
+        public async Task<IActionResult> Create([Bind("Brand,Model,Year,Mileage,History,UserID")] Car car, IFormFile carImageFile)
         {
             // Check if the submitted form data is valid
             if (ModelState.IsValid)

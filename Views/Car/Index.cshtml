@@ -23,6 +23,8 @@
                 <th>Year</th>
                 <th>Mileage</th>
                 <th>History</th>
+                <th>UserID</th>
+<th>Car Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -36,6 +38,7 @@
                     <td>@car.Year</td>
                     <td>@car.Mileage</td>
                     <td>@car.History</td>
+<td>@car.UserID</td>
                     <td>
                         @if (car.CarImage != null && car.CarImage.Length > 0)
                         {
@@ -66,7 +69,5 @@ else
 {
     <p>No results found.</p>
 }
-@if (User.IsInRole("Admin"))
-{
+
 <a asp-action="Create" class="btn btn-success">Create New Car</a>
-}

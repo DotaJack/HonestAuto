@@ -9,7 +9,7 @@
 <form asp-action="Create" method="post" enctype="multipart/form-data">
 
     @Html.AntiForgeryToken()
-
+    <p> @ViewBag.UserID</p>
     <div class="form-group">
         <label asp-for="Brand">Brand</label>
         <input asp-for="Brand" class="form-control" />
@@ -40,6 +40,7 @@
         <span asp-validation-for="History" class="text-danger"></span>
     </div>
 
+    <input type="hidden" asp-for="UserID" value="@ViewBag.UserID" />
 
     <div class="form-group">
         <label for="carImageFile">Car Image</label>
