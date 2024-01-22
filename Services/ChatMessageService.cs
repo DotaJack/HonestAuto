@@ -25,10 +25,12 @@ namespace HonestAuto.Services
         public async Task<IEnumerable<ChatMessage>> GetMessagesForConversationAsync(string senderId, string receiverId)
         {
             return await _context.ChatMessages
+                .Include(m => m.Sender) // Include the Sender user data
                 .Where(m => (m.SenderId == senderId && m.ReceiverId == receiverId) ||
                             (m.SenderId == receiverId && m.ReceiverId == senderId))
                 .OrderBy(m => m.DateSent)
                 .ToListAsync();
         }
+
     }
 }

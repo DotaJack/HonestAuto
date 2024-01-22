@@ -1,0 +1,33 @@
+﻿@model HonestAuto.Models.ChatViewModel
+
+<h2>Chat with User</h2>
+
+<div id="chatWindow" style="border: 1px solid black; padding: 10px; margin-bottom: 20px; max-height: 300px; overflow-y: scroll;">
+    @foreach (var message in Model.Messages)
+    {
+        <div>
+            @if (message.Sender != null && User.Identity.Name == message.Sender.UserName)
+            {
+                <strong>You:</strong>
+            }
+            else
+            {
+                <strong>@message.Sender?.UserName:</strong>
+            }
+            @message.Content <br />
+            <small>@message.DateSent.ToString("dd MMM yyyy HH:mm")</small>
+        </div>
+    }
+</div>
+
+<form id="messageForm">
+    <input type="hidden" id="receiverId" value="@Model.ReceiverId" />
+    <textarea id="messageInput" placeholder="Type your message..." rows="4" cols="50"></textarea>
+    <span asp-validation-for="Content"></span>
+    <button type="submit">Send</button>
+</form>
+
+@section Scripts {
+    <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/chat.js"></script>
+}

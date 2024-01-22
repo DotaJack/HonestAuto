@@ -2,8 +2,6 @@ using HonestAuto.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using HonestAuto.Models;
-using System;
-using System.Threading.Tasks;
 using HonestAuto.Hubs;
 using HonestAuto.Services;
 

@@ -24,13 +24,12 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Index">Car</a>
                         </li>
-                        @if (User.IsInRole("Admin"))
-                        {
+                      
                          
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="CarEvaluation" asp-action="Index">Car Evaluation</a>
                             </li>
-                        }
+                       
                     </ul>
                     <partial name ="_LoginPartial" />
 
@@ -49,9 +48,12 @@
             &copy; 2023 - HonestAuto - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
 </body>
 </html>

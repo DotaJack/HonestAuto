@@ -42,7 +42,12 @@
         <dd>
             @Html.DisplayFor(model => model.History)
         </dd>
-
+        <dt>
+            @Html.DisplayNameFor(model => model.UserID)
+        </dt>
+<dd>
+			@Html.DisplayFor(model => model.UserID)
+</dd>
         <dt>
             Car Image
         </dt>
@@ -69,8 +74,13 @@
     {
     //
         <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
-
+        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
         <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
+        <div>
+            <button onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = Model.UserID })'">
+                Message User
+            </button>
+        </div>
     }
 
 </div>
