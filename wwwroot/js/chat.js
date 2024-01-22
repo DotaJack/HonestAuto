@@ -18,7 +18,16 @@ document.getElementById("messageForm").addEventListener("submit", function (even
 
     sendMessage(receiverId, messageContent);
 });
+// Function to append a sent message to the chat window
+function appendSentMessage(messageContent) {
+    const chatWindow = document.getElementById("chatWindow");
+    const messageDiv = document.createElement("div");
+    messageDiv.innerHTML = `<strong>You:</strong> ${messageContent}`;
+    chatWindow.appendChild(messageDiv);
 
+    // Scroll to the bottom of the chat window to show the latest message
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+}
 // Initialize SignalR connection
 const connection = new signalR.HubConnectionBuilder()
     .withUrl("/chatHub")
@@ -26,9 +35,19 @@ const connection = new signalR.HubConnectionBuilder()
     .build();
 
 connection.on("ReceiveMessage", function (message) {
-    // Handle incoming messages and display them in the chat window
     const chatWindow = document.getElementById("chatWindow");
-    chatWindow.innerHTML += `<div><strong>${message.senderId}:</strong> ${message.content}</div>`;
+    const messageDiv = document.createElement("div");
+
+    if (message.sender !== null && message.sender.userName === userIdentifier) {
+        messageDiv.innerHTML = `<strong>You:</strong> ${message.content} <br /><small>${message.dateSent}</small>`;
+    } else {
+        messageDiv.innerHTML = `<strong>${message.sender?.userName}:</strong> ${message.content} <br /><small>${message.dateSent}</small>`;
+    }
+
+    chatWindow.appendChild(messageDiv);
+
+    // Scroll to the bottom of the chat window to show the latest message
+    chatWindow.scrollTop = chatWindow.scrollHeight;
 });
 
 connection.start()
