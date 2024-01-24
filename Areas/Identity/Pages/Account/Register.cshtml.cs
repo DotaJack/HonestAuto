@@ -98,6 +98,10 @@ namespace HonestAuto.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "Role")]
+            public string SelectedRole { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -123,14 +127,18 @@ namespace HonestAuto.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    // Assign the user to the 'User' role
-                    var addToRoleResult = await _userManager.AddToRoleAsync(user, "User");
-                    if (!addToRoleResult.Succeeded)
+                    // Assign the user to the selected role from the dropdown
+                    if (!string.IsNullOrWhiteSpace(Input.SelectedRole))
                     {
-                        // Handle any errors that occurred during adding the user to the role
-                        foreach (var error in addToRoleResult.Errors)
+                        var addToRoleResult = await _userManager.AddToRoleAsync(user, Input.SelectedRole);
+                        if (!addToRoleResult.Succeeded)
                         {
-                            ModelState.AddModelError(string.Empty, error.Description);
+                            // Handle any errors that occurred during adding the user to the role
+                            foreach (var error in addToRoleResult.Errors)
+                            {
+                                ModelState.AddModelError(string.Empty, error.Description);
+                            }
+                            return Page();
                         }
                     }
 

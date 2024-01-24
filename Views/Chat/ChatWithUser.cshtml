@@ -3,17 +3,21 @@
 <h2>Chat with User</h2>
 
 <div id="chatWindow" style="border: 1px solid black; padding: 10px; margin-bottom: 20px; max-height: 300px; overflow-y: scroll;">
+    <!-- Loop through chat messages -->
     @foreach (var message in Model.Messages)
     {
         <div>
+            <!-- Check if the sender is the current user -->
             @if (message.Sender != null && User.Identity.Name == message.Sender.UserName)
             {
                 <strong>You:</strong>
             }
             else
             {
+                <!-- Display sender's username (if available) -->
                 <strong>@message.Sender?.UserName:</strong>
             }
+            <!-- Display message content and timestamp -->
             @message.Content <br />
             <small>@message.DateSent.ToString("dd MMM yyyy HH:mm")</small>
         </div>
@@ -21,14 +25,19 @@
 </div>
 
 <form id="messageForm">
-
+    <!-- Hidden input to store the receiver's ID -->
     <input type="hidden" id="receiverId" value="@Model.ReceiverId" />
+    <!-- Textarea for entering a new message -->
     <textarea id="messageInput" placeholder="Type your message..." rows="4" cols="50"></textarea>
+    <!-- Validation message for message content (if needed) -->
     <span asp-validation-for="Content"></span>
+    <!-- Button to submit the message -->
     <button type="submit">Send</button>
 </form>
 
 @section Scripts {
+    <!-- Include SignalR library -->
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
+    <!-- Include custom JavaScript for chat functionality -->
     <script src="~/js/chat.js"></script>
 }

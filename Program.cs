@@ -56,7 +56,7 @@ async Task SeedRoles(IServiceProvider serviceProvider)
     using var scope = serviceProvider.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = { "User", "Admin" };
+    string[] roleNames = { "User", "Admin", "Buyer", "Seller" };
     foreach (var roleName in roleNames)
     {
         var roleExist = await roleManager.RoleExistsAsync(roleName);
