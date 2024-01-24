@@ -29,11 +29,17 @@
                 <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group">
+                <label asp-for="Input.UserName"></label>
+                <input asp-for="Input.UserName" class="form-control" />
+                <span asp-validation-for="Input.UserName" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
                 <label for="SelectedRole">Select Role:</label>
                 <select asp-for="Input.SelectedRole" class="form-control">
                     <option value="Buyer">Buyer</option>
                     <option value="Seller">Seller</option>
-                    <!-- Add more roles as needed -->
+         
                 </select>
             </div>
 
