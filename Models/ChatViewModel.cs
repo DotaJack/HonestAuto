@@ -10,5 +10,8 @@
 
         // Represents the content of a new message being composed
         public string Content { get; set; }
+
+        // Represents the username of the chat receiver
+        public string ReceiverUsername { get; set; }
     }
 }

@@ -24,20 +24,52 @@ namespace HonestAuto.Controllers
             _userManager = userManager;
         }
 
+        // Action to display the list of conversations for the current user
+        public async Task<IActionResult> Index()
+        {
+            // Get the current user's ID
+            var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Retrieve conversations for the current user
+            var conversations = await _messageService.GetConversationsAsync(currentUserId);
+
+            // Fetch sender usernames for each conversation and group by receiver ID
+            var conversationViewModels = new List<ChatViewModel>();
+            foreach (var conversation in conversations)
+            {
+                var receiverId = conversation.ReceiverId == currentUserId ? conversation.SenderId : conversation.ReceiverId;
+                var receiverUsername = await _messageService.FetchUsernameForIdAsync(receiverId);
+
+                conversationViewModels.Add(new ChatViewModel
+                {
+                    ReceiverId = receiverId,
+                    ReceiverUsername = receiverUsername,
+                    Content = conversation.Content,
+                });
+            }
+
+            // Pass the list of conversations to the view
+            return View(conversationViewModels);
+        }
+
         // Action to display the chat with a specific user
         public async Task<IActionResult> ChatWithUser(string receiverId)
         {
             // Get the current user's ID
             var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // Fetch the receiver's username based on the receiverId
+            var receiverUsername = await _messageService.FetchUsernameForIdAsync(receiverId);
+
             // Retrieve messages between the current user and the receiver
             var messages = await _messageService.GetMessagesForConversationAsync(currentUserId, receiverId);
 
-            // Create a view model to pass messages and receiver ID to the view
+            // Create a view model to pass messages, receiver ID, and receiver username to the view
             var viewModel = new ChatViewModel
             {
                 Messages = messages,
-                ReceiverId = receiverId
+                ReceiverId = receiverId,
+                ReceiverUsername = receiverUsername // Set the ReceiverUsername property
             };
 
             // Render the chat view with the view model

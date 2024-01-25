@@ -4,16 +4,19 @@ using HonestAuto.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
 namespace HonestAuto.Services
 {
     public class ChatMessageService
     {
         private readonly MarketplaceContext _context;
+        private readonly UserManager<User> _userManager; // Define it here
 
-        public ChatMessageService(MarketplaceContext context)
+        public ChatMessageService(MarketplaceContext context, UserManager<User> userManager)
         {
             _context = context;
+            _userManager = userManager; // Initialize it in the constructor
         }
 
         // This method saves a chat message to the database
@@ -24,6 +27,29 @@ namespace HonestAuto.Services
 
             // Save the changes to the database asynchronously
             await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<ChatMessage>> GetConversationsAsync(string currentUserId)
+        {
+            // Retrieve messages that contain the current user
+            var messagesContainingCurrentUser = await _context.ChatMessages
+                .Where(m => m.SenderId == currentUserId || m.ReceiverId == currentUserId)
+                .ToListAsync();
+
+            // Group messages by conversations where sender and receiver IDs are the same
+            var conversations = messagesContainingCurrentUser
+                .GroupBy(m => new { OtherUserId = m.SenderId == currentUserId ? m.ReceiverId : m.SenderId })
+                .Select(g => g.OrderBy(m => m.DateSent)) // Optionally, you can order messages within each conversation by timestamp
+                .SelectMany(g => g)
+                .ToList();
+
+            return conversations;
+        }
+
+        public async Task<string> FetchUsernameForIdAsync(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            return user != null ? user.UserName : "User Not Found";
         }
 
         // This method retrieves messages for a specific conversation between two users

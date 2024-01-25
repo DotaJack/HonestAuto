@@ -1,0 +1,27 @@
+﻿@model IEnumerable<HonestAuto.Models.ChatViewModel>
+
+<h1>Chat Conversations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Receiver</th>
+            <th scope="col">Last Message</th>
+            <th scope="col">Date Sent</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var conversation in Model)
+        {
+            <tr>
+                <td>@conversation.ReceiverUsername</td>
+                <td>@conversation.Content</td>
+         
+                <td>
+                    <a asp-action="ChatWithUser" asp-route-receiverId="@conversation.ReceiverId">View Conversation</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
