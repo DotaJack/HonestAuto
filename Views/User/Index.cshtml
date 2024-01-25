@@ -23,7 +23,14 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
                     <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>|
+                    <div>
+                        <button onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = user.Id })'">
+                            Message User
+                        </button>
+                    </div>
+
+             
                 </td>
             </tr>
         }

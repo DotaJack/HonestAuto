@@ -21,6 +21,14 @@ namespace HonestAuto.Controllers
             _roleManager = roleManager;
         }
 
+        public IActionResult StartChat(string id)
+        {
+            // Perform any necessary logic to set up the chat, e.g., create a conversation
+            // and navigate to the chat view.
+            // You can also pass the user's ID to the chat view if needed.
+            return RedirectToAction("ChatWithUser", new { receiverId = id });
+        }
+
         // GET: /User
         public IActionResult Index()
         {

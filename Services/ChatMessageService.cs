@@ -29,23 +29,53 @@ namespace HonestAuto.Services
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<ChatMessage>> GetConversationsAsync(string currentUserId)
+        public async Task<IEnumerable<ChatViewModel>> GetConversationsAsync(string currentUserId)
         {
-            // Retrieve messages that contain the current user
-            var messagesContainingCurrentUser = await _context.ChatMessages
+            var conversations = await _context.ChatMessages
                 .Where(m => m.SenderId == currentUserId || m.ReceiverId == currentUserId)
+                .GroupBy(m => m.ReceiverId)
                 .ToListAsync();
 
-            // Group messages by conversations where sender and receiver IDs are the same
-            var conversations = messagesContainingCurrentUser
-                .GroupBy(m => new { OtherUserId = m.SenderId == currentUserId ? m.ReceiverId : m.SenderId })
-                .Select(g => g.OrderBy(m => m.DateSent)) // Optionally, you can order messages within each conversation by timestamp
-                .SelectMany(g => g)
-                .ToList();
+            var conversationViewModels = new List<ChatViewModel>();
 
-            return conversations;
+            foreach (var conversation in conversations)
+            {
+                var receiverId = conversation.Key;
+
+                // Check if the receiver ID is the same as the current user's ID
+                if (receiverId == currentUserId)
+                {
+                    // Skip the current user's conversation
+                    continue;
+                }
+
+                var receiver = await _userManager.FindByIdAsync(receiverId);
+
+                if (receiver != null)
+                {
+                    var receiverUsername = receiver.UserName;
+
+                    var lastMessage = conversation.OrderByDescending(m => m.DateSent).FirstOrDefault();
+                    var content = lastMessage?.Content;
+
+                    conversationViewModels.Add(new ChatViewModel
+                    {
+                        ReceiverId = receiverId,
+                        ReceiverUsername = receiverUsername,
+                        Content = content
+                    });
+                }
+                else
+                {
+                    // Handle the case where the user with the given ID is not found.
+                    // You can skip this conversation or handle it as needed.
+                }
+            }
+
+            return conversationViewModels;
         }
 
+        // Method to fetch the username for a given user ID
         public async Task<string> FetchUsernameForIdAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);

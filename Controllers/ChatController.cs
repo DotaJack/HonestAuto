@@ -45,11 +45,21 @@ namespace HonestAuto.Controllers
                     ReceiverId = receiverId,
                     ReceiverUsername = receiverUsername,
                     Content = conversation.Content,
+                    // Add the sender's ID here if needed
+                    SenderId = conversation.SenderId
                 });
             }
 
             // Pass the list of conversations to the view
             return View(conversationViewModels);
+        }
+
+        public IActionResult StartChat(string id)
+        {
+            // Perform any necessary logic to set up the chat, e.g., create a conversation
+            // and navigate to the chat view.
+            // You can also pass the user's ID to the chat view if needed.
+            return RedirectToAction("ChatWithUser", new { receiverId = id });
         }
 
         // Action to display the chat with a specific user

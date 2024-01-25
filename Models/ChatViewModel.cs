@@ -8,6 +8,8 @@
         // Represents the ID of the chat receiver
         public string ReceiverId { get; set; }
 
+        public string SenderId { get; set; }
+
         // Represents the content of a new message being composed
         public string Content { get; set; }
 

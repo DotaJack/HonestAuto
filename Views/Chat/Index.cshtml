@@ -7,7 +7,7 @@
         <tr>
             <th scope="col">Receiver</th>
             <th scope="col">Last Message</th>
-            <th scope="col">Date Sent</th>
+         
             <th scope="col">Actions</th>
         </tr>
     </thead>
@@ -17,10 +17,13 @@
             <tr>
                 <td>@conversation.ReceiverUsername</td>
                 <td>@conversation.Content</td>
-         
+
                 <td>
-                    <a asp-action="ChatWithUser" asp-route-receiverId="@conversation.ReceiverId">View Conversation</a>
+                    <form asp-action="ChatWithUser" asp-route-receiverId="@conversation.ReceiverId" method="post">
+                        <button type="submit" class="btn btn-primary">View Conversation</button>
+                    </form>
                 </td>
+
             </tr>
         }
     </tbody>
