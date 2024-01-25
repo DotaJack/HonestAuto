@@ -31,36 +31,41 @@ namespace HonestAuto.Services
 
         public async Task<IEnumerable<ChatViewModel>> GetConversationsAsync(string currentUserId)
         {
-            var conversations = await _context.ChatMessages
-                .Where(m => m.SenderId == currentUserId || m.ReceiverId == currentUserId)
-                .GroupBy(m => m.ReceiverId)
-                .ToListAsync();
-
             var conversationViewModels = new List<ChatViewModel>();
 
-            foreach (var conversation in conversations)
-            {
-                var receiverId = conversation.Key;
+            // Retrieve all messages involving the current user
+            var messages = await _context.ChatMessages
+                .Where(m => m.SenderId == currentUserId || m.ReceiverId == currentUserId)
+                .ToListAsync();
 
-                // Check if the receiver ID is the same as the current user's ID
-                if (receiverId == currentUserId)
+            // Group messages by the other user's ID
+            var groupedMessages = messages
+                .GroupBy(m => m.SenderId == currentUserId ? m.ReceiverId : m.SenderId);
+
+            foreach (var group in groupedMessages)
+            {
+                var otherUserId = group.Key;
+
+                // Skip the current user's own ID
+                if (otherUserId == currentUserId)
                 {
-                    // Skip the current user's conversation
                     continue;
                 }
 
-                var receiver = await _userManager.FindByIdAsync(receiverId);
+                // Get the other user's information
+                var otherUser = await _userManager.FindByIdAsync(otherUserId);
 
-                if (receiver != null)
+                if (otherUser != null)
                 {
-                    var receiverUsername = receiver.UserName;
+                    var receiverUsername = otherUser.UserName;
 
-                    var lastMessage = conversation.OrderByDescending(m => m.DateSent).FirstOrDefault();
+                    // Get the last message in the conversation
+                    var lastMessage = group.OrderByDescending(m => m.DateSent).FirstOrDefault();
                     var content = lastMessage?.Content;
 
                     conversationViewModels.Add(new ChatViewModel
                     {
-                        ReceiverId = receiverId,
+                        ReceiverId = otherUserId,
                         ReceiverUsername = receiverUsername,
                         Content = content
                     });
