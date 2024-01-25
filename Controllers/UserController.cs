@@ -10,29 +10,27 @@ namespace HonestAuto.Controllers
 {
     public class UserController : Controller
     {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly UserManager<User> _userManager; // User manager for managing user accounts
+        private readonly RoleManager<IdentityRole> _roleManager; // Role manager for managing roles
 
-        public UserController(
-            UserManager<User> userManager,
-            RoleManager<IdentityRole> roleManager)
+        // Constructor to initialize the controller with required services
+        public UserController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
         }
 
+        // Action to start a chat with a specific user
         public IActionResult StartChat(string id)
         {
-            // Perform any necessary logic to set up the chat, e.g., create a conversation
-            // and navigate to the chat view.
-            // You can also pass the user's ID to the chat view if needed.
+            // Perform any necessary logic to set up the chat and navigate to the chat view
             return RedirectToAction("ChatWithUser", new { receiverId = id });
         }
 
-        // GET: /User
+        // GET: /User/Index
         public IActionResult Index()
         {
-            // Retrieve all users
+            // Retrieve all users using UserManager
             var users = _userManager.Users;
             return View(users);
         }

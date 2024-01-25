@@ -10,14 +10,13 @@ using System.Threading.Tasks;
 
 namespace HonestAuto.Controllers
 {
-    [Authorize]
+    [Authorize] // Specifies that this controller requires authorization (authentication)
     public class ChatController : Controller
     {
-        private readonly ChatMessageService _messageService;
-        private readonly UserManager<User> _userManager;
+        private readonly ChatMessageService _messageService; // Service for managing chat messages
+        private readonly UserManager<User> _userManager; // User manager for managing user accounts
 
-        // Source:https://www.youtube.com/watch?v=RUZLIh4Vo20
-        // Source 2: https://learn.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr
+        // Constructor to initialize the controller with required services
         public ChatController(ChatMessageService messageService, UserManager<User> userManager)
         {
             _messageService = messageService;
@@ -40,6 +39,7 @@ namespace HonestAuto.Controllers
                 var receiverId = conversation.ReceiverId == currentUserId ? conversation.SenderId : conversation.ReceiverId;
                 var receiverUsername = await _messageService.FetchUsernameForIdAsync(receiverId);
 
+                // Create a view model for each conversation
                 conversationViewModels.Add(new ChatViewModel
                 {
                     ReceiverId = receiverId,
@@ -54,6 +54,7 @@ namespace HonestAuto.Controllers
             return View(conversationViewModels);
         }
 
+        // Action to start a chat with a specific user
         public IActionResult StartChat(string id)
         {
             // Perform any necessary logic to set up the chat, e.g., create a conversation

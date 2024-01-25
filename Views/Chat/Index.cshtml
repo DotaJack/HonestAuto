@@ -1,29 +1,36 @@
 ﻿@model IEnumerable<HonestAuto.Models.ChatViewModel>
 
+<!-- Define the page title -->
 <h1>Chat Conversations</h1>
 
+<!-- Create a table to display chat conversations -->
 <table class="table">
     <thead>
         <tr>
+            <!-- Table header columns -->
             <th scope="col">Receiver</th>
             <th scope="col">Last Message</th>
-         
             <th scope="col">Actions</th>
         </tr>
     </thead>
     <tbody>
+        <!-- Loop through each conversation in the Model (list of ChatViewModel) -->
         @foreach (var conversation in Model)
         {
             <tr>
+                <!-- Display the receiver's username in the table cell -->
                 <td>@conversation.ReceiverUsername</td>
+
+                <!-- Display the content of the last message in the table cell -->
                 <td>@conversation.Content</td>
 
                 <td>
+                    <!-- Create a form to post to the "ChatWithUser" action with the receiverId as a parameter -->
                     <form asp-action="ChatWithUser" asp-route-receiverId="@conversation.ReceiverId" method="post">
+                        <!-- Add a button to view the conversation -->
                         <button type="submit" class="btn btn-primary">View Conversation</button>
                     </form>
                 </td>
-
             </tr>
         }
     </tbody>
