@@ -21,10 +21,6 @@
     <None Include="Views\CarEvaluation\Edit.cshtml" />
     <None Include="Views\CarEvaluation\Index.cshtml" />
     <None Include="Views\Car\Create.cshtml" />
-    <None Include="Views\Car\Delete.cshtml" />
-    <None Include="Views\Car\Details.cshtml" />
-    <None Include="Views\Car\Edit.cshtml" />
-    <None Include="Views\Car\Index.cshtml" />
     <None Include="Views\Home\Contact.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
     <None Include="Views\Mechanic\Create.cshtml" />

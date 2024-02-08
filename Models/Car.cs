@@ -12,11 +12,11 @@ namespace HonestAuto.Models
 
         [Required]
         [StringLength(100)]
-        public string Brand { get; set; } // Brand or manufacturer of the car
+        public string BrandId { get; set; } // Brand or manufacturer of the car
 
         [Required]
         [StringLength(100)]
-        public string Model { get; set; } // Model of the car
+        public string ModelId { get; set; } // Model of the car
 
         [Required]
         [Range(1900, 2100)]
@@ -32,6 +32,15 @@ namespace HonestAuto.Models
 
         [Required]
         public string UserID { get; set; } // Foreign key to the User table
+
+        [Required]
+        public string Registration { get; set; } // Foreign key to the User table
+
+        [Required]
+        public string Status { get; set; } // Foreign key to the User table
+
+        [Required]
+        public string Colour { get; set; } // Foreign key to the User table
 
         // This class represents the Car entity in the database and defines its properties and constraints.
     }

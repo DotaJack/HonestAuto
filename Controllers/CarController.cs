@@ -53,7 +53,7 @@ namespace HonestAuto.Controllers
         // CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Brand,Model,Year,Mileage,History,UserID")] Car car, IFormFile carImageFile)
+        public async Task<IActionResult> Create([Bind("BrandId,ModelId,Year,Mileage,History,UserID,Registration,Status,Colour")] Car car, IFormFile carImageFile)
         {
             // Check if the submitted form data is valid
             if (ModelState.IsValid)
@@ -177,8 +177,8 @@ namespace HonestAuto.Controllers
                     car.CarImage = existingCar.CarImage;
 
                     // Update other car properties in the database context
-                    existingCar.Brand = car.Brand;
-                    existingCar.Model = car.Model;
+                    existingCar.BrandId = car.BrandId;
+                    existingCar.ModelId = car.ModelId;
                     existingCar.Year = car.Year;
                     existingCar.Mileage = car.Mileage;
                     existingCar.History = car.History;
