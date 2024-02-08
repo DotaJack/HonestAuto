@@ -23,5 +23,9 @@ namespace HonestAuto.Data
 
         public DbSet<ChatMessage> ChatMessages { get; set; }
         // DbSet for the CarEvaluation model. Allows interaction with the CarEvaluations table.
+
+        public DbSet<Brand> Brands { get; set; }
+
+        public DbSet<Model> Models { get; set; }
     }
 }

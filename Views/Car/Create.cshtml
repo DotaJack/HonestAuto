@@ -5,20 +5,26 @@
 }
 
 <h2>@ViewData["Title"]</h2>
+<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+<link href="~/lib/select2/dist/css/select2.min.css" rel="stylesheet" />
 
 <form asp-action="Create" method="post" enctype="multipart/form-data">
 
     @Html.AntiForgeryToken()
     <p> @ViewBag.UserID</p>
     <div class="form-group">
-        <label asp-for="BrandId">Brand</label>
-        <input asp-for="BrandId" class="form-control" />
+        <label asp-for="BrandId" class="control-label">Brand</label>
+        <select asp-for="BrandId" class="form-control js-select2-brand" style="width: 100%;">
+            <option value="">Select Brand</option>
+        </select>
         <span asp-validation-for="BrandId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="ModelId">Model</label>
-        <input asp-for="ModelId" class="form-control" />
+        <label asp-for="ModelId" class="control-label">Model</label>
+        <select asp-for="ModelId" class="form-control js-select2-model" style="width: 100%;">
+            <option value="">Select Model</option>
+        </select>
         <span asp-validation-for="ModelId" class="text-danger"></span>
     </div>
 
@@ -63,4 +69,12 @@
         <input type="file" name="carImageFile" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Create</button>
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/select2/dist/js/select2.min.js"></script>
+    <script src="~/js/carCreate.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
 </form>

@@ -121,15 +121,6 @@ namespace HonestAuto.Controllers
             return Json(models);
         }
 
-        // CREATE (GET)
-        [HttpGet]
-        public IActionResult Create()
-        {
-            ViewBag.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier); // Set the user ID
-            // Display a form for creating a new car
-            return View();
-        }
-
         // CREATE (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
