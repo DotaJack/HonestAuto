@@ -8,17 +8,17 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Brand)
+            @Html.DisplayNameFor(model => model.BrandId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Brand)
+            @Html.DisplayFor(model => model.BrandId)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Model)
+            @Html.DisplayNameFor(model => model.ModelId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Model)
+            @Html.DisplayFor(model => model.ModelId)
         </dd>
 
         <dt>
@@ -42,7 +42,19 @@
             @Html.DisplayFor(model => model.History)
         </dd>
 
-       
+        <dt>
+            @Html.DisplayNameFor(model => model.Registration)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Registration)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
     </dl>
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="CarID" />

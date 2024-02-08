@@ -17,10 +17,27 @@ namespace HonestAuto.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("HonestAuto.Models.Brand", b =>
+                {
+                    b.Property<int>("BrandId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BrandId");
+
+                    b.ToTable("Brands");
+                });
 
             modelBuilder.Entity("HonestAuto.Models.Car", b =>
                 {
@@ -30,13 +47,16 @@ namespace HonestAuto.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarID"));
 
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("CarImage")
+                        .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Colour")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("History")
                         .IsRequired()
@@ -45,10 +65,16 @@ namespace HonestAuto.Migrations
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
 
-                    b.Property<string>("Model")
+                    b.Property<int>("ModelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Registration")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserID")
                         .IsRequired()
@@ -85,8 +111,8 @@ namespace HonestAuto.Migrations
                     b.Property<string>("EvaluationSummary")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("MechanicID")
-                        .HasColumnType("int");
+                    b.Property<string>("MechanicID")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CarEvaluationID");
 
@@ -126,40 +152,26 @@ namespace HonestAuto.Migrations
                     b.ToTable("ChatMessages");
                 });
 
-            modelBuilder.Entity("HonestAuto.Models.Mechanic", b =>
+            modelBuilder.Entity("HonestAuto.Models.Model", b =>
                 {
-                    b.Property<int>("MechanicID")
+                    b.Property<int>("ModelId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MechanicID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ModelId"));
 
-                    b.Property<string>("Address")
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasKey("ModelId");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.HasIndex("BrandId");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("PhoneNumber")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("MechanicID");
-
-                    b.ToTable("Mechanics");
+                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("HonestAuto.Models.User", b =>
@@ -379,6 +391,17 @@ namespace HonestAuto.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("HonestAuto.Models.Model", b =>
+                {
+                    b.HasOne("HonestAuto.Models.Brand", "Brand")
+                        .WithMany("Models")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -428,6 +451,11 @@ namespace HonestAuto.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HonestAuto.Models.Brand", b =>
+                {
+                    b.Navigation("Models");
                 });
 #pragma warning restore 612, 618
         }

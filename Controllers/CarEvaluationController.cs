@@ -1,8 +1,10 @@
 ﻿using HonestAuto.Data;
 using HonestAuto.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace HonestAuto.Controllers
@@ -27,6 +29,20 @@ namespace HonestAuto.Controllers
 
             // Render the view with groupedCarEvaluations
             return View(groupedCarEvaluations);
+        }
+
+        // GET: CarEvaluation/MechanicIndex
+        [Authorize(Roles = "Mechanic")]
+        public async Task<IActionResult> MechanicIndex()
+        {
+            // Retrieve the ID of the logged-in user
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Retrieve all CarEvaluations where the mechanic ID matches the logged-in user's ID
+            var mechanicEvaluations = await _context.CarEvaluations.Where(ce => ce.MechanicID == userId).ToListAsync();
+
+            // Render the view with mechanicEvaluations
+            return View(mechanicEvaluations);
         }
 
         // GET: CarEvaluation/Details/5

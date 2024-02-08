@@ -18,13 +18,15 @@
         <thead>
             <tr>
                 <th>Car ID</th>
+                <th>Registration</th>
                 <th>Brand</th>
                 <th>Model</th>
                 <th>Year</th>
                 <th>Mileage</th>
                 <th>History</th>
-                <th>UserID</th>
-<th>Car Image</th>
+                <th>User ID</th>
+                <th>Status</th>
+                <th>Car Image</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -33,12 +35,14 @@
             {
                 <tr>
                     <td>@car.CarID</td>
-                    <td>@car.Brand</td>
-                    <td>@car.Model</td>
+                    <td>@car.Registration</td>
+                    <td>@car.BrandId</td>
+                    <td>@car.ModelId</td>
                     <td>@car.Year</td>
                     <td>@car.Mileage</td>
                     <td>@car.History</td>
-<td>@car.UserID</td>
+                    <td>@car.UserID</td>
+                    <td>@car.Status</td>
                     <td>
                         @if (car.CarImage != null && car.CarImage.Length > 0)
                         {
@@ -50,15 +54,11 @@
                         }
                     </td>
                     <td>
-                        @if (User.IsInRole("Admin"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-warning">Edit</a>
-                        }
                         <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-primary">Details</a>
-                        @if (User.IsInRole("Admin"))
-                        {
+                      
+                            <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-warning">Edit</a>
                             <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-danger">Delete</a>
-                        }
+                        
                     </td>
                 </tr>
             }
@@ -70,4 +70,6 @@ else
     <p>No results found.</p>
 }
 
-<a asp-action="Create" class="btn btn-success">Create New Car</a>
+
+    <a asp-action="Create" class="btn btn-success">Create New Car</a>
+

@@ -9,17 +9,24 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Brand)
+            @Html.DisplayNameFor(model => model.Registration)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Brand)
+            @Html.DisplayFor(model => model.Registration)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Model)
+            @Html.DisplayNameFor(model => model.BrandId)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.Model)
+            @Html.DisplayFor(model => model.BrandId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModelId)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ModelId)
         </dd>
 
         <dt>
@@ -45,9 +52,15 @@
         <dt>
             @Html.DisplayNameFor(model => model.UserID)
         </dt>
-<dd>
-			@Html.DisplayFor(model => model.UserID)
-</dd>
+        <dd>
+            @Html.DisplayFor(model => model.UserID)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
         <dt>
             Car Image
         </dt>
@@ -61,7 +74,7 @@
                 <text>No Image</text>
             }
         </dd>
-       
+
     </dl>
 </div>
 <div>
@@ -72,9 +85,8 @@
     }
     else
     {
-    //
         <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
-        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
+        <a asp-action="Delete" asp-route-id="@Model.CarID" class="btn btn-danger">Delete</a>
         <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
         <div>
             <button onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = Model.UserID })'">

@@ -4,47 +4,69 @@
     ViewData["Title"] = "Create New Car";
 }
 
-<h2>@ViewData["Title"]</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/select2/dist/css/select2.min.css" rel="stylesheet" />
 
-<form asp-action="Create" method="post" enctype="multipart/form-data">
+</head>
+<body>
+    <h2>@ViewData["Title"]</h2>
 
-    @Html.AntiForgeryToken()
-    <p> @ViewBag.UserID</p>
-    <div class="form-group">
-        <label asp-for="Brand">Brand</label>
-        <input asp-for="Brand" class="form-control" />
-        <span asp-validation-for="Brand" class="text-danger"></span>
-    </div>
+    <form asp-action="Create" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
 
-    <div class="form-group">
-        <label asp-for="Model">Model</label>
-        <input asp-for="Model" class="form-control" />
-        <span asp-validation-for="Model" class="text-danger"></span>
-    </div>
+        <input type="hidden" asp-for="BrandId" value="1" />
+        <input type="hidden" asp-for="ModelId" value="1" />
+        <div class="form-group">
+            <label asp-for="Mileage" class="control-label">Mileage</label>
+            <input asp-for="Mileage" class="form-control" />
+            <span asp-validation-for="Mileage" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Mileage">Mileage</label>
-        <input asp-for="Mileage" class="form-control" />
-        <span asp-validation-for="Mileage" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Year" class="control-label">Year</label>
+            <input asp-for="Year" class="form-control" />
+            <span asp-validation-for="Year" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="Year">Year</label>
-        <input asp-for="Year" class="form-control" />
-        <span asp-validation-for="Year" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="History" class="control-label">History</label>
+            <input asp-for="History" class="form-control" />
+            <span asp-validation-for="History" class="text-danger"></span>
+        </div>
 
-    <div class="form-group">
-        <label asp-for="History">History</label>
-        <input asp-for="History" class="form-control" />
-        <span asp-validation-for="History" class="text-danger"></span>
-    </div>
+        <div class="form-group">
+            <label asp-for="Colour" class="control-label">Colour</label>
+            <input asp-for="Colour" class="form-control" />
+            <span asp-validation-for="Colour" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Registration" class="control-label">Registration</label>
+            <input asp-for="Registration" class="form-control" />
+            <span asp-validation-for="Registration" class="text-danger"></span>
+        </div>
+        <input type="hidden" asp-for="UserID" value="@ViewBag.UserID" /> 
+        <input type="hidden" asp-for="Status" value="Evaluating" />
 
-    <input type="hidden" asp-for="UserID" value="@ViewBag.UserID" />
+        <div class="form-group">
+            <label for="carImageFile">Car Image</label>
+            <input type="file" name="carImageFile" class="form-control" />
+        </div>
 
-    <div class="form-group">
-        <label for="carImageFile">Car Image</label>
-        <input type="file" name="carImageFile" class="form-control" />
-    </div>
-    <button type="submit" class="btn btn-primary">Create</button>
-</form>
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
+    <!-- Scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/select2/dist/js/select2.min.js"></script>
+    <script src="~/js/carCreate.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+
+</body>
+</html>

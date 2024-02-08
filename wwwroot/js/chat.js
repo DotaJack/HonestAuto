@@ -1,6 +1,6 @@
 ﻿// Source:https://www.youtube.com/watch?v=RUZLIh4Vo20
 // Source 2: https://learn.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr
-
+// Source 3: https://stackoverflow.com/questions/63721149/signalr-call-from-controller
 function sendMessage(receiverId, messageContent) {
     connection.invoke("SendMessage", receiverId, messageContent)
         .then(() => {

@@ -56,7 +56,7 @@ async Task SeedRoles(IServiceProvider serviceProvider)
     using var scope = serviceProvider.CreateScope();
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
-    string[] roleNames = { "User", "Admin", "Buyer", "Seller" };
+    string[] roleNames = { "User", "Admin", "Buyer", "Mechanic", "Seller" };
     foreach (var roleName in roleNames)
     {
         var roleExist = await roleManager.RoleExistsAsync(roleName);
@@ -75,7 +75,8 @@ async Task SeedUsersAndRoles(IServiceProvider serviceProvider)
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
     // Seed roles
-    string[] roleNames = { "User", "Admin" };
+
+    string[] roleNames = { "User", "Admin", "Buyer", "Mechanic", "Seller" };
     foreach (var roleName in roleNames)
     {
         if (!await roleManager.RoleExistsAsync(roleName))
@@ -85,8 +86,13 @@ async Task SeedUsersAndRoles(IServiceProvider serviceProvider)
     }
 
     // Seed users and assign roles for you to have one admin and one user account pregenerated
-    await SeedUserAsync(userManager, "Admin@honestauto.com", "Admin123456!", "Admin");
-    await SeedUserAsync(userManager, "User123@gmail.com", "User123465789!", "User");
+    await SeedUserAsync(userManager, "Admin@honestauto.com", "Dotajack2!", "Admin");
+    await SeedUserAsync(userManager, "BuyerTest@gmail.com", "Dotajack2!", "Buyer");
+    await SeedUserAsync(userManager, "SellerTest@gmail.com", "Dotajack2!", "Seller");
+    await SeedUserAsync(userManager, "MechanicTest@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "MechanicTest2@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "MechanicTest3@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "MechanicTest4@gmail.com", "Dotajack2!", "Mechanic");
 }
 
 async Task SeedUserAsync(UserManager<User> userManager, string email, string password, string role)

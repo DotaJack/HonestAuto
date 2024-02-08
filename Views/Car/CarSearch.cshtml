@@ -1,0 +1,113 @@
+﻿@model List<HonestAuto.Models.Car>
+
+@{
+    ViewData["Title"] = "Cars List";
+}
+
+<h1>Cars</h1>
+
+<div id="searchForm">
+    <form method="get" action="@Url.Action("Index", "Car")">
+        <div class="input-group mb-3">
+            <input type="text" name="searchString" class="form-control" placeholder="Search by brand, model, or year">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <button type="button" id="advancedSearchButton" class="btn btn-secondary">Advanced</button>
+        </div>
+    </form>
+</div>
+
+<div id="advancedSearchForm" style="display: none;">
+    <form method="get" action="@Url.Action("Index", "Car")">
+        <div class="form-row">
+            <div class="form-group col-md-3">
+                <label for="searchBrand">Brand</label>
+                <select name="searchBrand" class="form-control" id="searchBrand">
+                    <option value="">Select Brand</option>
+                    <!-- Populate options dynamically with brands -->
+                    @foreach (var brand in ViewBag.Brands)
+                    {
+                        <option value="@brand">@brand</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="searchModel">Model</label>
+                <select name="searchModel" class="form-control" id="searchModel">
+                    <option value="">Select Model</option>
+                    <!-- Models will be populated dynamically based on selected brand -->
+                </select>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="searchYear">Year</label>
+                <select name="searchYear" class="form-control" id="searchYear">
+                    <option value="">Select Year</option>
+                    <!-- Populate options dynamically with years -->
+                    @for (int year = DateTime.Now.Year; year >= 1970; year--)
+                    {
+                        <option value="@year">@year</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <button type="button" id="basicSearchButton" class="btn btn-secondary">Basic</button>
+    </form>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Brand</th>
+                <th>Model</th>
+                <th>Year</th>
+                <th>Mileage</th>
+                <th>History</th>
+                <th>User ID</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var car in Model)
+            {
+                <tr>
+                    <td>@car.BrandId</td>
+                    <td>@car.ModelId</td>
+                    <td>@car.Year</td>
+                    <td>@car.Mileage</td>
+                    <td>@car.History</td>
+                    <td>@car.UserID</td>
+                    <td>
+                        <!-- Actions for each car -->
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No results found.</p>
+}
+
+@section Scripts {
+    <script>
+        // JavaScript to toggle between basic and advanced search forms
+        document.getElementById("advancedSearchButton").addEventListener("click", function () {
+            document.getElementById("searchForm").style.display = "none";
+            document.getElementById("advancedSearchForm").style.display = "block";
+            // Clear basic search input
+            document.querySelector("input[name='searchString']").value = "";
+        });
+
+        document.getElementById("basicSearchButton").addEventListener("click", function () {
+            document.getElementById("searchForm").style.display = "block";
+            document.getElementById("advancedSearchForm").style.display = "none";
+            // Clear advanced search inputs
+            document.querySelector("select[name='searchBrand']").value = "";
+            document.querySelector("select[name='searchModel']").value = "";
+            document.querySelector("select[name='searchYear']").value = "";
+        });
+    </script>
+}

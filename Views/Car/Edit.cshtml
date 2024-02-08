@@ -7,36 +7,45 @@
     <input type="hidden" asp-for="CarID" />
 
     <div class="form-group">
-        <label asp-for="Brand" class="control-label"></label>
-        <input asp-for="Brand" class="form-control" />
-        <span asp-validation-for="Brand" class="text-danger"></span>
+        <label asp-for="Registration" class="control-label">Registration</label>
+        <input asp-for="Registration" class="form-control" />
+        <span asp-validation-for="Registration" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Model" class="control-label"></label>
-        <input asp-for="Model" class="form-control" />
-        <span asp-validation-for="Model" class="text-danger"></span>
+        <label asp-for="BrandId" class="control-label">Brand</label>
+        <input asp-for="BrandId" class="form-control" />
+        <span asp-validation-for="BrandId" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Year" class="control-label"></label>
+        <label asp-for="ModelId" class="control-label">Model</label>
+        <input asp-for="ModelId" class="form-control" />
+        <span asp-validation-for="ModelId" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Year" class="control-label">Year</label>
         <input asp-for="Year" class="form-control" />
         <span asp-validation-for="Year" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="Mileage" class="control-label"></label>
+        <label asp-for="Mileage" class="control-label">Mileage</label>
         <input asp-for="Mileage" class="form-control" />
         <span asp-validation-for="Mileage" class="text-danger"></span>
     </div>
 
     <div class="form-group">
-        <label asp-for="History" class="control-label"></label>
+        <label asp-for="History" class="control-label">History</label>
         <input asp-for="History" class="form-control" />
         <span asp-validation-for="History" class="text-danger"></span>
     </div>
 
-
+    <div class="form-group">
+        <label asp-for="Status" class="control-label">Status</label>
+        <input type="text" asp-for="Status" class="form-control" readonly value="Evaluating" />
+    </div>
 
     <div class="form-group">
         <input type="submit" value="Save" class="btn btn-primary" />

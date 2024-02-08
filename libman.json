@@ -11,6 +11,18 @@
         "package.json",
         "README.md"
       ]
+    },
+    {
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery/"
+    },
+    {
+      "library": "select2@4.0.13",
+      "destination": "wwwroot/lib/select2/",
+      "files": [
+        "dist/css/select2.min.css",
+        "dist/js/select2.min.js"
+      ]
     }
   ]
 }

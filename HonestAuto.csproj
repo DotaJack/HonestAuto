@@ -7,6 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Mechanic\**" />
+    <Content Remove="Views\Mechanic\**" />
+    <EmbeddedResource Remove="Views\Mechanic\**" />
+    <None Remove="Views\Mechanic\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\MechanicController.cs" />
     <Compile Remove="Controllers\MessageConversationController.cs" />
   </ItemGroup>
 
@@ -27,7 +35,6 @@
     <None Include="Views\Car\Index.cshtml" />
     <None Include="Views\Home\Contact.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
-    <None Include="Views\Mechanic\Create.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
     <None Include="Views\Shared\Error404.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />
@@ -37,7 +44,7 @@
     <None Include="Views\_ViewStart.cshtml" />
     <None Include="wwwroot\css\site.css" />
     <None Include="wwwroot\favicon.ico" />
-    <None Include="wwwroot\js\site.js" />
+    <None Include="wwwroot\js\autocomplete.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css" />
@@ -110,7 +117,7 @@
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Client.Core" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Common" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.Protocols.Json" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.4" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="5.1.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="8.0.1" />

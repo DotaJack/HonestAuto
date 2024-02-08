@@ -12,8 +12,8 @@ namespace HonestAuto.Data
             // Constructor remains the same
         }
 
-        public DbSet<Mechanic> Mechanics { get; set; }
-        // DbSet for the Mechanic model. Allows interaction with the Mechanics table.
+        public DbSet<Brand> Brands { get; set; }
+        public DbSet<Model> Models { get; set; }
 
         public DbSet<Car> Cars { get; set; }
         // DbSet for the Car model. Allows interaction with the Cars table.

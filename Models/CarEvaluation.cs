@@ -11,7 +11,7 @@ namespace HonestAuto.Models
         [ForeignKey("CarID")]
         public int CarID { get; set; } // Foreign key linking to the associated Car entity
 
-        public int? MechanicID { get; set; } // ID of the mechanic performing the evaluation (nullable)
+        public string? MechanicID { get; set; } // ID of the mechanic performing the evaluation (nullable)
 
         public string? EvaluationStatus { get; set; } // Status of the evaluation (nullable)
 

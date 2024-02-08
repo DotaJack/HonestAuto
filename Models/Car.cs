@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -11,12 +12,10 @@ namespace HonestAuto.Models
         public int CarID { get; set; } // Unique identifier for a car
 
         [Required]
-        [StringLength(100)]
-        public string Brand { get; set; } // Brand or manufacturer of the car
+        public int BrandId { get; set; } // Brand or manufacturer of the car
 
         [Required]
-        [StringLength(100)]
-        public string Model { get; set; } // Model of the car
+        public int ModelId { get; set; } // Model of the car
 
         [Required]
         [Range(1900, 2100)]
@@ -26,8 +25,20 @@ namespace HonestAuto.Models
         [Range(0, int.MaxValue)]
         public int Mileage { get; set; } // Mileage of the car, must be non-negative
 
+        [Required]
         public string History { get; set; } // Optional history or additional information about the car
 
+        [DefaultValue("Evaluating")]
+        [Required]
+        public string Registration { get; set; } // Optional history or additional information about the car
+
+        [Required]
+        public string Status { get; set; } // Optional history or additional information about the car
+
+        [Required]
+        public string Colour { get; set; } // Optional history or additional information about the car
+
+        [Required]
         public byte[]? CarImage { get; set; } // Binary data representing an image of the car (nullable)
 
         [Required]
