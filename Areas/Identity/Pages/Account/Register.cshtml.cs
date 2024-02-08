@@ -1,4 +1,8 @@
-﻿using System;
+﻿// Licensed to the .NET Foundation under one or more agreements.
+// The .NET Foundation licenses this file to you under the MIT license.
+#nullable disable
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -20,12 +24,12 @@ namespace HonestAuto.Areas.Identity.Pages.Account
 {
     public class RegisterModel : PageModel
     {
-        private readonly SignInManager<User> _signInManager; // Manages user sign-in
-        private readonly UserManager<User> _userManager; // Manages user accounts
-        private readonly IUserStore<User> _userStore; // Manages user data store
-        private readonly IUserEmailStore<User> _emailStore; // Manages user email
-        private readonly ILogger<RegisterModel> _logger; // Logger for logging events
-        private readonly IEmailSender _emailSender; // Sends email notifications
+        private readonly SignInManager<User> _signInManager;
+        private readonly UserManager<User> _userManager;
+        private readonly IUserStore<User> _userStore;
+        private readonly IUserEmailStore<User> _emailStore;
+        private readonly ILogger<RegisterModel> _logger;
+        private readonly IEmailSender _emailSender;
 
         public RegisterModel(
             UserManager<User> userManager,
@@ -42,28 +46,54 @@ namespace HonestAuto.Areas.Identity.Pages.Account
             _emailSender = emailSender;
         }
 
-        // Define a data model for registration form input
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; } // URL to redirect after registration
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public string ReturnUrl { get; set; }
 
-        public IList<AuthenticationScheme> ExternalLogins { get; set; } // External authentication schemes
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
+        public IList<AuthenticationScheme> ExternalLogins { get; set; }
 
-        // Define the input model for registration form
+        /// <summary>
+        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+        ///     directly from your code. This API may change or be removed in future releases.
+        /// </summary>
         public class InputModel
         {
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
 
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Password)]
             [Display(Name = "Password")]
             public string Password { get; set; }
 
+            /// <summary>
+            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
+            ///     directly from your code. This API may change or be removed in future releases.
+            /// </summary>
             [DataType(DataType.Password)]
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -78,14 +108,12 @@ namespace HonestAuto.Areas.Identity.Pages.Account
             public string SelectedRole { get; set; }
         }
 
-        // Handle HTTP GET request for registration
         public async Task OnGetAsync(string returnUrl = null)
         {
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
         }
 
-        // Handle HTTP POST request for registration
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
@@ -93,18 +121,14 @@ namespace HonestAuto.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                // Create a new user and set properties from the input model
                 var user = CreateUser();
                 user.UserName = Input.UserName;
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
-
-                // Create the user account using UserManager
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    // Log the event and send an email confirmation link
                     _logger.LogInformation("User created a new account with password.");
 
                     // Assign the user to the selected role from the dropdown
@@ -122,7 +146,6 @@ namespace HonestAuto.Areas.Identity.Pages.Account
                         }
                     }
 
-                    // Generate an email confirmation token and send a confirmation email
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
@@ -152,7 +175,7 @@ namespace HonestAuto.Areas.Identity.Pages.Account
                 }
             }
 
-            // If there are validation errors, redisplay the registration form
+            // If we got this far, something failed, redisplay form
             return Page();
         }
 

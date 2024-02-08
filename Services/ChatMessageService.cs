@@ -10,13 +10,13 @@ namespace HonestAuto.Services
 {
     public class ChatMessageService
     {
-        private readonly MarketplaceContext _context; // Database context
-        private readonly UserManager<User> _userManager; // User manager for managing user accounts
+        private readonly MarketplaceContext _context;
+        private readonly UserManager<User> _userManager; // Define it here
 
         public ChatMessageService(MarketplaceContext context, UserManager<User> userManager)
         {
             _context = context;
-            _userManager = userManager; // Initialize the user manager in the constructor
+            _userManager = userManager; // Initialize it in the constructor
         }
 
         // This method saves a chat message to the database
