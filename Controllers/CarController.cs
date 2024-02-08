@@ -41,6 +41,86 @@ namespace HonestAuto.Controllers
             return View(filteredCars);
         }
 
+        private async Task<User> GetRandomMechanic()
+        {
+            // Get all users who have the "Mechanic" role
+            var mechanics = await _userManager.GetUsersInRoleAsync("Mechanic");
+
+            // If there are no mechanics, return null
+            if (!mechanics.Any())
+            {
+                return null;
+            }
+
+            // Choose a random index
+            var random = new Random();
+            var index = random.Next(0, mechanics.Count);
+
+            // Return the randomly chosen mechanic
+            return mechanics.ElementAt(index);
+        }
+
+        // CREATE (GET)
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var brands = _context.Brands.ToList() ?? new List<Brand>(); // Retrieve all brands from the database or initialize an empty list if null
+            var models = _context.Models.ToList() ?? new List<Model>(); // Retrieve all models from the database or initialize an empty list if null
+
+            ViewBag.Brands = brands;
+            ViewBag.Models = models;
+
+            ViewBag.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier); // Set the user ID
+            // Display a form for creating a new car
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult GetAllBrands()
+        {
+            var allBrands = _context.Brands
+                .Select(b => new { BrandID = b.BrandId, BrandName = b.Name })
+                .ToList();
+
+            return Json(allBrands);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetModelsByBrand(int selectedBrandId)
+        {
+            // Retrieve models corresponding to the selected brand from the database
+            var models = await _context.Models
+                .Where(m => m.BrandId == selectedBrandId)
+                .Select(m => new { ModelId = m.ModelId, ModelName = m.Name })
+                .ToListAsync();
+
+            return Json(models);
+        }
+
+        [HttpGet]
+        public IActionResult GetBrandsByName(string searchTerm)
+        {
+            // Perform a case-insensitive search for brands containing the searchTerm
+            var matchingBrands = _context.Brands
+                .Where(b => b.Name.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                .Select(b => new { BrandID = b.BrandId, BrandName = b.Name })
+                .ToList();
+
+            return Json(matchingBrands);
+        }
+
+        [HttpGet]
+        public IActionResult GetModelsBySelectedBrand(int selectedBrandId)
+        {
+            // Retrieve models corresponding to the selected brand from the database
+            var models = _context.Models
+                .Where(m => m.BrandId == selectedBrandId)
+                .Select(m => new { ModelId = m.ModelId, ModelName = m.Name })
+                .ToList();
+
+            return Json(models);
+        }
+
         // CREATE (GET)
         [HttpGet]
         public IActionResult Create()
