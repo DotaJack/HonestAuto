@@ -23,7 +23,6 @@
     <None Include="Views\Car\Create.cshtml" />
     <None Include="Views\Home\Contact.cshtml" />
     <None Include="Views\Home\Index.cshtml" />
-    <None Include="Views\Mechanic\Create.cshtml" />
     <None Include="Views\Shared\Error.cshtml" />
     <None Include="Views\Shared\Error404.cshtml" />
     <None Include="Views\Shared\_Layout.cshtml" />

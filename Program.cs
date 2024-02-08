@@ -83,10 +83,14 @@ async Task SeedUsersAndRoles(IServiceProvider serviceProvider)
             await roleManager.CreateAsync(new IdentityRole(roleName));
         }
     }
-
     // Seed users and assign roles for you to have one admin and one user account pregenerated
-    await SeedUserAsync(userManager, "Admin@honestauto.com", "Admin123456!", "Admin");
-    await SeedUserAsync(userManager, "User123@gmail.com", "User123465789!", "User");
+    await SeedUserAsync(userManager, "Admin@honestauto.com", "Dotajack2!", "Admin");
+    await SeedUserAsync(userManager, "BuyerTest@gmail.com", "Dotajack2!", "Buyer");
+    await SeedUserAsync(userManager, "SellerTest@gmail.com", "Dotajack2!", "Seller");
+    await SeedUserAsync(userManager, "MechanicTest@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "MechanicTest2@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "MechanicTest3@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "MechanicTest4@gmail.com", "Dotajack2!", "Mechanic");
 }
 
 async Task SeedUserAsync(UserManager<User> userManager, string email, string password, string role)

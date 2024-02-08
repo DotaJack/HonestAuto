@@ -41,15 +41,15 @@ namespace HonestAuto.Controllers
             return View(filteredCars);
         }
 
-        private async Task<int> GetRandomMechanicId()
+        private async Task<string> GetRandomMechanicId()
         {
             // Get all users who have the "Mechanic" role
             var mechanics = await _userManager.GetUsersInRoleAsync("Mechanic");
 
-            // If there are no mechanics, return -1 or throw an exception, depending on your requirement
+            // If there are no mechanics, return null or throw an exception, depending on your requirement
             if (!mechanics.Any())
             {
-                return -1; // or throw new Exception("No mechanics found.");
+                return null; // or throw new Exception("No mechanics found.");
             }
 
             // Choose a random index
@@ -59,17 +59,7 @@ namespace HonestAuto.Controllers
             // Retrieve the ID of the randomly chosen mechanic
             var mechanicIdString = mechanics.ElementAt(index).Id;
 
-            // Convert the string ID to an integer
-            if (int.TryParse(mechanicIdString, out int mechanicId))
-            {
-                return mechanicId;
-            }
-            else
-            {
-                // Handle the case where the conversion fails
-                // You can throw an exception or return a default value
-                return -1; // or throw new Exception("Failed to parse mechanic ID.");
-            }
+            return mechanicIdString;
         }
 
         // CREATE (GET)
