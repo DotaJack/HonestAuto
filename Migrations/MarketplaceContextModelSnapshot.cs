@@ -22,6 +22,23 @@ namespace HonestAuto.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HonestAuto.Models.Brand", b =>
+                {
+                    b.Property<int>("BrandId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BrandId"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BrandId");
+
+                    b.ToTable("Brands");
+                });
+
             modelBuilder.Entity("HonestAuto.Models.Car", b =>
                 {
                     b.Property<int>("CarID")
@@ -30,7 +47,7 @@ namespace HonestAuto.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarID"));
 
-                    b.Property<string>("Brand")
+                    b.Property<string>("BrandId")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -45,7 +62,7 @@ namespace HonestAuto.Migrations
                     b.Property<int>("Mileage")
                         .HasColumnType("int");
 
-                    b.Property<string>("Model")
+                    b.Property<string>("ModelId")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -160,6 +177,28 @@ namespace HonestAuto.Migrations
                     b.HasKey("MechanicID");
 
                     b.ToTable("Mechanics");
+                });
+
+            modelBuilder.Entity("HonestAuto.Models.Model", b =>
+                {
+                    b.Property<int>("ModelId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ModelId"));
+
+                    b.Property<int>("BrandId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ModelId");
+
+                    b.HasIndex("BrandId");
+
+                    b.ToTable("Models");
                 });
 
             modelBuilder.Entity("HonestAuto.Models.User", b =>
@@ -379,6 +418,17 @@ namespace HonestAuto.Migrations
                     b.Navigation("Sender");
                 });
 
+            modelBuilder.Entity("HonestAuto.Models.Model", b =>
+                {
+                    b.HasOne("HonestAuto.Models.Brand", "Brand")
+                        .WithMany("Models")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Brand");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -428,6 +478,11 @@ namespace HonestAuto.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("HonestAuto.Models.Brand", b =>
+                {
+                    b.Navigation("Models");
                 });
 #pragma warning restore 612, 618
         }

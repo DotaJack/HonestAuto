@@ -41,7 +41,5 @@ namespace HonestAuto.Models
 
         [Required]
         public string Colour { get; set; } // Foreign key to the User table
-
-        // This class represents the Car entity in the database and defines its properties and constraints.
     }
 }

@@ -226,9 +226,8 @@ namespace HonestAuto.Controllers
 
         // EDIT (POST)
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CarID,Brand,Model,Year,Mileage,History,UserID,CarImage")] Car car)
+        public async Task<IActionResult> Edit(int id, [Bind("CarID,BrandId,ModelId,Year,Mileage,History,UserID,Registration,Status,Colour")] Car car)
         {
             // Check if the provided ID matches the car's ID
             if (id != car.CarID)
@@ -245,14 +244,17 @@ namespace HonestAuto.Controllers
                 try
                 {
                     // Retain the existing image without updating it
-                    car.CarImage = existingCar.CarImage;
-
+                    // car.CarImage = existingCar.CarImage;
+                    car.UserID = existingCar.UserID;
                     // Update other car properties in the database context
                     existingCar.BrandId = car.BrandId;
                     existingCar.ModelId = car.ModelId;
                     existingCar.Year = car.Year;
                     existingCar.Mileage = car.Mileage;
                     existingCar.History = car.History;
+                    existingCar.Registration = car.Registration;
+                    existingCar.Status = car.Status;
+                    existingCar.Colour = car.Colour;
 
                     // Update the car in the database context
                     _context.Update(existingCar);

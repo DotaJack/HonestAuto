@@ -9,45 +9,47 @@
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.BrandId)
+            Brand
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.BrandId)
+            @ViewData["BrandName"]
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.ModelId)
+            Model
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.ModelId)
+            @ViewData["ModelName"]
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Year)
+            Year
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Year)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.Mileage)
+            Mileage
         </dt>
         <dd>
             @Html.DisplayFor(model => model.Mileage)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.History)
+            History
         </dt>
         <dd>
             @Html.DisplayFor(model => model.History)
         </dd>
+
         <dt>
-            @Html.DisplayNameFor(model => model.UserID)
+            UserID
         </dt>
-<dd>
-			@Html.DisplayFor(model => model.UserID)
-</dd>
+        <dd>
+            @Html.DisplayFor(model => model.UserID)
+        </dd>
+
         <dt>
             Car Image
         </dt>
@@ -61,9 +63,9 @@
                 <text>No Image</text>
             }
         </dd>
-       
     </dl>
 </div>
+
 <div>
     @if (referrerId.HasValue)
     {
@@ -72,8 +74,6 @@
     }
     else
     {
-    //
-        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
         <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
         <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
         <div>
@@ -82,5 +82,4 @@
             </button>
         </div>
     }
-
 </div>
