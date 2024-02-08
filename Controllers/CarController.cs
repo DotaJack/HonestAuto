@@ -203,6 +203,64 @@ namespace HonestAuto.Controllers
             return View(car);
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeStatus(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var car = await _context.Cars.FindAsync(id);
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            return View(car); // Assuming you have a view named "ChangeStatus" that matches this action
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeStatus(int carId, string Status) // Notice the parameter name matches the form field name
+        {
+            if (string.IsNullOrEmpty(Status))
+            {
+                ModelState.AddModelError("", "Status is required.");
+                return View(await _context.Cars.FindAsync(carId));
+            }
+
+            var car = await _context.Cars.FindAsync(carId);
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            car.Status = Status;
+
+            try
+            {
+                _context.Update(car);
+                await _context.SaveChangesAsync();
+                TempData["Message"] = "Car status updated successfully.";
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!CarExists(carId))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    ModelState.AddModelError("", "An error occurred while updating the status. Please try again.");
+                    return View(car);
+                }
+            }
+        }
+
         // EDIT (GET)
         [HttpGet]
         [Authorize(Roles = "Admin")]
