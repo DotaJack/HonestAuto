@@ -175,28 +175,31 @@ namespace HonestAuto.Controllers
 
         public async Task<IActionResult> Details(int? id, int? referrerId = 0)
         {
-            // Check if the provided ID is null
             if (id == null)
             {
                 return NotFound();
             }
 
-            // Retrieve a car by ID from the database asynchronously
-            var car = await _context.Cars.FirstOrDefaultAsync(m => m.CarID == id);
+            var car = await _context.Cars.FindAsync(id);
 
-            // Check if the car with the provided ID exists
             if (car == null)
             {
                 return NotFound();
             }
 
-            // Check if referrerId has a valid value and pass it to the view
-            if (referrerId > 0)
-            {
-                ViewData["ReferrerId"] = referrerId;
-            }
+            // Fetch brand name
+            var brand = await _context.Brands.FirstOrDefaultAsync(b => b.BrandId == int.Parse(car.BrandId));
+            var brandName = brand != null ? brand.Name : "Unknown Brand";
 
-            // Return the car details to a view
+            // Fetch model name
+            var model = await _context.Models.FirstOrDefaultAsync(m => m.ModelId == int.Parse(car.ModelId));
+            var modelName = model != null ? model.Name : "Unknown Model";
+
+            // Pass brand name and model name to the view
+            ViewData["BrandName"] = brandName;
+            ViewData["ModelName"] = modelName;
+            ViewData["ReferrerId"] = referrerId;
+
             return View(car);
         }
 
