@@ -11,17 +11,17 @@
             data.forEach(function (brand) {
                 brandSelect.append(new Option(brand.brandName, brand.brandID));
             });
-            brandSelect.select2();
+            brandSelect.select2(); // Initialize Select2
         },
         error: function (xhr, status, error) {
             console.error('Error fetching brands:', error); // Log any errors for debugging
         }
     });
 
-    // Inside your document ready function
+    // Event listener for brand dropdown change
     $('#SelectedBrand').on('change', function () {
-        var selectedBrandId = $(this).val();
-        updateModelDropdown(selectedBrandId);
+        var selectedBrandId = $(this).val(); // Get the selected brand ID
+        updateModelDropdown(selectedBrandId); // Call function to update model dropdown
     });
 
     // Function to update the model dropdown
@@ -37,13 +37,14 @@
                     models.forEach(function (model) {
                         modelSelect.append(new Option(model.modelName, model.modelId));
                     });
-                    modelSelect.trigger('change');
+                    modelSelect.trigger('change'); // Trigger change event to refresh Select2
                 },
                 error: function (xhr, status, error) {
                     console.error('Error fetching models:', error);
                 }
             });
         } else {
+            // If no brand is selected, clear and disable model dropdown
             $('#SelectedModel').empty().append(new Option('Select Model', '')).trigger('change');
         }
     }

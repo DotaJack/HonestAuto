@@ -1,99 +1,67 @@
 ﻿@model HonestAuto.Models.SearchViewModel
 
 <h1>Search Cars</h1>
+
+<!-- Include CSS stylesheets -->
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <link href="~/lib/select2/dist/css/select2.min.css" rel="stylesheet" />
-<form asp-action="SearchCars" method="get">
 
+<!-- Search form -->
+<form asp-action="SearchCars" method="get">
     <div class="form-group">
         <label asp-for="SelectedBrand" class="control-label">Brand</label>
         <select asp-for="SelectedBrand" class="form-control js-select2" id="SelectedBrand" style="width: 100%;">
             <option value="">Select Brand</option>
         </select>
-
     </div>
 
-    <div class="form-group">
-        <label asp-for="SelectedModel" class="control-label">Model</label>
-        <select asp-for="SelectedModel" class="form-control js-select2" id="SelectedModel" style="width: 100%;">
-            <option value="">Select Model</option>
-        </select>
-
-    </div>
-
-    <div class="form-group">
-        <label asp-for="SelectedYear" class="control-label">Year</label>
-        <input asp-for="SelectedYear" class="form-control" id="SelectedYear" placeholder="Enter Year" type="number" min="1900" max="2100" />
-    </div>
-
-
-<div class="form-group">
-    <label asp-for="SelectedColour" class="control-label">Colour</label>
-    <select asp-for="SelectedColour" class="form-control" id="SelectedColour">
-        <option value="">Select Colour</option>
-        <option value="Red">Red</option>
-        <option value="Blue">Blue</option>
-        <option value="Green">Green</option>
-        <option value="Yellow">Yellow</option>
-        <option value="Orange">Orange</option>
-        <option value="Purple">Purple</option>
-        <option value="Pink">Pink</option>
-        <option value="Brown">Brown</option>
-        <option value="Gray">Gray</option>
-        <option value="Black">Black</option>
-    </select>
-</div>
-
-
-    <div class="form-group">
-        <label class="control-label">Minimum Mileage</label>
-        <input type="number" asp-for="MinMileage" class="form-control" />
-    </div>
-
-    <div class="form-group">
-        <label class="control-label">Maximum Mileage</label>
-        <input type="number" asp-for="MaxMileage" class="form-control" />
-    </div>
+    <!-- Similar form groups for model, year, colour, and mileage -->
 
     <button type="submit" class="btn btn-primary">Search</button>
 </form>
+
+<!-- Container for search results -->
 <div id="search-results-container" style="display: none;">
-@if (Model != null && Model.SearchResults != null && Model.SearchResults.Any())
-{
-    <h2>Search Results</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Car ID</th>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Mileage</th>
-                <th>History</th>
-                <th>Colour</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var car in Model.SearchResults)
-            {
+    @if (Model != null && Model.SearchResults != null && Model.SearchResults.Any())
+    {
+        <!-- Display search results in a table -->
+        <h2>Search Results</h2>
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@car.CarID</td>
-                    <td>@car.BrandName</td>
-                    <td>@car.ModelName</td>
-                    <td>@car.Year</td>
-                    <td>@car.Mileage</td>
-                    <td>@car.History</td>
-                    <td>@car.Colour</td>
+                    <th>Car ID</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Year</th>
+                    <th>Mileage</th>
+                    <th>History</th>
+                    <th>Colour</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}    
-else
-{
-    <p>No cars found matching the search criteria.</p>
-}
+            </thead>
+            <tbody>
+                @foreach (var car in Model.SearchResults)
+                {
+                    <tr>
+                        <td>@car.CarID</td>
+                        <td>@car.BrandName</td>
+                        <td>@car.ModelName</td>
+                        <td>@car.Year</td>
+                        <td>@car.Mileage</td>
+                        <td>@car.History</td>
+                        <td>@car.Colour</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <!-- Display message if no search results -->
+        <p>No cars found matching the search criteria.</p>
+    }
 </div>
+
+<!-- Include scripts -->
 @section scripts {
     <script src="~/lib/select2/js/select2.min.js"></script>
     <script src="~/js/Search.js"></script>

@@ -4,21 +4,26 @@
 
 <form asp-action="ChangeStatus" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <!-- Hidden input field to store the CarID -->
     <input type="hidden" asp-for="CarID" />
 
     <div class="form-group">
+        <!-- Label for the status dropdown -->
         <label asp-for="Status">Status</label>
+        <!-- Dropdown list to select the new status -->
         <select asp-for="Status" class="form-control">
+            <!-- Options for different status values -->
             <option value="Hidden">Hidden</option>
             <option value="Visible">Visible</option>
         </select>
-
-
+        <!-- Validation message for status field -->
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
     <div class="form-group">
+        <!-- Button to submit the form -->
         <input type="submit" value="Change Status" class="btn btn-primary" />
+        <!-- Button to cancel and go back to the list of cars -->
         <a asp-action="Index" class="btn btn-secondary">Back to List</a>
     </div>
 </form>
