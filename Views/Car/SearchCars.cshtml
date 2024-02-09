@@ -15,7 +15,50 @@
         </select>
     </div>
 
-    <!-- Similar form groups for model, year, colour, and mileage -->
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedModel" class="control-label">Model</label>
+        <select asp-for="SelectedModel" class="form-control js-select2" id="SelectedModel" style="width: 100%;">
+            <option value="">Select Model</option>
+        </select>
+
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SelectedYear" class="control-label">Year</label>
+        <input asp-for="SelectedYear" class="form-control" id="SelectedYear" placeholder="Enter Year" type="number" min="1900" max="2100" />
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="SelectedColour" class="control-label">Colour</label>
+        <select asp-for="SelectedColour" class="form-control" id="SelectedColour">
+            <option value="">Select Colour</option>
+            <option value="Red">Red</option>
+            <option value="Blue">Blue</option>
+            <option value="Green">Green</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Orange">Orange</option>
+            <option value="Purple">Purple</option>
+            <option value="Pink">Pink</option>
+            <option value="Brown">Brown</option>
+            <option value="Gray">Gray</option>
+            <option value="Black">Black</option>
+        </select>
+    </div>
+
+
+    <div class="form-group">
+        <label class="control-label">Minimum Mileage</label>
+        <input type="number" asp-for="MinMileage" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label">Maximum Mileage</label>
+        <input type="number" asp-for="MaxMileage" class="form-control" />
+    </div>
 
     <button type="submit" class="btn btn-primary">Search</button>
 </form>
