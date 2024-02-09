@@ -1,10 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using HonestAuto.Data;
 using HonestAuto.Models;
-using HonestAuto.Data;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HonestAuto.Services
 {

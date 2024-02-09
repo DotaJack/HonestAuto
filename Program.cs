@@ -1,9 +1,9 @@
 using HonestAuto.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using HonestAuto.Models;
 using HonestAuto.Hubs;
+using HonestAuto.Models;
 using HonestAuto.Services;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

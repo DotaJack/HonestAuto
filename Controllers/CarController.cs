@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Linq;
 using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace HonestAuto.Controllers
 {
@@ -478,6 +476,43 @@ namespace HonestAuto.Controllers
 
             // Redirect to the Index action after successful deletion
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> ViewAds()
+        {
+            var cars = await _context.Cars
+                .Where(c => c.Status == "Visible") // Filter ads by status
+                .Join(
+                    _context.Brands,
+                    car => car.BrandId,
+                    brand => brand.BrandId.ToString(),
+                    (car, brand) => new { Car = car, Brand = brand })
+                .Join(
+                    _context.Models,
+                    joinResult => joinResult.Car.ModelId,
+                    model => model.ModelId.ToString(),
+                    (joinResult, model) => new CarViewModel
+                    {
+                        CarID = joinResult.Car.CarID,
+                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
+                        ModelName = model.Name ?? "Unknown Model",
+                        Year = joinResult.Car.Year,
+                        Mileage = joinResult.Car.Mileage,
+                        History = joinResult.Car.History,
+                        UserID = joinResult.Car.UserID,
+                        Registration = joinResult.Car.Registration,
+                        Status = joinResult.Car.Status,
+                        Colour = joinResult.Car.Colour,
+                        CarImage = joinResult.Car.CarImage
+                    })
+                .ToListAsync();
+
+            if (cars == null || !cars.Any())
+            {
+                return NotFound();
+            }
+
+            return View(cars);
         }
 
         public async Task<IActionResult> SearchCars(SearchViewModel model)

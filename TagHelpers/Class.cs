@@ -11,7 +11,7 @@ namespace HonestAuto.TagHelpers
         {
             output.TagName = "a"; // Change the tag from <custom-href> to <a>.
             output.Attributes.SetAttribute("href", PageUrl);
-            output.TagMode = TagMode.StartTagAndEndTag; 
+            output.TagMode = TagMode.StartTagAndEndTag;
         }
     }
 }

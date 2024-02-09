@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using System.Threading.Tasks;
-using HonestAuto.Models;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
+﻿using HonestAuto.Models;
 using HonestAuto.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 
 // Source:https://www.youtube.com/watch?v=RUZLIh4Vo20
 // Source 2: https://learn.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr

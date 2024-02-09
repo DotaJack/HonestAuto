@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Razor.TagHelpers;
+
 namespace HonestAuto.TagHelpers
 {
     public class TestTagHelper : TagHelper
@@ -7,10 +8,9 @@ namespace HonestAuto.TagHelpers
         {
             if (context.TagName == "test")
             {
-               
                 output.TagName = "a";
-                output.Attributes.SetAttribute("href", "https://discord.com/"); 
-                output.Content.SetContent("Visit discord.com"); 
+                output.Attributes.SetAttribute("href", "https://discord.com/");
+                output.Content.SetContent("Visit discord.com");
             }
         }
     }

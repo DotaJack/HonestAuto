@@ -1,7 +1,6 @@
 ﻿using HonestAuto.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace HonestAuto.Data
 {// This is done so that the MarketplaceContext class can be used to interact with the database. This can then be paired with the Migrations which will allow the project to be used on other devices. Using Add-Migration DBcreation and then update-database
