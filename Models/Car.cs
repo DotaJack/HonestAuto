@@ -28,15 +28,15 @@ namespace HonestAuto.Models
         public byte[]? CarImage { get; set; } // Binary data representing an image of the car (nullable)
 
         [Required]
-        public string UserID { get; set; } // Foreign key to the User table
+        public string UserID { get; set; }
 
         [Required]
-        public string Registration { get; set; } // Foreign key to the User table
+        public string Registration { get; set; }
 
         [Required]
-        public string Status { get; set; } // Foreign key to the User table
+        public string Status { get; set; }
 
         [Required]
-        public string Colour { get; set; } // Foreign key to the User table
+        public string Colour { get; set; }
     }
 }

@@ -11,11 +11,11 @@
         public int Mileage { get; set; }
         public string History { get; set; }
         public string UserID { get; set; }
-        public string Registration { get; set; } // Foreign key to the User table
+        public string Registration { get; set; }
 
-        public string Status { get; set; } // Foreign key to the User table
+        public string Status { get; set; }
 
-        public string Colour { get; set; } // Foreign key to the User table
+        public string Colour { get; set; }
         public byte[] CarImage { get; set; }
     }
 }
