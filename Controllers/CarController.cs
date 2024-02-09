@@ -23,22 +23,35 @@ namespace HonestAuto.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index(int? searchYear)
+        public async Task<IActionResult> Index()
         {
-            // Retrieve a list of all cars from the database asynchronously
-            var cars = _context.Cars.AsQueryable(); // Start with all cars
+            var carViewModels = await _context.Cars
+                .Join(
+                    _context.Brands,
+                    car => car.BrandId,
+                    brand => brand.BrandId.ToString(), // Convert BrandId to string for comparison
+                    (car, brand) => new { Car = car, Brand = brand })
+                .Join(
+                    _context.Models,
+                    joinResult => joinResult.Car.ModelId,
+                    model => model.ModelId.ToString(), // Convert ModelId to string for comparison
+                    (joinResult, model) => new CarViewModel
+                    {
+                        CarID = joinResult.Car.CarID,
+                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
+                        ModelName = model.Name ?? "Unknown Model",
+                        Year = joinResult.Car.Year,
+                        Mileage = joinResult.Car.Mileage,
+                        History = joinResult.Car.History,
+                        UserID = joinResult.Car.UserID,
+                        CarImage = joinResult.Car.CarImage,
+                        Registration = joinResult.Car.Registration,
+                        Status = joinResult.Car.Status,
+                        Colour = joinResult.Car.Colour
+                    })
+                .ToListAsync();
 
-            if (searchYear.HasValue)
-            {
-                // If a search year is provided, filter cars by that year
-                cars = cars.Where(car => car.Year == searchYear.Value);
-            }
-
-            // Execute the query and retrieve the filtered cars
-            var filteredCars = await cars.ToListAsync();
-
-            // Return the list of filtered cars to a view
-            return View(filteredCars);
+            return View(carViewModels);
         }
 
         private async Task<string> GetRandomMechanicId()
@@ -465,6 +478,107 @@ namespace HonestAuto.Controllers
 
             // Redirect to the Index action after successful deletion
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> SearchCars(SearchViewModel model)
+        {
+            var query = _context.Cars.AsQueryable();
+
+            if (!string.IsNullOrEmpty(model.SelectedBrand))
+            {
+                query = query.Where(c => c.BrandId == model.SelectedBrand);
+            }
+
+            if (!string.IsNullOrEmpty(model.SelectedModel))
+            {
+                query = query.Where(c => c.ModelId == model.SelectedModel);
+            }
+
+            if (model.SelectedYear.HasValue)
+            {
+                query = query.Where(c => c.Year == model.SelectedYear.Value);
+            }
+
+            if (!string.IsNullOrEmpty(model.SelectedColour))
+            {
+                query = query.Where(c => c.Colour == model.SelectedColour);
+            }
+
+            if (model.MinMileage.HasValue)
+            {
+                query = query.Where(c => c.Mileage >= model.MinMileage.Value);
+            }
+
+            if (model.MaxMileage.HasValue)
+            {
+                query = query.Where(c => c.Mileage <= model.MaxMileage.Value);
+            }
+
+            var carViewModels = await query
+                .Join(
+                    _context.Brands,
+                    car => car.BrandId,
+                    brand => brand.BrandId.ToString(), // Convert BrandId to string for comparison
+                    (car, brand) => new { Car = car, Brand = brand })
+                .Join(
+                    _context.Models,
+                    joinResult => joinResult.Car.ModelId,
+                    model => model.ModelId.ToString(), // Convert ModelId to string for comparison
+                    (joinResult, model) => new CarViewModel
+                    {
+                        CarID = joinResult.Car.CarID,
+                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
+                        ModelName = model.Name ?? "Unknown Model",
+                        Year = joinResult.Car.Year,
+                        Mileage = joinResult.Car.Mileage,
+                        History = joinResult.Car.History,
+                        Colour = joinResult.Car.Colour
+                    })
+                .ToListAsync();
+
+            model.SearchResults = carViewModels;
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> UserCars()
+        {
+            // Get the currently logged-in user
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                // Handle the case where user is not logged in
+                return RedirectToAction("Login", "Account");
+            }
+
+            var carViewModels = await _context.Cars
+                .Where(car => car.UserID == user.Id) // Filter by user ID
+                .Join(
+                    _context.Brands,
+                    car => car.BrandId,
+                    brand => brand.BrandId.ToString(), // Convert BrandId to string for comparison
+                    (car, brand) => new { Car = car, Brand = brand })
+                .Join(
+                    _context.Models,
+                    joinResult => joinResult.Car.ModelId,
+                    model => model.ModelId.ToString(), // Convert ModelId to string for comparison
+                    (joinResult, model) => new CarViewModel
+                    {
+                        CarID = joinResult.Car.CarID,
+                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
+                        ModelName = model.Name ?? "Unknown Model",
+                        Year = joinResult.Car.Year,
+                        Mileage = joinResult.Car.Mileage,
+                        History = joinResult.Car.History,
+                        UserID = joinResult.Car.UserID,
+                        CarImage = joinResult.Car.CarImage,
+                        Registration = joinResult.Car.Registration,
+                        Status = joinResult.Car.Status,
+                        Colour = joinResult.Car.Colour
+                    })
+                .ToListAsync();
+
+            return View(carViewModels);
         }
 
         private bool CarExists(int id)

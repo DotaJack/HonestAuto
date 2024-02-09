@@ -1,0 +1,45 @@
+﻿@model IEnumerable<HonestAuto.Models.CarViewModel>
+
+<h1 class="text-center">All Car Ads</h1>
+
+<div class="container">
+    @foreach (var car in Model)
+    {
+        <div class="row mb-4">
+            <div class="col-md-6 offset-md-3">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="car-image">
+                                    @if (car.CarImage != null && car.CarImage.Length > 0)
+                                    {
+                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" class="img-fluid" alt="Car Image" />
+                                    }
+                                    else
+                                    {
+                                        <p class="text-center">No Image</p>
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="car-details">
+                                    <h2>@car.BrandName @car.ModelName</h2>
+                                    <ul class="list-unstyled">
+                                        <li><strong>Car ID:</strong> @car.CarID</li>
+                                        <li><strong>Year:</strong> @car.Year</li>
+                                        <li><strong>Mileage:</strong> @car.Mileage</li>
+                                        <li><strong>History:</strong> @car.History</li>
+                                        <li><strong>User ID:</strong> @car.UserID</li>
+                                        <li><strong>Registration:</strong> @car.Registration</li>
+                                        <li><strong>Colour:</strong> @car.Colour</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
