@@ -1,10 +1,10 @@
-﻿@model IEnumerable<HonestAuto.Models.CarViewModel>
+﻿@model Tuple<string, IEnumerable<HonestAuto.Models.CarViewModel>>
 
-<h1 class="text-center">All Car Ads</h1>
+<h1 class="text-center">All Car Ads - User: @Model.Item1</h1>
 
 <div class="container">
     <!-- Loop through each car in the model -->
-    @foreach (var car in Model)
+    @foreach (var car in Model.Item2)
     {
         <div class="row mb-4">
             <div class="col-md-6 offset-md-3">
@@ -38,7 +38,6 @@
                                         <li><strong>User ID:</strong> @car.UserID</li>
                                         <li><strong>Registration:</strong> @car.Registration</li>
                                         <li><strong>Colour:</strong> @car.Colour</li>
-
                                     </ul>
                                     <a href="@Url.Action("Details", "Car", new { id = car.CarID })" class="btn btn-primary">View Details</a>
                                 </div>

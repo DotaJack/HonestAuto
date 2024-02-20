@@ -218,7 +218,6 @@ namespace HonestAuto.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeStatus(int? id)
         {
             if (id == null)
@@ -236,7 +235,6 @@ namespace HonestAuto.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeStatus(int carId, string Status) // Notice the parameter name matches the form field name
         {
@@ -277,7 +275,6 @@ namespace HonestAuto.Controllers
 
         // EDIT (GET)
         [HttpGet]
-        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             // Check if the provided ID is null
@@ -574,6 +571,52 @@ namespace HonestAuto.Controllers
             model.SearchResults = carViewModels;
 
             return View(model);
+        }
+
+        public async Task<IActionResult> ViewUserCars(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                return NotFound(); // Handle invalid user ID
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound(); // Handle user not found
+            }
+
+            var carViewModels = await _context.Cars
+                .Where(car => car.UserID == userId) // Filter by user ID
+                .Join(
+                    _context.Brands,
+                    car => car.BrandId,
+                    brand => brand.BrandId.ToString(), // Convert BrandId to string for comparison
+                    (car, brand) => new { Car = car, Brand = brand })
+                .Join(
+                    _context.Models,
+                    joinResult => joinResult.Car.ModelId,
+                    model => model.ModelId.ToString(), // Convert ModelId to string for comparison
+                    (joinResult, model) => new CarViewModel
+                    {
+                        CarID = joinResult.Car.CarID,
+                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
+                        ModelName = model.Name ?? "Unknown Model",
+                        Year = joinResult.Car.Year,
+                        Mileage = joinResult.Car.Mileage,
+                        History = joinResult.Car.History,
+                        UserID = joinResult.Car.UserID,
+                        CarImage = joinResult.Car.CarImage,
+                        Registration = joinResult.Car.Registration,
+                        Status = joinResult.Car.Status,
+                        Colour = joinResult.Car.Colour
+                    })
+                .ToListAsync();
+
+            var userEmail = user.Email;
+            var tupleModel = new Tuple<string, IEnumerable<CarViewModel>>(userEmail, carViewModels);
+
+            return View(tupleModel);
         }
 
         public async Task<IActionResult> UserCars()

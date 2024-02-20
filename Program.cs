@@ -91,6 +91,7 @@ async Task SeedUsersAndRoles(IServiceProvider serviceProvider)
     await SeedUserAsync(userManager, "MechanicTest2@gmail.com", "Dotajack2!", "Mechanic");
     await SeedUserAsync(userManager, "MechanicTest3@gmail.com", "Dotajack2!", "Mechanic");
     await SeedUserAsync(userManager, "MechanicTest4@gmail.com", "Dotajack2!", "Mechanic");
+    await SeedUserAsync(userManager, "Admin2@honestauto.com", "Dotajack2!", "Admin");
 }
 
 async Task SeedUserAsync(UserManager<User> userManager, string email, string password, string role)
