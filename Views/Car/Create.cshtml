@@ -50,10 +50,23 @@
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
+
     <!-- Input field for colour -->
     <div class="form-group">
         <label asp-for="Colour">Colour</label>
-        <input asp-for="Colour" class="form-control" />
+        <select asp-for="Colour" class="form-control">
+            <option value="">Select Colour</option>
+            <option value="Red">Red</option>
+            <option value="Blue">Blue</option>
+            <option value="Green">Green</option>
+            <option value="Yellow">Yellow</option>
+            <option value="Orange">Orange</option>
+            <option value="Purple">Purple</option>
+            <option value="Pink">Pink</option>
+            <option value="Brown">Brown</option>
+            <option value="Gray">Gray</option>
+            <option value="Black">Black</option>
+        </select>
         <span asp-validation-for="Colour" class="text-danger"></span>
     </div>
 

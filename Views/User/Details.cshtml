@@ -20,14 +20,18 @@
         </dd>
     </dl>
 </div>
+
 <div>
     @if (User.IsInRole("Admin"))
     {
         <button type="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
- 
-    <button type = "button" class="btn btn-secondary" asp-action="Index">Back to List</button>
+        <button type="button" class="btn btn-secondary" asp-action="Index">Back to List</button>
     }
 
     <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("ViewUserCars", "Car", new { userId = Model.Id })'">View User's Cars</button>
 
+    @if (User.IsInRole("Buyer"))
+    {
+        <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = Model.Id })'">Message User</button>
+    }
 </div>
