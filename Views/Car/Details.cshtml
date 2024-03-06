@@ -82,7 +82,10 @@
                     Message User
                 </button>
             </div>
-
+            <!-- Button to view seller's profile -->
+            <div>
+                <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserID" class="btn btn-info">View Mechanic's Profile</a>
+            </div>
             <!-- Button to view seller's profile -->
             <div>
                 <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserID" class="btn btn-info">View Seller's Profile</a>

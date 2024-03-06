@@ -4,13 +4,17 @@ using HonestAuto.Models;
 using HonestAuto.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MailKit.Net.Smtp;
+using MimeKit;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<MarketplaceContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MarketplaceContext")));
-
+// Configure EmailService and related services
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<EmailService>(); // Register EmailService for dependency injection
 // Configure Identity services
 builder.Services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole>() // Add roles to the identity configuration
@@ -129,4 +133,16 @@ async Task SeedUserAsync(UserManager<User> userManager, string email, string pas
     {
         // User already exists - you might want to check if the email is confirmed or perform other updates
     }
+}
+
+public class EmailSettings
+{
+    public string? SmtpServer { get; set; }
+    public int SmtpPort { get; set; }
+    public string? Email { get; set; }
+    public string? SenderName { get; set; }
+    public string? SenderEmail { get; set; }
+    public string? Password { get; set; }
+    public string? ImapServer { get; set; }
+    public int ImapPort { get; set; }
 }

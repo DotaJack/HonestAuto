@@ -3,6 +3,7 @@ using HonestAuto.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NuGet.Protocol.Plugins;
 using System.Security.Claims;
 
 namespace HonestAuto.Controllers
@@ -12,13 +13,16 @@ namespace HonestAuto.Controllers
     {
         private readonly ChatMessageService _messageService;
         private readonly UserManager<User> _userManager;
+        private readonly EmailService _emailService;
 
         // Source:https://www.youtube.com/watch?v=RUZLIh4Vo20
         // Source 2: https://learn.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr
-        public ChatController(ChatMessageService messageService, UserManager<User> userManager)
+        public ChatController(ChatMessageService messageService, UserManager<User> userManager, EmailService emailService)
+
         {
             _messageService = messageService;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         // Action to display the list of conversations for the current user
@@ -85,26 +89,44 @@ namespace HonestAuto.Controllers
 
         // Action to handle sending a chat message
         [HttpPost]
+        [ValidateAntiForgeryToken] // Ensure that the request is coming from your own form
         public async Task<IActionResult> SendMessage(ChatViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Get the sender's ID from the current user's claims
-                var senderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-                // Create a chat message with sender, receiver, content, and timestamp
-                var message = new ChatMessage
+                try
                 {
-                    SenderId = senderId,
-                    ReceiverId = model.ReceiverId,
-                    DateSent = DateTime.UtcNow,
-                    Content = model.Content
-                };
+                    // Get the sender's ID from the current user's claims
+                    var senderId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-                // Save the chat message to the database
-                await _messageService.SaveMessageAsync(message);
+                    // Create a chat message with sender, receiver, content, and timestamp
+                    var message = new ChatMessage
+                    {
+                        SenderId = senderId,
+                        ReceiverId = model.ReceiverId, // Use model.ReceiverId to set the receiver ID
+                        DateSent = DateTime.UtcNow,
+                        Content = model.Content
+                    };
 
-                // You can return a success message or perform other actions here
+                    // Save the chat message to the database
+                    await _messageService.SaveMessageAsync(message);
+
+                    // Fetch the receiver's email address using UserManager
+                    var receiver = await _userManager.FindByIdAsync(model.ReceiverId); // Find the receiver by ID
+                    var receiverEmail = receiver != null ? await _userManager.GetEmailAsync(receiver) : null; // Get the receiver's email
+
+                    var emailSubject = "New Chat Message";
+                    var emailContent = $"You have received a new message from .";
+                    await _emailService.SendEmailAsync(receiverEmail, emailSubject, emailContent);
+
+                    // You can return a success message or perform other actions here
+                }
+                catch (Exception ex)
+                {
+                    // Log the exception for troubleshooting
+                    Console.WriteLine($"An error occurred while sending the message: {ex.Message}");
+                    // You may choose to handle the error differently, e.g., show an error message to the user
+                }
             }
 
             // Redirect back to the chat view with the same receiver

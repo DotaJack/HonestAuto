@@ -1,9 +1,11 @@
 ﻿using HonestAuto.Data;
 using HonestAuto.Models;
+using HonestAuto.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using System.Security.Claims;
 
 namespace HonestAuto.Controllers
@@ -11,45 +13,69 @@ namespace HonestAuto.Controllers
     public class CarController : Controller
     {
         private readonly MarketplaceContext _context;
+        private readonly EmailService _emailService;
 
         // Inject UserManager into your controller
         private readonly UserManager<User> _userManager;
 
-        public CarController(MarketplaceContext context, UserManager<User> userManager)
+        public CarController(MarketplaceContext context, UserManager<User> userManager, EmailService emailService)
         {
             _context = context;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var carViewModels = await _context.Cars
-                .Join(
-                    _context.Brands,
-                    car => car.BrandId,
-                    brand => brand.BrandId.ToString(), // Convert BrandId to string for comparison
-                    (car, brand) => new { Car = car, Brand = brand })
-                .Join(
-                    _context.Models,
-                    joinResult => joinResult.Car.ModelId,
-                    model => model.ModelId.ToString(), // Convert ModelId to string for comparison
-                    (joinResult, model) => new CarViewModel
-                    {
-                        CarID = joinResult.Car.CarID,
-                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
-                        ModelName = model.Name ?? "Unknown Model",
-                        Year = joinResult.Car.Year,
-                        Mileage = joinResult.Car.Mileage,
-                        History = joinResult.Car.History,
-                        UserID = joinResult.Car.UserID,
-                        CarImage = joinResult.Car.CarImage,
-                        Registration = joinResult.Car.Registration,
-                        Status = joinResult.Car.Status,
-                        Colour = joinResult.Car.Colour
-                    })
-                .ToListAsync();
+            // Ensure there's a user authenticated and email claim exists
+            var userEmail = User?.FindFirstValue(ClaimTypes.Email);
+            if (string.IsNullOrEmpty(userEmail))
+            {
+                // If no user authenticated or email claim doesn't exist, handle accordingly
+                return RedirectToAction("Login", "Account"); // Redirect to login or handle unauthorized access
+            }
 
-            return View(carViewModels);
+            try
+            {
+                // Fetch car view models from the database
+                var carViewModels = await _context.Cars
+                    .Join(
+                        _context.Brands,
+                        car => car.BrandId,
+                        brand => brand.BrandId.ToString(),
+                        (car, brand) => new { Car = car, Brand = brand })
+                    .Join(
+                        _context.Models,
+                        joinResult => joinResult.Car.ModelId,
+                        model => model.ModelId.ToString(),
+                        (joinResult, model) => new CarViewModel
+                        {
+                            CarID = joinResult.Car.CarID,
+                            BrandName = joinResult.Brand.Name ?? "Unknown Brand",
+                            ModelName = model.Name ?? "Unknown Model",
+                            Year = joinResult.Car.Year,
+                            Mileage = joinResult.Car.Mileage,
+                            History = joinResult.Car.History,
+                            UserID = joinResult.Car.UserID,
+                            CarImage = joinResult.Car.CarImage,
+                            Registration = joinResult.Car.Registration,
+                            Status = joinResult.Car.Status,
+                            Colour = joinResult.Car.Colour
+                        })
+                    .ToListAsync();
+
+                // Send email to the user
+                await _emailService.SendEmailAsync(userEmail, "Car Created Successfully", "Your car has been successfully added to our system.");
+
+                // Return the car view models to the view
+                return View(carViewModels);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for troubleshooting
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return RedirectToAction("Error", "Home"); // Redirect to error page or handle the error
+            }
         }
 
         private async Task<string> GetRandomMechanicId()
@@ -79,7 +105,8 @@ namespace HonestAuto.Controllers
         {
             var brands = _context.Brands.ToList() ?? new List<Brand>(); // Retrieve all brands from the database or initialize an empty list if null
             var models = _context.Models.ToList() ?? new List<Model>(); // Retrieve all models from the database or initialize an empty list if null
-
+                                                                        // Retrieve the email of the currently logged-in user
+            var userEmail = User.FindFirstValue(ClaimTypes.Email);
             ViewBag.Brands = brands;
             ViewBag.Models = models;
 
@@ -151,6 +178,16 @@ namespace HonestAuto.Controllers
                         car.CarImage = memoryStream.ToArray(); // Store the image data as a byte array in the Car object
                     }
                 }
+                // Retrieve the email of the currently logged-in user
+                var userEmail = User.FindFirstValue(ClaimTypes.Email);
+                // Ensure userEmail is not null before proceeding
+                if (userEmail == null)
+                {
+                    // Log or handle the case where the user's email is not available
+                    // For now, let's log a message and return a bad request response
+                    Console.WriteLine("User email not found.");
+                    return BadRequest("User email not found.");
+                }
 
                 // Add the car to the database context
                 _context.Add(car);
@@ -175,6 +212,7 @@ namespace HonestAuto.Controllers
 
                 // Add the new CarEvaluation to the context
                 _context.CarEvaluations.Add(carEvaluation);
+                // Send email to the user
 
                 // Save changes to the database to save the CarEvaluation
                 await _context.SaveChangesAsync();
