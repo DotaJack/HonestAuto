@@ -1,4 +1,5 @@
-﻿using HonestAuto.Data;
+﻿using Azure.Messaging;
+using HonestAuto.Data;
 using HonestAuto.Models;
 using HonestAuto.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -65,7 +66,7 @@ namespace HonestAuto.Controllers
                     .ToListAsync();
 
                 // Send email to the user
-                await _emailService.SendEmailAsync(userEmail, "Car Created Successfully", "Your car has been successfully added to our system.");
+                //   await _emailService.SendEmailAsync(userEmail, "Car Created Successfully", "Your car has been successfully added to our system.");
 
                 // Return the car view models to the view
                 return View(carViewModels);
@@ -105,7 +106,7 @@ namespace HonestAuto.Controllers
         {
             var brands = _context.Brands.ToList() ?? new List<Brand>(); // Retrieve all brands from the database or initialize an empty list if null
             var models = _context.Models.ToList() ?? new List<Model>(); // Retrieve all models from the database or initialize an empty list if null
-                                                                        // Retrieve the email of the currently logged-in user
+
             var userEmail = User.FindFirstValue(ClaimTypes.Email);
             ViewBag.Brands = brands;
             ViewBag.Models = models;
@@ -205,15 +206,53 @@ namespace HonestAuto.Controllers
                     EvaluationStatus = "Submitted", // Set the EvaluationStatus as "Submitted"
                     EvaluationDate = DateTime.UtcNow, // Set the current UTC date and time
                     MechanicID = mechanicId, // Set the MechanicID to the ID of the random mechanic
-                    CarValue = 20000, // Set the CarValue to 20000 for now
-                    EvaluationSummary = "This is a summary of the car evaluation."
+
                     // Other properties can be initialized here if needed
                 };
 
                 // Add the new CarEvaluation to the context
                 _context.CarEvaluations.Add(carEvaluation);
-                // Send email to the user
+                var emailSubject = "Welcome to Honest Auto - Your Car is Registered";
+                // Call the method to send the email
+                var emailContent = $@"
+<html lang=""en"">
+<head>
+    <meta charset=""UTF-8"">
+    <title>Your Car is Added to Our System</title>
+    <style>
+        body {{ background-color: #f2f2f2; font-family: Arial, sans-serif; margin: 0; padding: 0; }}
+        .container {{ background-color: #ffffff; max-width: 600px; margin: auto; padding: 20px; }}
+        .content {{ padding: 20px; text-align: left; color: #333333; }}
+        .footer {{ padding: 20px; text-align: center; }}
+        a {{ color: #1A55E8; text-decoration: none; }}
+        .button {{ background-color: #004aad; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; }}
+        .logo {{ height: 100px; vertical-align: middle; margin-right: 10px; }}
+        .type {{ height: 100px; vertical-align: middle; }}
+    </style>
+</head>
+<body>
+    <div class=""container"">
+        <div class=""content"">
+            <h2>Hello,</h2>
+            <p>We have successfully added your car to our system! We're excited to get you started with our premium auto services.</p>
+            <p>Please bring your car to the following address:</p>
+            <p><strong>Ship St, Penrose Quay, Victorian Quarter, Cork, T23 TR7</strong></p>
+            <p>If you have any questions or need further assistance, don't hesitate to contact us. You can also click the button below for directions:</p>
+            <p style=""text-align: center;"">
+                <a href=""https://www.google.com/maps/place/Ship+St+Penrose+Quay+Victorian+Quarter+Cork+T23+TR7/"" target=""_blank"" class=""button"">Get Directions</a>
+            </p>
+        </div>
+        <div class=""footer"">
+            <p>Thank you for choosing Honest Auto!</p>
+            <img src=""https://i.ibb.co/m6cXxB1/Honest-Auto-Logo.png"" alt=""Honest Auto Logo"" class=""logo"" />
+            <img src=""https://i.ibb.co/6RzfjLM/Honest-Auto-Type.png"" alt=""Honest Auto Type"" class=""type"" />
+        </div>
+    </div>
+</body>
+</html>
 
+";
+                await _emailService.SendEmailAsync(userEmail, emailSubject, emailContent, true);
                 // Save changes to the database to save the CarEvaluation
                 await _context.SaveChangesAsync();
 
