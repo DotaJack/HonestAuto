@@ -22,13 +22,21 @@ namespace HonestAuto.Services
             _context = context;
         }
 
-        public async Task SendEmailAsync(string email, string subject, string message)
+        public async Task SendEmailAsync(string email, string subject, string message, bool isHtml = false)
         {
             var emailMessage = new MimeMessage();
             emailMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.Email));
             emailMessage.To.Add(new MailboxAddress("", email));
             emailMessage.Subject = subject;
-            emailMessage.Body = new TextPart("plain") { Text = message };
+
+            if (isHtml)
+            {
+                emailMessage.Body = new TextPart("html") { Text = message };
+            }
+            else
+            {
+                emailMessage.Body = new TextPart("plain") { Text = message };
+            }
 
             using (var client = new SmtpClient())
             {
