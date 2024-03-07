@@ -17,5 +17,7 @@
 
         public string Colour { get; set; }
         public byte[] CarImage { get; set; }
+
+        public bool IsEvaluationComplete { get; set; }
     }
 }

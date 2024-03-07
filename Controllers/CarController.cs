@@ -717,11 +717,16 @@ namespace HonestAuto.Controllers
                     _context.Models,
                     joinResult => joinResult.Car.ModelId,
                     model => model.ModelId.ToString(), // Convert ModelId to string for comparison
-                    (joinResult, model) => new CarViewModel
+                    (joinResult, model) => new { Car = joinResult.Car, Brand = joinResult.Brand, Model = model })
+                .Join(
+                    _context.CarEvaluations,
+                    joinResult => joinResult.Car.CarID,
+                    evaluation => evaluation.CarID,
+                    (joinResult, evaluation) => new CarViewModel
                     {
                         CarID = joinResult.Car.CarID,
                         BrandName = joinResult.Brand.Name ?? "Unknown Brand",
-                        ModelName = model.Name ?? "Unknown Model",
+                        ModelName = joinResult.Model.Name ?? "Unknown Model",
                         Year = joinResult.Car.Year,
                         Mileage = joinResult.Car.Mileage,
                         History = joinResult.Car.History,
@@ -729,7 +734,8 @@ namespace HonestAuto.Controllers
                         CarImage = joinResult.Car.CarImage,
                         Registration = joinResult.Car.Registration,
                         Status = joinResult.Car.Status,
-                        Colour = joinResult.Car.Colour
+                        Colour = joinResult.Car.Colour,
+                        IsEvaluationComplete = evaluation.EvaluationStatus == "Completed"
                     })
                 .ToListAsync();
 

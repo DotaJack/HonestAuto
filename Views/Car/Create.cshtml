@@ -15,8 +15,6 @@
     <!-- Anti-forgery token to prevent CSRF attacks -->
     @Html.AntiForgeryToken()
 
-    <!-- Display user ID -->
-    <p> @ViewBag.UserID</p>
 
     <div class="form-group">
         <!-- Dropdown list for selecting brand -->
@@ -41,13 +39,6 @@
         <label asp-for="Registration">Registration</label>
         <input asp-for="Registration" class="form-control" />
         <span asp-validation-for="Registration" class="text-danger"></span>
-    </div>
-
-    <!-- Input field for status -->
-    <div class="form-group">
-        <label asp-for="Status">Status</label>
-        <input asp-for="Status" class="form-control" />
-        <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
 
@@ -93,7 +84,8 @@
 
     <!-- Hidden field for user ID -->
     <input type="hidden" asp-for="UserID" value="@ViewBag.UserID" />
-
+    <!-- Hidden field for user ID -->
+    <input type="hidden" asp-for="Status" value="Hidden" />
     <!-- Input field for uploading car image -->
     <div class="form-group">
         <label for="carImageFile">Car Image</label>

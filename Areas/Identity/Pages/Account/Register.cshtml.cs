@@ -93,6 +93,11 @@ namespace HonestAuto.Areas.Identity.Pages.Account
             public string ConfirmPassword { get; set; }
 
             [Required]
+            [Phone]
+            [Display(Name = "Phone")]
+            public string Phone { get; set; }
+
+            [Required]
             [Display(Name = "Role")]
             public string SelectedRole { get; set; }
         }

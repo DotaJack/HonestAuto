@@ -1,7 +1,10 @@
 ﻿@model HonestAuto.Models.Car
+
 @{
+    ViewData["Title"] = "Car Details";
     var referrerId = ViewData["ReferrerId"] as int?;
 }
+
 <h2>Car Details</h2>
 
 <div>
@@ -67,39 +70,14 @@
 </div>
 
 <div>
-    @if (referrerId.HasValue && referrerId.Value != 0)
-    {
-        <!-- Button to go back to the specific CarEvaluation -->
-        <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@referrerId.Value" class="btn btn-secondary">Back to Car Evaluation</a>
-    }
-    else
-    {
-        @if (User.IsInRole("Buyer"))
-        {
-            <!-- Button to message the user -->
-            <div>
-                <button onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = Model.UserID })'">
-                    Message User
-                </button>
-            </div>
-            <!-- Button to view seller's profile -->
-            <div>
-                <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserID" class="btn btn-info">View Mechanic's Profile</a>
-            </div>
-            <!-- Button to view seller's profile -->
-            <div>
-                <a asp-controller="User" asp-action="Details" asp-route-id="@Model.UserID" class="btn btn-info">View Seller's Profile</a>
-            </div>
-        }
+   
+        <!-- Button to view car evaluation details -->
+        <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-primary">View Car Evaluation</a>
 
-        @if (User.Identity.Name == Model.UserID)
-        {
-            <!-- Button to edit the car -->
-            <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
-        }
+        <!-- Button to edit the car -->
+        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
+    
 
-        <!-- Button to go back to the car list -->
-        <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
-    }
+    <!-- Button to go back to the car list -->
+    <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
 </div>
-
