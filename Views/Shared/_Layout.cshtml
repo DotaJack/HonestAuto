@@ -34,12 +34,13 @@
                         }
 
 
-                        @if (User.Identity.IsAuthenticated)
+                        @if (User.Identity.IsAuthenticated && !User.IsInRole("Mechanic"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Index">Chats</a>
                             </li>
                         }
+
 
                         @if (User.Identity.IsAuthenticated)
                         {
@@ -66,12 +67,16 @@
                             }
                         }
 
-                       
+                        @if (!User.IsInRole("Mechanic"))
+                        {
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="ViewAds">ViewAds</a>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="SearchCars">Search Cars</a>
-                        </li>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="SearchCars">Search Cars</a>
+                            </li>
+                        }
+
                     </ul>
                     <partial name ="_LoginPartial" />
 
