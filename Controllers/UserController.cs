@@ -1,4 +1,5 @@
 ﻿using HonestAuto.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -27,6 +28,7 @@ namespace HonestAuto.Controllers
         }
 
         // GET: /User
+        [Authorize(Roles = "Admin")]
         public IActionResult Index()
         {
             // Retrieve all users
@@ -34,7 +36,7 @@ namespace HonestAuto.Controllers
             return View(users);
         }
 
-        // GET: /User/Create
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             // Get all available roles from the RoleManager as a list of role names
@@ -46,6 +48,7 @@ namespace HonestAuto.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: /User/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -83,7 +86,7 @@ namespace HonestAuto.Controllers
             return View(user);
         }
 
-        // GET: /User/Edit/1
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             if (string.IsNullOrEmpty(id))
@@ -110,6 +113,7 @@ namespace HonestAuto.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         // POST: /User/Edit/1
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -186,6 +190,7 @@ namespace HonestAuto.Controllers
             return View(user);
         }
 
+        [Authorize(Roles = "Admin")]
         // Additional action to change a user's role
         [HttpPost]
         [ValidateAntiForgeryToken]

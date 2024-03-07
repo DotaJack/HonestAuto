@@ -26,6 +26,7 @@ namespace HonestAuto.Controllers
             _emailService = emailService;
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             // Ensure there's a user authenticated and email claim exists
@@ -100,6 +101,7 @@ namespace HonestAuto.Controllers
             return mechanicIdString;
         }
 
+        [Authorize(Roles = "Admin,Seller")]
         // CREATE (GET)
         [HttpGet]
         public IActionResult Create()
@@ -163,6 +165,7 @@ namespace HonestAuto.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,Seller")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("BrandId,ModelId,Year,Mileage,History,UserID,Registration,Status,Colour")] Car car, IFormFile carImageFile)
         {
@@ -256,8 +259,17 @@ namespace HonestAuto.Controllers
                 // Save changes to the database to save the CarEvaluation
                 await _context.SaveChangesAsync();
 
-                // Redirect to the Index action after successful creation
-                return RedirectToAction(nameof(Index));
+                // Redirect based on the user's role
+                if (User.IsInRole("Admin"))
+                {
+                    // If the user is an admin, redirect them to the index page
+                    return RedirectToAction("Index");
+                }
+                else if (User.IsInRole("Seller"))
+                {
+                    // If the user is a seller, redirect them to the UserCars page
+                    return RedirectToAction("UserCars");
+                }
             }
 
             // If the model state is not valid, return the view with the car data to display validation errors
@@ -281,23 +293,42 @@ namespace HonestAuto.Controllers
             // Fetch brand name
             var brand = await _context.Brands.FirstOrDefaultAsync(b => b.BrandId == int.Parse(car.BrandId));
             var brandName = brand != null ? brand.Name : "Unknown Brand";
-            // Get the current user's ID
-            string currentUserId = User.Identity.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
 
-            // Pass the current user's ID along with the car details to the view
-            ViewData["CurrentUserId"] = currentUserId;
             // Fetch model name
             var model = await _context.Models.FirstOrDefaultAsync(m => m.ModelId == int.Parse(car.ModelId));
             var modelName = model != null ? model.Name : "Unknown Model";
 
-            // Pass brand name and model name to the view
+            // Get the car evaluation value
+            var carEvaluation = await _context.CarEvaluations.FirstOrDefaultAsync(ce => ce.CarID == car.CarID);
+            var carValue = carEvaluation != null ? (decimal)carEvaluation.CarValue : 0;
+
+            // Create the view model and populate its properties
+            var carViewModel = new CarViewModel
+            {
+                CarID = car.CarID,
+                BrandName = brandName,
+                ModelName = modelName,
+                Year = car.Year,
+                Mileage = car.Mileage,
+                History = car.History,
+                CarImage = car.CarImage,
+                Registration = car.Registration,
+                Status = car.Status,
+                Colour = car.Colour,
+                IsEvaluationComplete = carEvaluation != null && carEvaluation.EvaluationStatus == "Completed",
+                CarValue = carValue
+            };
+
+            // Pass brand name, model name, and other details to the view
+            ViewData["CurrentUserId"] = User.Identity.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
             ViewData["BrandName"] = brandName;
             ViewData["ModelName"] = modelName;
             ViewData["ReferrerId"] = referrerId;
 
-            return View(car);
+            return View(carViewModel);
         }
 
+        [Authorize(Roles = "Admin,Seller")]
         [HttpGet]
         public async Task<IActionResult> ChangeStatus(int? id)
         {
@@ -315,6 +346,7 @@ namespace HonestAuto.Controllers
             return View(car); // Assuming you have a view named "ChangeStatus" that matches this action
         }
 
+        [Authorize(Roles = "Admin,Seller")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ChangeStatus(int carId, string Status) // Notice the parameter name matches the form field name
@@ -354,6 +386,7 @@ namespace HonestAuto.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin,Seller")]
         // EDIT (GET)
         [HttpGet]
         public async Task<IActionResult> Edit(int? id)
@@ -377,6 +410,7 @@ namespace HonestAuto.Controllers
             return View(car);
         }
 
+        [Authorize(Roles = "Admin,Seller")]
         // EDIT (POST)
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -439,7 +473,7 @@ namespace HonestAuto.Controllers
         // GET: Car/EditImage/5
         // EDIT (GET)
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Seller")]
         public async Task<IActionResult> EditImage(int? id)
         {
             if (id == null)
@@ -460,6 +494,7 @@ namespace HonestAuto.Controllers
         // POST: Car/EditImage/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin,Seller")]
         public async Task<IActionResult> EditImage(int id, IFormFile imageFile)
         {
             if (id == null)
@@ -511,7 +546,7 @@ namespace HonestAuto.Controllers
 
         // DELETE (GET)
         [HttpGet]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Seller")]
         public async Task<IActionResult> Delete(int? id)
         {
             // Check if the provided ID is null
@@ -535,7 +570,7 @@ namespace HonestAuto.Controllers
 
         // DELETE (POST/Confirmed)
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Seller")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
@@ -654,6 +689,7 @@ namespace HonestAuto.Controllers
             return View(model);
         }
 
+        [Authorize]
         public async Task<IActionResult> ViewUserCars(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -700,6 +736,7 @@ namespace HonestAuto.Controllers
             return View(tupleModel);
         }
 
+        [Authorize(Roles = "Admin,Seller")]
         public async Task<IActionResult> UserCars()
         {
             // Get the currently logged-in user
@@ -708,6 +745,19 @@ namespace HonestAuto.Controllers
             {
                 // Handle the case where user is not logged in
                 return RedirectToAction("Login", "Account");
+            }
+
+            // Fetch the user's email using their ID
+            var userEmail = await _context.Users
+                .Where(u => u.Id == user.Id)
+                .Select(u => u.Email)
+                .FirstOrDefaultAsync();
+
+            if (userEmail == null)
+            {
+                // Handle the case where user's email is not found
+                // You can log an error or return an appropriate response
+                return BadRequest("User email not found.");
             }
 
             var carViewModels = await _context.Cars
@@ -739,7 +789,8 @@ namespace HonestAuto.Controllers
                         Registration = joinResult.Car.Registration,
                         Status = joinResult.Car.Status,
                         Colour = joinResult.Car.Colour,
-                        IsEvaluationComplete = evaluation.EvaluationStatus == "Completed"
+                        IsEvaluationComplete = evaluation.EvaluationStatus == "Completed",
+                        UserEmail = userEmail // Assign the user's email to the UserEmail property
                     })
                 .ToListAsync();
 

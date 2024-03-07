@@ -11,13 +11,12 @@
         public int Mileage { get; set; }
         public string History { get; set; }
         public string UserID { get; set; }
+        public string UserEmail { get; set; } // New property for user's email
         public string Registration { get; set; }
-
         public string Status { get; set; }
-
         public string Colour { get; set; }
         public byte[] CarImage { get; set; }
-
         public bool IsEvaluationComplete { get; set; }
+        public decimal CarValue { get; set; }
     }
 }

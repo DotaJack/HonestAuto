@@ -20,10 +20,23 @@
         <span asp-validation-for="Status" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <!-- Button to submit the form -->
-        <input type="submit" value="Change Status" class="btn btn-primary" />
-        <!-- Button to cancel and go back to the list of cars -->
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="form-group">
+            <!-- Button to submit the form -->
+            <input type="submit" value="Change Status" class="btn btn-primary" />
+            <!-- Button to cancel and go back to the list of cars -->
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    }
+    else if (User.IsInRole("Seller"))
+    {
+        <div class="form-group">
+            <!-- Button to submit the form -->
+            <input type="submit" value="Change Status" class="btn btn-primary" />
+            <!-- Button to cancel and go back to the user's car ads -->
+            <a asp-action="UserCars" class="btn btn-secondary">Back to User's Car Ads</a>
+        </div>
+    }
+
 </form>

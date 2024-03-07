@@ -1,0 +1,38 @@
+﻿@model IEnumerable<HonestAuto.Models.CarEvaluation>
+
+@{
+    ViewData["Title"] = "My Car Evaluations";
+}
+
+<h1>My Car Evaluations</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Evaluation ID</th>
+            <th>Car ID</th>
+            <th>Evaluation Status</th>
+            <th>Evaluation Summary</th>
+            <th>Car Value</th>
+            <th>Evaluation Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.CarEvaluationID</td>
+                <td>@item.CarID</td>
+                <td>@item.EvaluationStatus</td>
+                <td>@item.EvaluationSummary</td>
+                <td>@item.CarValue</td>
+                <td>@item.EvaluationDate.ToString("d")</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.CarEvaluationID" class="btn btn-warning">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.CarEvaluationID" class="btn btn-primary">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,38 +1,81 @@
 ﻿@model HonestAuto.Models.ChatViewModel
 
+<style>
+    /* Style for chat messages */
+    .chat-message {
+        margin-bottom: 10px;
+        padding: 10px;
+        border-radius: 10px;
+    }
+
+        /* Style for messages sent by the current user */
+        .chat-message.sent {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+        }
+
+        /* Style for messages sent by other users */
+        .chat-message.received {
+            background-color: #E0E0E0;
+        }
+
+    /* Style for message content */
+    .chat-message-content {
+        margin-bottom: 5px;
+    }
+
+    /* Style for message sender */
+    .chat-message-sender {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+
+    /* Style for message timestamp */
+    .chat-message-timestamp {
+        font-size: 12px;
+        color: #666;
+    }
+
+    /* Style for message form */
+    #messageForm {
+        margin-top: 20px;
+    }
+
+    /* Style for message input */
+    #messageInput {
+        width: calc(100% - 100px); /* Adjust as needed */
+        margin-bottom: 10px;
+    }
+</style>
+
 <h2>Chat with User</h2>
 
-<div id="chatWindow" style="border: 1px solid black; padding: 10px; margin-bottom: 20px; max-height: 300px; overflow-y: scroll;">
-    <!-- Loop through chat messages -->
-    @foreach (var message in Model.Messages)
-    {
-        <div>
-            <!-- Check if the sender is the current user -->
-            @if (message.Sender != null && User.Identity.Name == message.Sender.UserName)
-            {
-                <strong>You:</strong>
-            }
-            else
-            {
-                <!-- Display sender's username (if available) -->
-                <strong>@message.Sender?.UserName:</strong>
-            }
-            <!-- Display message content and timestamp -->
-            @message.Content <br />
-            <small>@message.DateSent.ToString("dd MMM yyyy HH:mm")</small>
-        </div>
-    }
+<div id="chatWindowContainer" style="border: 1px solid black; padding: 10px; margin-bottom: 20px; max-height: 300px; overflow-y: scroll;">
+    <div id="chatWindow">
+        <!-- Loop through chat messages -->
+        @foreach (var message in Model.Messages)
+        {
+            <div class="chat-message @(User.Identity.Name == message.Sender.UserName ? "sent" : "received")">
+                <!-- Display message sender -->
+                <span class="chat-message-sender">@((User.Identity.Name == message.Sender.UserName) ? "You:" : $"{message.Sender?.UserName}:")</span>
+                <!-- Display message content -->
+                <div class="chat-message-content">@message.Content</div>
+                <!-- Display message timestamp -->
+                <div class="chat-message-timestamp">@message.DateSent.ToString("dd MMM yyyy HH:mm")</div>
+            </div>
+        }
+    </div>
 </div>
 
 <form id="messageForm">
     <!-- Hidden input to store the receiver's ID -->
     <input type="hidden" id="receiverId" value="@Model.ReceiverId" />
     <!-- Textarea for entering a new message -->
-    <textarea id="messageInput" placeholder="Type your message..." rows="4" cols="50"></textarea>
+    <textarea id="messageInput" placeholder="Type your message..." rows="4"></textarea>
     <!-- Validation message for message content (if needed) -->
     <span asp-validation-for="Content"></span>
     <!-- Button to submit the message -->
-    <button type="submit">Send</button>
+    <button type="submit" class="btn btn-primary">Send</button>
 </form>
 
 @section Scripts {
@@ -40,4 +83,19 @@
     <script src="~/js/signalr/dist/browser/signalr.min.js"></script>
     <!-- Include custom JavaScript for chat functionality -->
     <script src="~/js/chat.js"></script>
+    <script>
+        // Adjust chat window height as more messages are added
+        function adjustChatWindowHeight() {
+            var chatWindowContainer = document.getElementById("chatWindowContainer");
+            chatWindowContainer.scrollTop = chatWindowContainer.scrollHeight;
+        }
+
+        adjustChatWindowHeight(); // Call the function initially
+
+        // Call the function whenever a new message is added
+        var messageForm = document.getElementById("messageForm");
+        messageForm.addEventListener("submit", function () {
+            setTimeout(adjustChatWindowHeight, 100); // Delay to ensure message is rendered before adjusting height
+        });
+    </script>
 }

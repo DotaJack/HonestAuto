@@ -44,8 +44,19 @@
         <span asp-validation-for="Registration" class="text-danger"></span>
     </div>
 
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn btn-primary" />
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
-    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="Index" class="btn btn-secondary">Back to Index</a>
+        </div>
+    }
+    else if (User.IsInRole("Seller"))
+    {
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+            <a asp-action="UserCars" class="btn btn-secondary">Back to User's Car Ads</a>
+        </div>
+    }
+
 </form>

@@ -21,29 +21,51 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
 
-                      
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Index">Car</a>
-                        </li>
 
-                      
-                        
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Index">Car</a>
+                            </li>
+
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="User" asp-action="Index">User</a>
                             </li>
+                        }
 
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Index">Chats</a>
-                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="CarEvaluation" asp-action="Index">Car Evaluation</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Chat" asp-action="Index">Chats</a>
                             </li>
+                        }
 
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="CarEvaluation" asp-action="Index">Car Evaluation</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Mechanic"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="CarEvaluation" asp-action="MyEvaluations">Car Evaluation</a>
+                                </li>
+                            }
                             @if (User.IsInRole("Seller") || User.IsInRole("Admin"))
-                        {<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="UserCars">User's Car Ads</a>
-							</li>
-						}
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="UserCars">User's Car Ads</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Create">Place An Ad</a>
+                                </li>
+                            }
+                        }
+
                        
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="ViewAds">ViewAds</a>

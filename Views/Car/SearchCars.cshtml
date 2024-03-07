@@ -85,13 +85,17 @@
                 @foreach (var car in Model.SearchResults)
                 {
                     <tr>
-                        <td>@car.CarID</td>
+                  
                         <td>@car.BrandName</td>
                         <td>@car.ModelName</td>
                         <td>@car.Year</td>
                         <td>@car.Mileage</td>
                         <td>@car.History</td>
                         <td>@car.Colour</td>
+                        <td>
+                 
+                            <a asp-action="Details" asp-route-id="@car.CarID">View Details</a>
+                        </td>
                     </tr>
                 }
             </tbody>

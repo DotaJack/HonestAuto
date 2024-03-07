@@ -1,4 +1,4 @@
-﻿@model HonestAuto.Models.Car
+﻿@model HonestAuto.Models.CarViewModel
 
 @{
     ViewData["Title"] = "Car Details";
@@ -48,11 +48,12 @@
         </dd>
 
         <dt>
-            UserID
+            Car Value
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.UserID)
+            @string.Format("{0:C}", Model.CarValue)
         </dd>
+
 
         <dt>
             Car Image
@@ -71,12 +72,10 @@
 </div>
 
 <div>
-   
-        <!-- Button to view car evaluation details -->
-        <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-primary">View Car Evaluation</a>
+    <!-- Button to view car evaluation details -->
+    <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-primary">View Car Evaluation</a>
+
     <!-- Button to edit the car (only available if the current user matches the car's UserID) -->
-    <!-- Button to edit the car (only available if the current user's ID matches the car's UserID) -->
-    <!-- Button to edit the car (only visible if current user matches car's UserID) -->
     @if (User.Identity.IsAuthenticated && Model.UserID == currentUserId)
     {
         <!-- Display the "Edit" button if the current user owns the car -->

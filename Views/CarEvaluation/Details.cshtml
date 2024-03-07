@@ -21,30 +21,58 @@
 }
 
 <h2>Details</h2>
+<style>
+    /* CSS styles for the status bar */
+    .status-bar {
+        background-color: #f0f0f0;
+        border: 1px solid #ccc;
+        padding: 15px 20px; /* Adjusted padding to make the bar taller */
+        border-radius: 10px; /* Adjusted border-radius to make the corners more rounded */
+        display: inline-flex;
+        align-items: center; /* Center-align vertically */
+        font-size: 16px; /* Adjusted font size */
+    }
+
+    .status-submitted {
+        background-color: #ffebcc;
+        border-color: #ffd699;
+        color: #ff9900;
+    }
+
+    .status-in-progress {
+        background-color: #cce5ff;
+        border-color: #99ccff;
+        color: #007bff;
+    }
+
+    .status-completed {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+
+    .status-text {
+        font-weight: bold;
+        margin-left: 10px; /* Add margin to the left to separate text from the left edge */
+    }
+</style>
+
+
+
 
 <div>
     <h4>Car Evaluation</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.CarID)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.CarID)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.MechanicID)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.MechanicID)
-        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.EvaluationStatus)
         </dt>
         <dd>
-            @Html.DisplayFor(model => model.EvaluationStatus)
+            <!-- Status Bar -->
+            <div class="@statusBarClass">
+                <span class="status-text">@Model.EvaluationStatus</span>
+            </div>
         </dd>
 
         <dt>
@@ -61,18 +89,25 @@
             @Html.DisplayFor(model => model.EvaluationDate)
         </dd>
 
-        <dt>Status:</dt>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CarValue)
+        </dt>
         <dd>
-            <!-- Status Bar -->
-            <div class="status-bar @statusBarClass">
-                @Model.EvaluationStatus
-            </div>
+            @Html.DisplayFor(model => model.CarValue)
         </dd>
     </dl>
 </div>
 
 
 <div class="mt-3">
+    @{
+        // Check if the user is an admin
+        bool isAdmin = User.IsInRole("Admin");
+
+        // Determine the action based on user role
+        string backToListAction = isAdmin ? "Index" : "MyEvaluations";
+    }
     <!-- Mechanic/Admin buttons -->
     @if (User.IsInRole("Mechanic") || User.IsInRole("Admin"))
     {
@@ -82,8 +117,9 @@
         <!-- Style the "View Car Details" link as a button -->
         <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarID" asp-route-referrerId="@Model.CarEvaluationID" class="btn btn-info">View Car Details</a>
 
-        <!-- Style the "Back to List" link as a button -->
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+   
+
+        <a asp-action="@backToListAction" class="btn btn-secondary">Back to List</a>
     }
     <!-- Regular user buttons -->
     @if (!User.IsInRole("Mechanic") && !User.IsInRole("Admin"))
@@ -92,4 +128,3 @@
         <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-info">View Car Details</a>
     }
 </div>
-

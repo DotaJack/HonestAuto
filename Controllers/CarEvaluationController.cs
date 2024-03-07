@@ -2,6 +2,8 @@
 using HonestAuto.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace HonestAuto.Controllers
 {
@@ -15,6 +17,7 @@ namespace HonestAuto.Controllers
         }
 
         // GET: CarEvaluation
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             // Retrieve all CarEvaluations from the database
@@ -47,7 +50,7 @@ namespace HonestAuto.Controllers
             return View(carEvaluation);
         }
 
-        // GET: CarEvaluation/Edit/5
+        [Authorize(Roles = "Admin,Mechanic")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -67,6 +70,23 @@ namespace HonestAuto.Controllers
             return View(carEvaluation);
         }
 
+        // GET: CarEvaluation/MyEvaluations
+        [Authorize(Roles = "Mechanic")]
+        public async Task<IActionResult> MyEvaluations()
+        {
+            // Get the current mechanic's ID
+            var mechanicId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Retrieve car evaluations assigned to the current mechanic
+            var carEvaluations = await _context.CarEvaluations
+                .Where(ce => ce.MechanicID == mechanicId)
+                .ToListAsync();
+
+            // Render the view with car evaluations assigned to the current mechanic
+            return View(carEvaluations);
+        }
+
+        [Authorize(Roles = "Admin,Mechanic")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CarEvaluationID, CarID, MechanicID, EvaluationStatus, EvaluationSummary, EvaluationDate, CarValue")] CarEvaluation carEvaluation)

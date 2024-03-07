@@ -47,6 +47,15 @@
     <form asp-action="Delete" method="post">
         <input type="hidden" asp-for="CarID" />
         <input type="submit" value="Delete" class="btn btn-danger" />
-        <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        }
+        @if (User.IsInRole("Seller"))
+        {
+            <a asp-action="UserCars" class="btn btn-secondary">Back to UserCars</a>
+        }
     </form>
+
+
 </div>
