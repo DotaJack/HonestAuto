@@ -3,6 +3,7 @@
 @{
     ViewData["Title"] = "Car Details";
     var referrerId = ViewData["ReferrerId"] as int?;
+    var currentUserId = ViewData["CurrentUserId"] as string;
 }
 
 <h2>Car Details</h2>
@@ -73,10 +74,14 @@
    
         <!-- Button to view car evaluation details -->
         <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-primary">View Car Evaluation</a>
-
-        <!-- Button to edit the car -->
+    <!-- Button to edit the car (only available if the current user matches the car's UserID) -->
+    <!-- Button to edit the car (only available if the current user's ID matches the car's UserID) -->
+    <!-- Button to edit the car (only visible if current user matches car's UserID) -->
+    @if (User.Identity.IsAuthenticated && Model.UserID == currentUserId)
+    {
+        <!-- Display the "Edit" button if the current user owns the car -->
         <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
-    
+    }
 
     <!-- Button to go back to the car list -->
     <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>

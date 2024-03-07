@@ -281,7 +281,11 @@ namespace HonestAuto.Controllers
             // Fetch brand name
             var brand = await _context.Brands.FirstOrDefaultAsync(b => b.BrandId == int.Parse(car.BrandId));
             var brandName = brand != null ? brand.Name : "Unknown Brand";
+            // Get the current user's ID
+            string currentUserId = User.Identity.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
 
+            // Pass the current user's ID along with the car details to the view
+            ViewData["CurrentUserId"] = currentUserId;
             // Fetch model name
             var model = await _context.Models.FirstOrDefaultAsync(m => m.ModelId == int.Parse(car.ModelId));
             var modelName = model != null ? model.Name : "Unknown Model";
