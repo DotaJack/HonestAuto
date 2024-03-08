@@ -104,9 +104,8 @@
                         <input type="file" name="carImageFile" class="form-control" />
                     </div>
                     <div class="mb-3">
-                        <form method="post" action="@Url.Action("Create", "Car")">
-                            <button type="submit" class="btn btn-primary">Create</button>
-                        </form>
+                        <!-- Button to submit the form -->
+                        <button type="submit" class="btn btn-primary">Create</button>
                         <!-- Button to cancel and go back to the list of cars -->
                         <a asp-action="@(User.IsInRole("Admin") ? "Index" : "UserCars")" class="btn btn-secondary">Back to List</a>
                     </div>

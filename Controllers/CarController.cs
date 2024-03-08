@@ -828,6 +828,7 @@ namespace HonestAuto.Controllers
             return View(carViewModels);
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetCarCountByBrandAndModel()
         {
             var carCounts = await _context.Cars

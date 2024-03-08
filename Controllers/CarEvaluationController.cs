@@ -89,8 +89,8 @@ namespace HonestAuto.Controllers
             return View(groupedCarEvaluations);
         }
 
-        [Authorize(Roles = "Admin,Mechanic")]
         [HttpPost]
+        [Authorize(Roles = "Admin,Mechanic")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CarEvaluationID, CarID, MechanicID, EvaluationStatus, EvaluationSummary, EvaluationDate, CarValue")] CarEvaluation carEvaluation)
         {
@@ -123,8 +123,17 @@ namespace HonestAuto.Controllers
                     _context.Update(existingEvaluation);
                     await _context.SaveChangesAsync();
 
-                    // Redirect to the Index action after successful update
-                    return RedirectToAction(nameof(Index));
+                    // Redirect based on the user's role
+                    if (User.IsInRole("Admin"))
+                    {
+                        // If the user is an admin, redirect them to the index page
+                        return RedirectToAction("Index", "CarEvaluation");
+                    }
+                    else if (User.IsInRole("Mechanic"))
+                    {
+                        // If the user is a mechanic, redirect them to the MyEvaluations page
+                        return RedirectToAction("MyEvaluations", "CarEvaluation");
+                    }
                 }
                 catch (DbUpdateConcurrencyException)
                 {

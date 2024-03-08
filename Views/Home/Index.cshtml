@@ -5,13 +5,7 @@
 <div class="container-fluid homepage">
     <div class="row">
         <div class="col-lg-6 col-md-8 mx-auto text-center">
-            <h1 class="display-4">Welcome to Our Car Selling Website</h1>
-            <p>Find the perfect car for your needs</p>
-
-            @if (User.Identity.IsAuthenticated)
-            {
-                <a asp-controller="Home" asp-action="Contact" class="btn btn-primary">Contact Us</a>
-            }
+     
 
         </div>
     </div>
@@ -19,7 +13,7 @@
 
 <style>
     .homepage {
-        background-image: url('/backgroundpic.jpg'); /* Use the actual image file name */
+        background-image: url('/JackBG.png'); /* Use the actual image file name */
         background-size: cover;
         background-position: center;
         color: white;

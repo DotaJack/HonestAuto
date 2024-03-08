@@ -23,7 +23,7 @@
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <a asp-action="UserCounts" class="btn btn-primary">View User Counts</a> <!-- Added button -->
+                                <a asp-action="UserCounts" class="btn btn-primary">View User Counts</a> 
                             </div>
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                                 <table class="table my-0" id="dataTable">
@@ -48,7 +48,7 @@
                                                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
                                                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@user.Id">Details</a>
                                                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
-                                                    <a class="btn btn-info" onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = user.Id })'">Message User</a>
+                               
                                                 </td>
                                             </tr>
                                         }
