@@ -117,7 +117,7 @@ namespace HonestAuto.Controllers
         // POST: /User/Edit/1
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, string userName, string email, string selectedRole, string currentRole)
+        public async Task<IActionResult> Edit(string id, string userName, string email, string phoneNumber, string selectedRole, string currentRole)
         {
             if (string.IsNullOrEmpty(id))
             {
@@ -134,6 +134,7 @@ namespace HonestAuto.Controllers
             // Update user's properties
             user.UserName = userName;
             user.Email = email;
+            user.PhoneNumber = phoneNumber; // Update user's phone number
 
             var result = await _userManager.UpdateAsync(user);
 

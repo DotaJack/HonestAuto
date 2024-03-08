@@ -7,9 +7,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Contact - Honest Auto</title>
-    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
-    <link rel="stylesheet" href="~/css/pikaday.min.css">
+
+    <!-- Include CSS stylesheets -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="~/lib/select2/dist/css/select2.min.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -17,9 +18,8 @@
         <section class="portfolio-block contact">
             <div class="container">
                 <div class="heading">
-                    <h2>SearcH Cars</h2>
+                    <h2>Search Cars</h2>
                 </div>
-
                 <!-- Include CSS stylesheets -->
                 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
                 <link href="~/lib/select2/dist/css/select2.min.css" rel="stylesheet" />
@@ -33,11 +33,15 @@
                         </select>
                     </div>
 
+
+
+
                     <div class="form-group">
                         <label asp-for="SelectedModel" class="control-label">Model</label>
                         <select asp-for="SelectedModel" class="form-control js-select2" id="SelectedModel" style="width: 100%;">
                             <option value="">Select Model</option>
                         </select>
+
                     </div>
 
                     <div class="form-group">
@@ -154,6 +158,11 @@
         <script src="~/lib/select2/js/select2.min.js"></script>
         <script src="~/js/Search.js"></script>
         <script src="~/bootstrap/js/bootstrap.min.js"></script>
+
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/signalr/dist/browser/signalr.js"></script>
+        <script src="~/js/chat.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 var searchResultsContainer = document.getElementById('search-results-container');
@@ -161,9 +170,9 @@
                 // Check if there are query parameters in the URL
                 if (window.location.search) {
                     // Show the search results container
-                        searchResultsContainer.style.display = 'block';
-                        }
-                    });
+                    searchResultsContainer.style.display = 'block';
+                }
+            });
         </script>
     }
 </body>

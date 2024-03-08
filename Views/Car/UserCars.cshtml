@@ -1,75 +1,106 @@
 ﻿@model List<HonestAuto.Models.CarViewModel>
 
-<h1>Cars</h1>
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
 
-@if (Model.Any())
-{
-    <!-- Display table if there are cars -->
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Car ID</th>
-                <th>Brand</th>
-                <th>Model</th>
-                <th>Year</th>
-                <th>Mileage</th>
-                <th>History</th>
-                <th>User</th>
-                <th>Registration</th>
-                <th>Status</th>
-                <th>Colour</th>
-                <th>Car Image</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Iterate through each car in the model -->
-            @foreach (var car in Model)
-            {
-                <tr>
-                    <!-- Display car details in each row -->
-                    <td>@car.CarID</td>
-                    <td>@car.BrandName</td>
-                    <td>@car.ModelName</td>
-                    <td>@car.Year</td>
-                    <td>@car.Mileage</td>
-                    <td>@car.History</td>
-                    <td>@car.UserEmail</td> 
-                    <td>@car.Registration</td>
-                    <td>@car.Status</td>
-                    <td>@car.Colour</td>
-                    <td>
-                        <!-- Display car image if available -->
-                        @if (car.CarImage != null && car.CarImage.Length > 0)
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Users Cars</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
+<body id="page-top">
+    <div id="wrapper">
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <div class="container-fluid">
+                    <div class="card shadow">
+                        @if (Model != null && Model.Any())
                         {
-                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" style="width:100px; height:auto;" />
+                            <div class="card-header py-3">
+                                <p class="text-primary m-0 fw-bold">Cars Registered to @Model.First().UserEmail</p>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                    <table class="table my-0" id="dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th>Car ID</th>
+                                                <th>Brand</th>
+                                                <th>Model</th>
+                                                <th>Year</th>
+                                                <th>Mileage</th>
+                                                <th>History</th>
+                                                <th>User</th>
+                                                <th>Registration</th>
+                                                <th>Status</th>
+                                                <th>Colour</th>
+                                                <th>Image</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var car in Model)
+                                            {
+                                                <tr>
+                                                    <td>@car.CarID</td>
+                                                    <td>@car.BrandName</td>
+                                                    <td>@car.ModelName</td>
+                                                    <td>@car.Year</td>
+                                                    <td>@car.Mileage</td>
+                                                    <td>@car.History</td>
+                                                    <td>@car.UserEmail</td>
+                                                    <td>@car.Registration</td>
+                                                    <td>@car.Status</td>
+                                                    <td>@car.Colour</td>
+                                                    <td>
+                                                        @if (car.CarImage != null && car.CarImage.Length > 0)
+                                                        {
+                                                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" style="width:100px; height:auto;" />
+                                                        }
+                                                        else
+                                                        {
+                                                            <text>No Image</text>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-primary">Details</a>
+                                                        <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-warning">Edit</a>
+                                                        <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-danger">Delete</a>
+
+                                                        @if (car.IsEvaluationComplete)
+                                                        {
+                                                            <a asp-action="ChangeStatus" asp-route-id="@car.CarID" class="btn btn-primary">Change Status</a>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         }
                         else
                         {
-                            <!-- Display text if no image available -->
-                            <text>No Image</text>
+                            <div class="card-body">
+                                <p>No results found.</p>
+                            </div>
                         }
-                    </td>
-                    <td>
-                        <!-- Action buttons for details, status change, editing, and deletion -->
-                        <a asp-action="Details" asp-route-id="@car.CarID" class="btn btn-primary">Details</a>
-                        @if (car.IsEvaluationComplete)
-                        {
-                            <a asp-action="ChangeStatus" asp-route-id="@car.CarID" class="btn btn-primary">Change Status</a>
-                        }
-                        <a asp-action="Edit" asp-route-id="@car.CarID" class="btn btn-warning">Edit</a>
-                        <a asp-action="Delete" asp-route-id="@car.CarID" class="btn btn-danger">Delete</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
-else
-{
-    <!-- Display message if no cars found -->
-    <p>No results found.</p>
-}
 
-<!-- Button to create a new car -->
-<a asp-action="Create" class="btn btn-success">Create New Car</a>
+                        <div class="card-footer">
+                            <a asp-action="Create" class="btn btn-success">Create New Car</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>
