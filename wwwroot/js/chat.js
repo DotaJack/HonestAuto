@@ -70,3 +70,4 @@ function sendEmail(receiverId, messageContent) {
     connection.start()
         .then(() => console.log("SignalR Connected."))
         .catch(err => console.error(err));
+}
