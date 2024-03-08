@@ -58,7 +58,7 @@ namespace HonestAuto.Hubs
     <table cellpadding=""0"" cellspacing=""0"" width=""100%"" style=""max-width: 600px; margin: auto; background-color: #ffffff;"">
         <tr>
             <td style=""padding: 20px; text-align: left;"">
-             
+
       <h1>Hi,</h1>
             <p>You have received a new message from <strong>{senderEmail ?? "a user"}</strong>:</p>
             <blockquote style='font-style: italic; margin: 20px 0;'>{messageContent}</blockquote>

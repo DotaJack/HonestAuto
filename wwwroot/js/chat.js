@@ -1,6 +1,30 @@
-﻿// Source:https://www.youtube.com/watch?v=RUZLIh4Vo20
-// Source 2: https://learn.microsoft.com/en-us/aspnet/signalr/overview/getting-started/tutorial-getting-started-with-signalr
+﻿// Initialize SignalR connection
+const connection = new signalR.HubConnectionBuilder()
+    .withUrl("/chatHub")
+    .configureLogging(signalR.LogLevel.Information)
+    .build();
 
+connection.on("ReceiveMessage", function (message) {
+    const chatWindow = document.getElementById("chatWindow");
+    const messageDiv = document.createElement("div");
+
+    if (message.sender !== null && message.sender.userName === userIdentifier) {
+        messageDiv.innerHTML = `<strong>You:</strong> ${message.content} <br /><small>${message.dateSent}</small>`;
+    } else {
+        messageDiv.innerHTML = `<strong>${message.sender?.userName}:</strong> ${message.content} <br /><small>${message.dateSent}</small>`;
+    }
+
+    chatWindow.appendChild(messageDiv);
+
+    // Scroll to the bottom of the chat window to show the latest message
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+});
+
+connection.start()
+    .then(() => console.log("SignalR Connected."))
+    .catch(err => console.error(err));
+
+// Function to send a message
 function sendMessage(receiverId, messageContent) {
     connection.invoke("SendMessage", receiverId, messageContent)
         .then(() => {
@@ -9,65 +33,15 @@ function sendMessage(receiverId, messageContent) {
         })
         .catch(err => console.error(err.toString()));
 }
-// Function to send an email
-function sendEmail(receiverId, messageContent) {
-    // Make an AJAX request to your server to send the email
-    $.ajax({
-        url: "/ChatHub/SendMessageEmail",
-        type: "POST",
-        data: JSON.stringify({ receiverId: receiverId, messageContent: messageContent }),
-        contentType: "application/json",
-        success: function (response) {
-            console.log("Email sent successfully.");
-        },
-        error: function (error) {
-            console.error("Error sending email:", error);
-        }
-    });
-    // Event listener for form submission
-    document.getElementById("messageForm").addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent the form from submitting the traditional way
 
-        const receiverId = document.getElementById("receiverId").value;
-        const messageContent = document.getElementById("messageInput").value;
+// Event listener for form submission
+document.getElementById("messageForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent the form from submitting the traditional way
 
-        if (!messageContent.trim()) return; // Don't send an empty message
+    const receiverId = document.getElementById("receiverId").value;
+    const messageContent = document.getElementById("messageInput").value;
 
-        sendMessage(receiverId, messageContent);
-    });
-    // Function to append a sent message to the chat window
-    function appendSentMessage(messageContent) {
-        const chatWindow = document.getElementById("chatWindow");
-        const messageDiv = document.createElement("div");
-        messageDiv.innerHTML = `<strong>You:</strong> ${messageContent}`;
-        chatWindow.appendChild(messageDiv);
+    if (!messageContent.trim()) return; // Don't send an empty message
 
-        // Scroll to the bottom of the chat window to show the latest message
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-    // Initialize SignalR connection
-    const connection = new signalR.HubConnectionBuilder()
-        .withUrl("/chatHub")
-        .configureLogging(signalR.LogLevel.Information)
-        .build();
-
-    connection.on("ReceiveMessage", function (message) {
-        const chatWindow = document.getElementById("chatWindow");
-        const messageDiv = document.createElement("div");
-
-        if (message.sender !== null && message.sender.userName === userIdentifier) {
-            messageDiv.innerHTML = `<strong>You:</strong> ${message.content} <br /><small>${message.dateSent}</small>`;
-        } else {
-            messageDiv.innerHTML = `<strong>${message.sender?.userName}:</strong> ${message.content} <br /><small>${message.dateSent}</small>`;
-        }
-
-        chatWindow.appendChild(messageDiv);
-
-        // Scroll to the bottom of the chat window to show the latest message
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-    });
-
-    connection.start()
-        .then(() => console.log("SignalR Connected."))
-        .catch(err => console.error(err));
-}
+    sendMessage(receiverId, messageContent);
+});

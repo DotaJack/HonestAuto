@@ -12,5 +12,11 @@
         "README.md"
       ]
     }
-  ]
+  ,
+{
+  "provider": "unpkg",
+  "library": "signalr@2.4.3",
+  "destination": "wwwroot/js/signalr/signalr/"
+}
+]
 }
