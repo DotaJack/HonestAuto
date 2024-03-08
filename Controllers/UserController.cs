@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace HonestAuto.Controllers
 {
@@ -241,6 +242,35 @@ namespace HonestAuto.Controllers
             }
 
             return View(user);
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UserCounts()
+        {
+            var totalUsersCount = await _userManager.Users.CountAsync();
+
+            var usersPerRole = new List<UserCountsViewModel.RoleUserCountViewModel>();
+
+            var roles = await _roleManager.Roles.ToListAsync();
+
+            foreach (var role in roles)
+            {
+                var usersInRole = await _userManager.GetUsersInRoleAsync(role.Name);
+                var userCount = usersInRole.Count();
+                usersPerRole.Add(new UserCountsViewModel.RoleUserCountViewModel
+                {
+                    RoleName = role.Name,
+                    UserCount = userCount
+                });
+            }
+
+            var viewModel = new UserCountsViewModel
+            {
+                TotalUsersCount = totalUsersCount,
+                UsersPerRole = usersPerRole
+            };
+
+            return View(viewModel);
         }
 
         // POST: /User/DeleteConfirmed/1

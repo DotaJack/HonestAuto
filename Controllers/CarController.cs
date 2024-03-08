@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
+using System.Linq;
 using System.Security.Claims;
 
 namespace HonestAuto.Controllers
@@ -823,6 +824,46 @@ namespace HonestAuto.Controllers
                         UserEmail = userEmail // Assign the user's email to the UserEmail property
                     })
                 .ToListAsync();
+
+            return View(carViewModels);
+        }
+
+        public async Task<IActionResult> GetCarCountByBrandAndModel()
+        {
+            var carCounts = await _context.Cars
+          .Where(c => !string.IsNullOrEmpty(c.BrandId) && !string.IsNullOrEmpty(c.ModelId))
+          .GroupBy(c => new { BrandId = c.BrandId, ModelId = c.ModelId })
+          .Select(g => new
+          {
+              BrandId = g.Key.BrandId,
+              ModelId = g.Key.ModelId,
+              CarCount = g.Count()
+          })
+          .ToListAsync();
+
+            var carViewModels = new List<CarViewModel>();
+            foreach (var count in carCounts)
+            {
+                // Retrieve brand and model names using their IDs
+                var brandName = await _context.Brands
+           .Where(b => b.BrandId.ToString() == count.BrandId)
+           .Select(b => b.Name)
+           .FirstOrDefaultAsync();
+
+                var modelName = await _context.Models
+                    .Where(m => m.ModelId.ToString() == count.ModelId)
+                    .Select(m => m.Name)
+                    .FirstOrDefaultAsync();
+
+                carViewModels.Add(new CarViewModel
+                {
+                    BrandId = count.BrandId,
+                    ModelId = count.ModelId,
+                    BrandName = brandName,
+                    ModelName = modelName,
+                    CarCount = count.CarCount
+                });
+            }
 
             return View(carViewModels);
         }

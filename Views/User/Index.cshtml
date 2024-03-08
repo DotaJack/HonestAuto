@@ -1,4 +1,4 @@
-﻿@model IEnumerable<IdentityUser> // Replace 'User' with your actual User model class
+﻿@model IEnumerable<IdentityUser>
 
 <!DOCTYPE html>
 <html data-bs-theme="light" lang="en">
@@ -22,6 +22,9 @@
                             <p class="text-primary m-0 fw-bold">Users Registered On Honest Autos</p>
                         </div>
                         <div class="card-body">
+                            <div class="mb-3">
+                                <a asp-action="UserCounts" class="btn btn-primary">View User Counts</a> <!-- Added button -->
+                            </div>
                             <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
                                 <table class="table my-0" id="dataTable">
                                     <thead>
@@ -33,29 +36,27 @@
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-           <td>@user.Id</td>
-         <td>@user.UserName</td>
+                                    <tbody>
+                                        @foreach (var user in Model)
+                                        {
+                                            <tr>
+                                                <td>@user.Id</td>
+                                                <td>@user.UserName</td>
                                                 <td>@user.Email</td>
                                                 <td>@user.PhoneNumber</td>
-            
                                                 <td>
                                                     <a class="btn btn-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
                                                     <a class="btn btn-primary" asp-action="Details" asp-route-id="@user.Id">Details</a>
                                                     <a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
                                                     <a class="btn btn-info" onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = user.Id })'">Message User</a>
                                                 </td>
-
-            </tr>
-        }
-    </tbody>
-    <tfoot style="padding-left: 1px;padding-bottom: 0px;">
-        <tr></tr>
-    </tfoot>
-</table>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                    <tfoot style="padding-left: 1px;padding-bottom: 0px;">
+                                        <tr></tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -63,9 +64,9 @@
             </div>
         </div>
     </div>
-<script src="~/bootstrap/js/bootstrap.min.js"></script>
-<script src="~/js/pikaday.min.js"></script>
-<script src="~/js/theme.js"></script>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
 </body>
 
 </html>

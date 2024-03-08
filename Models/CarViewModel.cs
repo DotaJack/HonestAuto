@@ -19,5 +19,6 @@
         public bool IsEvaluationComplete { get; set; }
         public double? CarValue { get; set; }
         public int CarEvaluationID { get; set; }
+        public int CarCount { get; set; } // New property for car count
     }
 }

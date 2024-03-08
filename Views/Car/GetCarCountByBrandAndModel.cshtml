@@ -1,0 +1,52 @@
+﻿@model List<HonestAuto.Models.CarViewModel>
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Car Counts by Brand and Model</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Car Counts by Brand and Model</h1>
+
+        <h2>By Brand</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Brand</th>
+                    <th>Total Cars</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var brandGroup in Model.GroupBy(car => car.BrandName))
+                {
+                    <tr>
+                        <td>@brandGroup.Key</td>
+                        <td>@brandGroup.Sum(car => car.CarCount)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <h2>By Model</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Total Cars</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var modelGroup in Model.GroupBy(car => car.ModelName))
+                {
+                    <tr>
+                        <td>@modelGroup.Key</td>
+                        <td>@modelGroup.Sum(car => car.CarCount)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
