@@ -30,8 +30,15 @@
     <None Include="Views\Shared\_ValidationScriptsPartial.cshtml" />
     <None Include="Views\_ViewImports.cshtml" />
     <None Include="Views\_ViewStart.cshtml" />
+    <None Include="wwwroot\bootstrap\js\bootstrap.min.js" />
     <None Include="wwwroot\css\site.css" />
     <None Include="wwwroot\favicon.ico" />
+    <None Include="wwwroot\fonts\Lato-51893472f68d786b7cec684fd0a2af6d.woff2" />
+    <None Include="wwwroot\fonts\Lato-55e3fc6a5a6463f26fe1663dd67c13dc.woff2" />
+    <None Include="wwwroot\fonts\Lato-56d4f452a028c443cc47b3fadf4ce597.woff2" />
+    <None Include="wwwroot\fonts\Lato-86b6ba3051c727f86b5bebe10ec3d60e.woff2" />
+    <None Include="wwwroot\fonts\Lato-94b6e1f3e395174bc9a2ac26a293a78d.woff2" />
+    <None Include="wwwroot\fonts\Lato-ff54c608e77aa45d6d7fe812d5603c24.woff2" />
     <None Include="wwwroot\js\site.js" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css" />
     <None Include="wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map" />

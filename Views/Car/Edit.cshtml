@@ -1,6 +1,22 @@
 ﻿@model HonestAuto.Models.Car
+<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<h2>Edit Car</h2>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Contact - Honest Auto</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Edit Car</h2>
+                </div>
 
 <form asp-action="Edit" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -60,3 +76,12 @@
     }
 
 </form>
+            </div>
+        </section>
+    </main>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>

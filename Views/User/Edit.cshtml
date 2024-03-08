@@ -1,38 +1,59 @@
 ﻿@model Microsoft.AspNetCore.Identity.IdentityUser
 @using Microsoft.AspNetCore.Identity
-<h1>Edit</h1>
+<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<h4>IdentityUser</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label for="selectedRole">Select Role:</label>
-                <select id="selectedRole" name="selectedRole" class="form-control">
-                    <option value="">Select Role</option>
-                    @foreach (var role in ViewBag.Roles)
-                    {
-                        <option value="@role">@role</option>
-                    }
-                </select>
-            </div>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Edit User - Honest Auto</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
 
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Edit User</h2>
+                </div>
+
+                    <form asp-action="Edit">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                    <div class="mb-3 mt-4">
+                            <label><strong>User Name:</strong></label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                    <div class="mb-3 mt-4">
+                            <label><strong>Email:</strong></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    <div class="mb-3 mt-4">
+                            <label for="selectedRole"><strong>Select Role:</strong></label>
+                            <select id="selectedRole" name="selectedRole" class="form-control">
+                                <option value="">Select Role</option>
+                                @foreach (var role in ViewBag.Roles)
+                                {
+                                    <option value="@role">@role</option>
+                                }
+                            </select>
+                        </div>
+                    <div class="mb-3 mt-4">
+                            <button type="submit" class="btn btn-primary">Save</button>
+                        </div>
+                    </form>
+                </div>
+          
+        </section>
+    </main>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>

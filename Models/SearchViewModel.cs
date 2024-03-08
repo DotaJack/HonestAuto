@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HonestAuto.Models
 {
@@ -37,6 +38,13 @@ namespace HonestAuto.Models
         // MaxMileage property holds the maximum mileage for filtering
         [Display(Name = "Max Mileage")]
         public int? MaxMileage { get; set; }
+
+        [Display(Name = "Min Value")]
+        public decimal? MinCarValue { get; set; }
+
+        // MaxCarValue property holds the maximum car value for filtering
+        [Display(Name = "Max Value")]
+        public decimal? MaxCarValue { get; set; }
 
         // SearchResults property holds the list of car view models returned from the search
         public List<CarViewModel> SearchResults { get; set; }

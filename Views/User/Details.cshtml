@@ -1,44 +1,58 @@
-﻿@model Microsoft.AspNetCore.Identity.IdentityUser
+﻿<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<h1>Details</h1>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Contact - Honest Auto</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
 
-<div>
-    <h4>IdentityUser</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.PhoneNumber)
-        </dd>
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Evaluation Details&nbsp;</h2>
+                </div>
+                <form class="shadow-lg" data-bs-theme="light">
+                    <p><strong>User Name:</strong> @Model.UserName</p>
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Phone Number:</strong> @Model.PhoneNumber</p>
+                    <p>
+                        <strong>Role:</strong>
+                        @foreach (var role in ViewBag.Roles)
+                        {
+                            @role
+                        }
+                    </p>
 
-    </dl>
-</div>
 
-<div>
-    @if (User.IsInRole("Admin"))
-    {
-        <button type="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
-        <button type="button" class="btn btn-secondary" asp-action="Index">Back to List</button>
-    }
 
-    <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("ViewUserCars", "Car", new { userId = Model.Id })'">View User's Cars</button>
+                    <div>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <button type="button" class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Edit</button>
+                            <!-- Button to go back to the car list -->
+                            <a asp-action="Index" asp-controller="User" class="btn btn-secondary">Back to List</a>
+                        }
 
-    @if (User.IsInRole("Buyer"))
-    {
-        <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = Model.Id })'">Message User</button>
-    }
-</div>
+                        <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("ViewUserCars", "Car", new { userId = Model.Id })'">View User's Cars</button>
+
+                        @if (User.IsInRole("Buyer"))
+                        {
+                            <button type="button" class="btn btn-info" onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = Model.Id })'">Message User</button>
+                        }
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>

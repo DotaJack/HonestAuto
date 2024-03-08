@@ -6,82 +6,68 @@
     var currentUserId = ViewData["CurrentUserId"] as string;
 }
 
-<h2>Car Details</h2>
+<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<div>
-    <h4>Car</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            Brand
-        </dt>
-        <dd>
-            @ViewData["BrandName"]
-        </dd>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Car Details</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
 
-        <dt>
-            Model
-        </dt>
-        <dd>
-            @ViewData["ModelName"]
-        </dd>
-
-        <dt>
-            Year
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Year)
-        </dd>
-
-        <dt>
-            Mileage
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Mileage)
-        </dd>
-
-        <dt>
-            History
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.History)
-        </dd>
-
-        <dt>
-            Car Value
-        </dt>
-        <dd>
-            @string.Format("{0:C}", Model.CarValue)
-        </dd>
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Car Details&nbsp;</h2>
+                </div>
+                <form class="shadow-lg" data-bs-theme="light">
+                    <div>
+                        <p><strong>User:</strong> @Model.UserEmail</p>
+                        <p><strong>Brand:</strong> @Model.BrandName</p>
+                        <p><strong>Model:</strong> @Model.ModelName</p>
+                        @if (Model.CarImage != null && Model.CarImage.Length > 0)
+                        {
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.CarImage)" style="width:400px; height:auto;" />
+                        }
+                        else
+                        {
+                            <p><strong>No Image</strong></p>
+                        }
+                        <p><strong>Year:</strong> @Model.Year</p>
+                        <p><strong>Mileage:</strong> @Model.Mileage</p>
+                        <p><strong>History:</strong> @Model.History</p>
+                        <p><strong>Price:</strong> @($"{Model.CarValue:C}")</p>
 
 
-        <dt>
-            Car Image
-        </dt>
-        <dd>
-            @if (Model.CarImage != null && Model.CarImage.Length > 0)
-            {
-                <img src="data:image/jpeg;base64,@Convert.ToBase64String(Model.CarImage)" style="width:400px; height:auto;" />
-            }
-            else
-            {
-                <text>No Image</text>
-            }
-        </dd>
-    </dl>
-</div>
 
-<div>
-    <!-- Button to view car evaluation details -->
-    <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@Model.CarID" class="btn btn-primary">View Car Evaluation</a>
+                    </div>
+                    <div>
+                        <!-- Button to view car evaluation details -->
+                        <a asp-controller="CarEvaluation" asp-action="Details" asp-route-id="@Model.CarEvaluationID" class="btn btn-primary">View Car Evaluation</a>
 
-    <!-- Button to edit the car (only available if the current user matches the car's UserID) -->
-    @if (User.Identity.IsAuthenticated && Model.UserID == currentUserId)
-    {
-        <!-- Display the "Edit" button if the current user owns the car -->
-        <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
-    }
+                        <!-- Button to edit the car (only available if the current user matches the car's UserID) -->
+                        @if (User.Identity.IsAuthenticated && Model.UserID == currentUserId)
+                        {
+                            <!-- Display the "Edit" button if the current user owns the car -->
+                            <a asp-action="Edit" asp-route-id="@Model.CarID" class="btn btn-warning">Edit</a>
+                        }
 
-    <!-- Button to go back to the car list -->
-    <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
-</div>
+                        <!-- Button to go back to the car list -->
+                        <a asp-action="Index" asp-controller="Car" class="btn btn-secondary">Back to List</a>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>

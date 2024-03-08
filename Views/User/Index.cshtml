@@ -1,42 +1,71 @@
 ﻿@model IEnumerable<IdentityUser> // Replace 'User' with your actual User model class
 
-@{
-    ViewData["Title"] = "User List";
-}
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
 
-<h1>User List</h1>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Table - Honest Auto</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+<body id="page-top">
+    <div id="wrapper">
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <div class="container-fluid">
+                    <div class="card shadow">
+                        <div class="card-header py-3">
+                            <p class="text-primary m-0 fw-bold">Users Registered On Honest Autos</p>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive table mt-2" id="dataTable" role="grid" aria-describedby="dataTable_info">
+                                <table class="table my-0" id="dataTable">
+                                    <thead>
+                                        <tr>
+                                            <th>User ID</th>
+                                            <th>Username</th>
+                                            <th>Email</th>
+                                            <th>Phone Number</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
     <tbody>
         @foreach (var user in Model)
         {
             <tr>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@user.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@user.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@user.Id">Delete</a>|
-                    <div>
-                        <button onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = user.Id })'">
-                            Message User
-                        </button>
-                    </div>
+           <td>@user.Id</td>
+         <td>@user.UserName</td>
+                                                <td>@user.Email</td>
+                                                <td>@user.PhoneNumber</td>
+            
+                                                <td>
+                                                    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@user.Id">Edit</a>
+                                                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@user.Id">Details</a>
+                                                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@user.Id">Delete</a>
+                                                    <a class="btn btn-info" onclick="location.href='@Url.Action("ChatWithUser", "Chat", new { receiverId = user.Id })'">Message User</a>
+                                                </td>
 
-             
-                </td>
             </tr>
         }
     </tbody>
+    <tfoot style="padding-left: 1px;padding-bottom: 0px;">
+        <tr></tr>
+    </tfoot>
 </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="~/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/js/pikaday.min.js"></script>
+<script src="~/js/theme.js"></script>
+</body>
 
-<div class="text-center">
-    <a asp-action="Create" class="btn btn-success">Create New User</a>
-</div>
+</html>

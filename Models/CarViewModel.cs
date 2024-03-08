@@ -17,6 +17,7 @@
         public string Colour { get; set; }
         public byte[] CarImage { get; set; }
         public bool IsEvaluationComplete { get; set; }
-        public decimal CarValue { get; set; }
+        public double? CarValue { get; set; }
+        public int CarEvaluationID { get; set; }
     }
 }

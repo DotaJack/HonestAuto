@@ -20,11 +20,11 @@
             @Html.DisplayFor(model => model.Email)
         </dd>
     </dl>
-    <form asp-action="Delete">
+    <form asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="post">
         <input type="hidden" asp-for="Id" />
         <div class="form-group">
             <input type="submit" value="Delete" class="btn btn-danger" />
-            <a asp-action="Index">Back to List</a>
+            <a asp-action="Index" asp-controller="User" class="btn btn-secondary">Back to List</a>
         </div>
     </form>
 </div>

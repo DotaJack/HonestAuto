@@ -1,10 +1,25 @@
 ﻿@model HonestAuto.Models.CarEvaluation
 
-@{
-    ViewData["Title"] = "Edit Car Evaluation";
-}
+<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<h1>Edit Car Evaluation</h1>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Contact - Honest Auto</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
+
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Edit Car Evaluation</h2>
+                </div>
+     
 
 <form asp-action="Edit" method="post">
     <input type="hidden" asp-for="CarEvaluationID" />
@@ -12,20 +27,18 @@
     <input type="hidden" asp-for="MechanicID" />
     <input type="hidden" asp-for="EvaluationDate" />
 
- 
-
     <div class="form-group">
         <label asp-for="EvaluationSummary" class="control-label"></label>
         <textarea asp-for="EvaluationSummary" class="form-control"></textarea>
         <span asp-validation-for="EvaluationSummary" class="text-danger"></span>
     </div>
 
-
     <div class="form-group">
         <label asp-for="CarValue" class="control-label"></label>
         <input asp-for="CarValue" class="form-control" />
         <span asp-validation-for="CarValue" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="EvaluationStatus" class="control-label"></label>
         <select asp-for="EvaluationStatus" class="form-control">
@@ -35,23 +48,38 @@
         </select>
         <span asp-validation-for="EvaluationStatus" class="text-danger"></span>
     </div>
-    <div class="form-group">
 
-        <!-- Style the "View Car Details" link as a button -->
-        <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarID" asp-route-referrerId="@Model.CarEvaluationID" class="btn btn-info">View Car Details</a>
 
-        @{
-            // Check if the user is an admin
-            bool isAdmin = User.IsInRole("Admin");
+                    <div class="form-group row">
+                        <div class="col-sm">
+                            <!-- Style the "View Car Details" link as a button -->
+                            <a asp-controller="Car" asp-action="Details" asp-route-id="@Model.CarID" asp-route-referrerId="@Model.CarEvaluationID" class="btn btn-info">View Car Details</a>
+                            @{
+                                // Check if the user is an admin
+                                bool isAdmin = User.IsInRole("Admin");
 
-            // Determine the action based on user role
-            string backToListAction = isAdmin ? "Index" : "MyEvaluations";
-        }
+                                // Determine the action based on user role
+                                string backToListAction = isAdmin ? "Index" : "MyEvaluations";
+                            }
 
-        <!-- Set the formaction attribute of the submit button -->
-        <input type="submit" value="Save" formaction="@Url.Action(backToListAction)" class="btn btn-primary" />
+                            <!-- Set the formaction attribute of the submit button -->
+                            <button type="submit" formaction="@Url.Action("Edit")" class="btn btn-primary">Save</button>
+                       
+                                <!-- Back to List button -->
+                                <a asp-action="@backToListAction" class="btn btn-secondary">Back to List</a>
+                           
+                        </div>
 
-        <!-- Back to List button -->
-        <a asp-action="@backToListAction" class="btn btn-secondary">Back to List</a>
+                    
+                    </div>
 
 </form>
+            </div>
+        </section>
+    </main>
+<script src="~/bootstrap/js/bootstrap.min.js"></script>
+<script src="~/js/pikaday.min.js"></script>
+<script src="~/js/theme.js"></script>
+</body>
+
+</html>

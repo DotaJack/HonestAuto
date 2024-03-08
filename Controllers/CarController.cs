@@ -29,17 +29,8 @@ namespace HonestAuto.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
-            // Ensure there's a user authenticated and email claim exists
-            var userEmail = User?.FindFirstValue(ClaimTypes.Email);
-            if (string.IsNullOrEmpty(userEmail))
-            {
-                // If no user authenticated or email claim doesn't exist, handle accordingly
-                return RedirectToAction("Login", "Account"); // Redirect to login or handle unauthorized access
-            }
-
             try
             {
-                // Fetch car view models from the database
                 var carViewModels = await _context.Cars
                     .Join(
                         _context.Brands,
@@ -66,10 +57,16 @@ namespace HonestAuto.Controllers
                         })
                     .ToListAsync();
 
-                // Send email to the user
-                //   await _emailService.SendEmailAsync(userEmail, "Car Created Successfully", "Your car has been successfully added to our system.");
+                // Fetch the user email for each car
+                foreach (var car in carViewModels)
+                {
+                    var user = await _userManager.FindByIdAsync(car.UserID);
+                    if (user != null)
+                    {
+                        car.UserEmail = user.Email;
+                    }
+                }
 
-                // Return the car view models to the view
                 return View(carViewModels);
             }
             catch (Exception ex)
@@ -283,7 +280,8 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
-            var car = await _context.Cars.FindAsync(id);
+            // Fetch the car entity by ID
+            var car = await _context.Cars.FirstOrDefaultAsync(c => c.CarID == id);
 
             if (car == null)
             {
@@ -298,13 +296,25 @@ namespace HonestAuto.Controllers
             var model = await _context.Models.FirstOrDefaultAsync(m => m.ModelId == int.Parse(car.ModelId));
             var modelName = model != null ? model.Name : "Unknown Model";
 
-            // Get the car evaluation value
+            // Get the car evaluation and its ID
             var carEvaluation = await _context.CarEvaluations.FirstOrDefaultAsync(ce => ce.CarID == car.CarID);
-            var carValue = carEvaluation != null ? (decimal)carEvaluation.CarValue : 0;
+
+            // Fetch the user email for the current car
+            var user = await _userManager.FindByIdAsync(car.UserID);
+            var userEmail = user != null ? user.Email : "Unknown User Email";
+
+            // Pass brand name, model name, evaluation ID, and other details to the view
+            ViewData["CurrentUserId"] = User.Identity.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
+            ViewData["BrandName"] = brandName;
+            ViewData["ModelName"] = modelName;
+            ViewData["ReferrerId"] = referrerId;
+            ViewData["CarEvaluationId"] = carEvaluation != null ? carEvaluation.CarEvaluationID : 0;
+            ViewData["UserEmail"] = userEmail;
 
             // Create the view model and populate its properties
             var carViewModel = new CarViewModel
             {
+                UserID = car.UserID, // Populate UserID
                 CarID = car.CarID,
                 BrandName = brandName,
                 ModelName = modelName,
@@ -316,14 +326,11 @@ namespace HonestAuto.Controllers
                 Status = car.Status,
                 Colour = car.Colour,
                 IsEvaluationComplete = carEvaluation != null && carEvaluation.EvaluationStatus == "Completed",
-                CarValue = carValue
-            };
+                CarValue = carEvaluation != null ? (double?)carEvaluation.CarValue : null,
 
-            // Pass brand name, model name, and other details to the view
-            ViewData["CurrentUserId"] = User.Identity.IsAuthenticated ? User.FindFirstValue(ClaimTypes.NameIdentifier) : null;
-            ViewData["BrandName"] = brandName;
-            ViewData["ModelName"] = modelName;
-            ViewData["ReferrerId"] = referrerId;
+                CarEvaluationID = carEvaluation != null ? carEvaluation.CarEvaluationID : 0, // Include CarEvaluationId
+                UserEmail = userEmail // Include UserEmail
+            };
 
             return View(carViewModel);
         }
@@ -594,7 +601,7 @@ namespace HonestAuto.Controllers
         public async Task<IActionResult> ViewAds()
         {
             var cars = await _context.Cars
-                .Where(c => c.Status == "Visible") // Filter ads by status
+                .Where(c => c.Status == "Visible")
                 .Join(
                     _context.Brands,
                     car => car.BrandId,
@@ -619,6 +626,15 @@ namespace HonestAuto.Controllers
                         CarImage = joinResult.Car.CarImage
                     })
                 .ToListAsync();
+
+            foreach (var car in cars)
+            {
+                var user = await _userManager.FindByIdAsync(car.UserID);
+                if (user != null)
+                {
+                    car.UserEmail = user.Email;
+                }
+            }
 
             if (cars == null || !cars.Any())
             {
@@ -666,22 +682,35 @@ namespace HonestAuto.Controllers
                 .Join(
                     _context.Brands,
                     car => car.BrandId,
-                    brand => brand.BrandId.ToString(), // Convert BrandId to string for comparison
+                    brand => brand.BrandId.ToString(),
                     (car, brand) => new { Car = car, Brand = brand })
                 .Join(
                     _context.Models,
                     joinResult => joinResult.Car.ModelId,
-                    model => model.ModelId.ToString(), // Convert ModelId to string for comparison
-                    (joinResult, model) => new CarViewModel
-                    {
-                        CarID = joinResult.Car.CarID,
-                        BrandName = joinResult.Brand.Name ?? "Unknown Brand",
-                        ModelName = model.Name ?? "Unknown Model",
-                        Year = joinResult.Car.Year,
-                        Mileage = joinResult.Car.Mileage,
-                        History = joinResult.Car.History,
-                        Colour = joinResult.Car.Colour
-                    })
+                    model => model.ModelId.ToString(),
+                    (joinResult, model) => new { Car = joinResult.Car, Brand = joinResult.Brand, Model = model })
+                .Join(
+                    _context.Users,
+                    joinResult => joinResult.Car.UserID,
+                    user => user.Id,
+                    (joinResult, user) => new { Car = joinResult.Car, Brand = joinResult.Brand, Model = joinResult.Model, User = user })
+                .Select(result => new CarViewModel
+                {
+                    CarID = result.Car.CarID,
+                    BrandName = result.Brand.Name ?? "Unknown Brand",
+                    ModelName = result.Model.Name ?? "Unknown Model",
+                    Year = result.Car.Year,
+                    Mileage = result.Car.Mileage,
+                    History = result.Car.History,
+                    Colour = result.Car.Colour,
+                    CarValue = _context.CarEvaluations
+                                .Where(ce => ce.CarID == result.Car.CarID)
+                                .OrderByDescending(ce => ce.EvaluationDate)
+                                .Select(ce => ce.CarValue)
+                                .FirstOrDefault(),
+
+                    UserEmail = result.User.Email // Include user email
+                })
                 .ToListAsync();
 
             model.SearchResults = carViewModels;
@@ -702,6 +731,8 @@ namespace HonestAuto.Controllers
             {
                 return NotFound(); // Handle user not found
             }
+
+            var userEmail = user.Email;
 
             var carViewModels = await _context.Cars
                 .Where(car => car.UserID == userId) // Filter by user ID
@@ -730,7 +761,6 @@ namespace HonestAuto.Controllers
                     })
                 .ToListAsync();
 
-            var userEmail = user.Email;
             var tupleModel = new Tuple<string, IEnumerable<CarViewModel>>(userEmail, carViewModels);
 
             return View(tupleModel);

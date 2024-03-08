@@ -1,51 +1,58 @@
 ﻿@model Tuple<string, IEnumerable<HonestAuto.Models.CarViewModel>>
 
-<h1 class="text-center">All Car Ads - User: @Model.Item1</h1>
+<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<div class="container">
-    <!-- Loop through each car in the model -->
-    @foreach (var car in Model.Item2)
-    {
-        <div class="row mb-4">
-            <div class="col-md-6 offset-md-3">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="car-image">
-                                    <!-- Check if car image exists -->
-                                    @if (car.CarImage != null && car.CarImage.Length > 0)
-                                    {
-                                        <!-- Display car image -->
-                                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" class="img-fluid" alt="Car Image" />
-                                    }
-                                    else
-                                    {
-                                        <!-- Display placeholder for no image -->
-                                        <p class="text-center">No Image</p>
-                                    }
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="car-details">
-                                    <!-- Display car details -->
-                                    <h2>@car.BrandName @car.ModelName</h2>
-                                    <ul class="list-unstyled">
-                                        <li><strong>Car ID:</strong> @car.CarID</li>
-                                        <li><strong>Year:</strong> @car.Year</li>
-                                        <li><strong>Mileage:</strong> @car.Mileage</li>
-                                        <li><strong>History:</strong> @car.History</li>
-                                        <li><strong>User:</strong> @car.UserEmail</li>
-                                        <li><strong>Registration:</strong> @car.Registration</li>
-                                        <li><strong>Colour:</strong> @car.Colour</li>
-                                    </ul>
-                                    <a href="@Url.Action("Details", "Car", new { id = car.CarID })" class="btn btn-primary">View Details</a>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Contact - Honest Auto</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/Lato.css">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
+
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>User @Model.Item1 Car History</h2>
+                </div>
+                @foreach (var car in Model.Item2)
+                {
+                    <div>
+                        <div class="card">
+                            <div class="card-body">
+
+                                <!-- Display car image -->
+                                @if (car.CarImage != null && car.CarImage.Length > 0)
+                                {
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(car.CarImage)" class="img-fluid" alt="Car Image" width="200" />
+                                }
+                                else
+                                {
+                                    <p>No Image</p>
+                                }
+                                <!-- Display car details -->
+                                <p><strong>@car.BrandName @car.ModelName @car.Year</strong></p>
+                                <p><strong>Mileage:</strong> @car.Mileage</p>
+                                <p><strong>History:</strong> @car.History</p>
+                                <p><strong>Price:</strong> @car.CarValue</p>
+                                <!-- Replace the button with ASP action -->
+                                <div class="mb-3 mt-4">
+                                    <a href="@Url.Action("Details", "Car", new { id = car.CarID })" class="btn btn-info"><span style="color: rgb(255, 255, 255);">View Car</span></a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
-        </div>
-    }
-</div>
+        </section>
+    </main>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>

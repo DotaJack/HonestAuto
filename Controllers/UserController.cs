@@ -159,17 +159,43 @@ namespace HonestAuto.Controllers
             return View(user);
         }
 
-        // Helper method to update user role and handle role changes
         private async Task UpdateUserRole(User user, string newRole, string currentRole)
         {
-            if (newRole != currentRole)
+            if (!string.IsNullOrEmpty(currentRole))
             {
-                // Remove the user from the current role
                 await _userManager.RemoveFromRoleAsync(user, currentRole);
+            }
+
+            if (!string.IsNullOrEmpty(newRole))
+            {
+                await _userManager.AddToRoleAsync(user, newRole);
+            }
+        }
+
+        // Additional action to change a user's role
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeRole(string id, string newRole)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user != null)
+            {
+                // Remove the user from all current roles
+                var currentRoles = await _userManager.GetRolesAsync(user);
+                await _userManager.RemoveFromRolesAsync(user, currentRoles);
 
                 // Add the user to the new role
                 await _userManager.AddToRoleAsync(user, newRole);
+
+                // Update ViewBag.Roles with the new roles after changing the role
+                var updatedRoles = await _userManager.GetRolesAsync(user);
+                ViewBag.Roles = updatedRoles;
+
+                // Redirect to the Details view
+                return RedirectToAction(nameof(Details), new { id });
             }
+
+            return NotFound();
         }
 
         // GET: /User/Details/1
@@ -187,29 +213,67 @@ namespace HonestAuto.Controllers
                 return NotFound();
             }
 
+            // Get roles of the user
+            var roles = await _userManager.GetRolesAsync(user);
+
+            // Update ViewBag.Roles with the new roles
+            ViewBag.Roles = roles;
+
             return View(user);
         }
 
+        // DELETE: /User/Delete/1
         [Authorize(Roles = "Admin")]
-        // Additional action to change a user's role
+        [HttpGet]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        // POST: /User/DeleteConfirmed/1
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> ChangeRole(string id, string newRole)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
-            var user = await _userManager.FindByIdAsync(id);
-            if (user != null)
+            if (string.IsNullOrEmpty(id))
             {
-                // Remove the user from all current roles
-                var currentRoles = await _userManager.GetRolesAsync(user);
-                await _userManager.RemoveFromRolesAsync(user, currentRoles);
+                return NotFound();
+            }
 
-                // Add the user to the new role
-                await _userManager.AddToRoleAsync(user, newRole);
+            var user = await _userManager.FindByIdAsync(id);
 
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
                 return RedirectToAction(nameof(Index));
             }
 
-            return NotFound();
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            // If deletion fails, return to the Delete view with the user
+            return View("Delete", user);
         }
     }
 }

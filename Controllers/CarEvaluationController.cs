@@ -82,8 +82,11 @@ namespace HonestAuto.Controllers
                 .Where(ce => ce.MechanicID == mechanicId)
                 .ToListAsync();
 
-            // Render the view with car evaluations assigned to the current mechanic
-            return View(carEvaluations);
+            // Group the car evaluations by EvaluationStatus
+            var groupedCarEvaluations = carEvaluations.GroupBy(ce => ce.EvaluationStatus);
+
+            // Render the view with car evaluations assigned to the current mechanic, grouped by EvaluationStatus
+            return View(groupedCarEvaluations);
         }
 
         [Authorize(Roles = "Admin,Mechanic")]

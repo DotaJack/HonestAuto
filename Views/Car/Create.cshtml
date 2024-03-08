@@ -1,114 +1,135 @@
 ﻿@model HonestAuto.Models.Car
 
-@{
-    // Set the title of the page
-    ViewData["Title"] = "Create New Car";
-}
+<!DOCTYPE html>
+<html data-bs-theme="light">
 
-<h2>@ViewData["Title"]</h2>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Place An AD</title>
+    <link rel="stylesheet" href="~/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:300,400,700&amp;display=swap">
+    <link rel="stylesheet" href="~/css/pikaday.min.css">
+</head>
+
 
 <!-- Include Bootstrap and Select2 CSS -->
 <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 <link href="~/lib/select2/dist/css/select2.min.css" rel="stylesheet" />
-
-<form asp-action="Create" method="post" enctype="multipart/form-data">
-    <!-- Anti-forgery token to prevent CSRF attacks -->
-    @Html.AntiForgeryToken()
-
-
-    <div class="form-group">
-        <!-- Dropdown list for selecting brand -->
-        <label asp-for="BrandId" class="control-label">Brand</label>
-        <select asp-for="BrandId" class="form-control js-select2-brand" style="width: 100%;">
-            <option value="">Select Brand</option>
-        </select>
-        <span asp-validation-for="BrandId" class="text-danger"></span>
-    </div>
-
-    <div class="form-group">
-        <!-- Dropdown list for selecting model -->
-        <label asp-for="ModelId" class="control-label">Model</label>
-        <select asp-for="ModelId" class="form-control js-select2-model" style="width: 100%;">
-            <option value="">Select Model</option>
-        </select>
-        <span asp-validation-for="ModelId" class="text-danger"></span>
-    </div>
-
-    <!-- Input field for registration -->
-    <div class="form-group">
-        <label asp-for="Registration">Registration</label>
-        <input asp-for="Registration" class="form-control" />
-        <span asp-validation-for="Registration" class="text-danger"></span>
-    </div>
+<body>
+    <main class="page contact-page">
+        <section class="portfolio-block contact">
+            <div class="container">
+                <div class="heading">
+                    <h2>Place An AD</h2>
+                </div>
+                <form asp-action="Create" method="post" enctype="multipart/form-data">
+                    <!-- Anti-forgery token to prevent CSRF attacks -->
+                    @Html.AntiForgeryToken()
 
 
-    <!-- Input field for colour -->
-    <div class="form-group">
-        <label asp-for="Colour">Colour</label>
-        <select asp-for="Colour" class="form-control">
-            <option value="">Select Colour</option>
-            <option value="Red">Red</option>
-            <option value="Blue">Blue</option>
-            <option value="Green">Green</option>
-            <option value="Yellow">Yellow</option>
-            <option value="Orange">Orange</option>
-            <option value="Purple">Purple</option>
-            <option value="Pink">Pink</option>
-            <option value="Brown">Brown</option>
-            <option value="Gray">Gray</option>
-            <option value="Black">Black</option>
-        </select>
-        <span asp-validation-for="Colour" class="text-danger"></span>
-    </div>
+                    <div class="form-group">
+                        <!-- Dropdown list for selecting brand -->
+                        <label asp-for="BrandId" class="control-label">Brand</label>
+                        <select asp-for="BrandId" class="form-control js-select2-brand" style="width: 100%;">
+                            <option value="">Select Brand</option>
+                        </select>
+                        <span asp-validation-for="BrandId" class="text-danger"></span>
+                    </div>
 
-    <!-- Input field for mileage -->
-    <div class="form-group">
-        <label asp-for="Mileage">Mileage</label>
-        <input asp-for="Mileage" class="form-control" />
-        <span asp-validation-for="Mileage" class="text-danger"></span>
-    </div>
+                    <div class="form-group">
+                        <!-- Dropdown list for selecting model -->
+                        <label asp-for="ModelId" class="control-label">Model</label>
+                        <select asp-for="ModelId" class="form-control js-select2-model" style="width: 100%;">
+                            <option value="">Select Model</option>
+                        </select>
+                        <span asp-validation-for="ModelId" class="text-danger"></span>
+                    </div>
 
-    <!-- Input field for year -->
-    <div class="form-group">
-        <label asp-for="Year">Year</label>
-        <input asp-for="Year" class="form-control" />
-        <span asp-validation-for="Year" class="text-danger"></span>
-    </div>
+                    <!-- Input field for registration -->
+                    <div class="form-group">
+                        <label asp-for="Registration">Registration</label>
+                        <input asp-for="Registration" class="form-control" />
+                        <span asp-validation-for="Registration" class="text-danger"></span>
+                    </div>
 
-    <!-- Input field for history -->
-    <div class="form-group">
-        <label asp-for="History">History</label>
-        <input asp-for="History" class="form-control" />
-        <span asp-validation-for="History" class="text-danger"></span>
-    </div>
 
-    <!-- Hidden field for user ID -->
-    <input type="hidden" asp-for="UserID" value="@ViewBag.UserID" />
-    <!-- Hidden field for user ID -->
-    <input type="hidden" asp-for="Status" value="Hidden" />
-    <!-- Input field for uploading car image -->
-    <div class="form-group">
-        <label for="carImageFile">Car Image</label>
-        <input type="file" name="carImageFile" class="form-control" />
-    </div>
-    <div class="form-group">
-        <form method="post" action="@Url.Action("Create", "Car")">
-            <button type="submit" class="btn btn-primary">Create</button>
-        </form>
-        <!-- Button to cancel and go back to the list of cars -->
-        <a asp-action="@(User.IsInRole("Admin") ? "Index" : "UserCars")" class="btn btn-secondary">Back to List</a>
-    </div>
-    <!-- Include scripts -->
-    <!-- jQuery -->
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <!-- Bootstrap bundle -->
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Select2 -->
-    <script src="~/lib/select2/dist/js/select2.min.js"></script>
-    <!-- Custom JavaScript for car creation -->
-    <script src="~/js/carCreate.js"></script>
-    <!-- jQuery Validation -->
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <!-- jQuery Unobtrusive Validation -->
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
-</form>
+                    <!-- Input field for colour -->
+                    <div class="form-group">
+                        <label asp-for="Colour">Colour</label>
+                        <select asp-for="Colour" class="form-control">
+                            <option value="">Select Colour</option>
+                            <option value="Red">Red</option>
+                            <option value="Blue">Blue</option>
+                            <option value="Green">Green</option>
+                            <option value="Yellow">Yellow</option>
+                            <option value="Orange">Orange</option>
+                            <option value="Purple">Purple</option>
+                            <option value="Pink">Pink</option>
+                            <option value="Brown">Brown</option>
+                            <option value="Gray">Gray</option>
+                            <option value="Black">Black</option>
+                        </select>
+                        <span asp-validation-for="Colour" class="text-danger"></span>
+                    </div>
+
+                    <!-- Input field for mileage -->
+                    <div class="mb-3">
+                        <label asp-for="Mileage">Mileage</label>
+                        <input asp-for="Mileage" class="form-control" />
+                        <span asp-validation-for="Mileage" class="text-danger"></span>
+                    </div>
+
+                    <!-- Input field for year -->
+                    <div class="mb-3">
+                        <label asp-for="Year">Year</label>
+                        <input asp-for="Year" class="form-control" />
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+
+                    <!-- Input field for history -->
+                    <div class="mb-3">
+                        <label asp-for="History">History</label>
+                        <input asp-for="History" class="form-control" />
+                        <span asp-validation-for="History" class="text-danger"></span>
+                    </div>
+
+                    <!-- Hidden field for user ID -->
+                    <input type="hidden" asp-for="UserID" value="@ViewBag.UserID" />
+                    <!-- Hidden field for user ID -->
+                    <input type="hidden" asp-for="Status" value="Hidden" />
+                    <!-- Input field for uploading car image -->
+                    <div class="mb-3">
+                        <label for="carImageFile">Car Image</label>
+                        <input type="file" name="carImageFile" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <form method="post" action="@Url.Action("Create", "Car")">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                        </form>
+                        <!-- Button to cancel and go back to the list of cars -->
+                        <a asp-action="@(User.IsInRole("Admin") ? "Index" : "UserCars")" class="btn btn-secondary">Back to List</a>
+                    </div>
+                    <!-- Include scripts -->
+                    <!-- jQuery -->
+                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                    <!-- Bootstrap bundle -->
+                    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+                    <!-- Select2 -->
+                    <script src="~/lib/select2/dist/js/select2.min.js"></script>
+                    <!-- Custom JavaScript for car creation -->
+                    <script src="~/js/carCreate.js"></script>
+                    <!-- jQuery Validation -->
+                    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+                    <!-- jQuery Unobtrusive Validation -->
+                    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+                </form>
+            </div>
+        </section>
+    </main>
+    <script src="~/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/js/pikaday.min.js"></script>
+    <script src="~/js/theme.js"></script>
+</body>
+
+</html>
