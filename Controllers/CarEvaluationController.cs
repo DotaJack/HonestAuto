@@ -157,7 +157,5 @@ namespace HonestAuto.Controllers
             // Check if a CarEvaluation with the given ID exists in the database
             return _context.CarEvaluations.Any(ce => ce.CarEvaluationID == id);
         }
-
-        // Additional action methods (Create, Delete, etc.) as needed
     }
 }

@@ -8,7 +8,7 @@ namespace HonestAuto.Services
     public class ChatMessageService
     {
         private readonly MarketplaceContext _context;
-        private readonly UserManager<User> _userManager; // Define it here
+        private readonly UserManager<User> _userManager;
 
         public ChatMessageService(MarketplaceContext context, UserManager<User> userManager)
         {
@@ -70,7 +70,6 @@ namespace HonestAuto.Services
                 else
                 {
                     // Handle the case where the user with the given ID is not found.
-                    // You can skip this conversation or handle it as needed.
                 }
             }
 

@@ -11,7 +11,7 @@
         public int Mileage { get; set; }
         public string History { get; set; }
         public string UserID { get; set; }
-        public string UserEmail { get; set; } // New property for user's email
+        public string UserEmail { get; set; }
         public string Registration { get; set; }
         public string Status { get; set; }
         public string Colour { get; set; }
@@ -19,6 +19,6 @@
         public bool IsEvaluationComplete { get; set; }
         public double? CarValue { get; set; }
         public int CarEvaluationID { get; set; }
-        public int CarCount { get; set; } // New property for car count
+        public int CarCount { get; set; }
     }
 }
